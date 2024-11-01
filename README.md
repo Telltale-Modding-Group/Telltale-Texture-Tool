@@ -7,7 +7,18 @@
 ## Description
 This is an application designed to preview and convert **Telltale textures** (files with the **.d3dtx** extension) to more accessible formats like **PNG**, **JPEG**, **DDS**, **TGA**, **HDR**, **TIFF**, **BMP** and vice versa.
 
-**[DOWNLOAD THE LATEST VERSION HERE](https://github.com/Telltale-Modding-Group/Telltale-Texture-Tool/releases)**
+## Main Features
+- Supports converting `D3DTX` files to more common formats like `PNG`, `JPEG`, `DDS`, `TGA`, `HDR`, `BMP`, `TIFF` and vice versa.
+- Supports most, if not all `PC` textures. However, some are not decrypted.
+- `PS Vita`, `PS3`, `PS4`, `Nintendo Switch`, `Xbox 360`, `iOS` and `Android` platforms for newer games.
+- Supports `2D`, `2D array`, `cubemap` and `volumemap` textures.
+- Mip generation, normal map tools, automatic compression and platform swizzling/deswizzling (works for all file types).
+- Batch conversion.
+- A texture previewer with pan and zoom, and sliders for mips and faces.
+- A file explorer with navigation and additional functions.
+- Cross-platform support.
+
+### **[DOWNLOAD THE LATEST VERSION HERE](https://github.com/Telltale-Modding-Group/Telltale-Texture-Tool/releases)**
 
 ## Screenshots
 ![Main 1](Docs/tutorial-screenshots/mainThumb.png)
@@ -63,20 +74,10 @@ This is an application designed to preview and convert **Telltale textures** (fi
 - CSI: Fatal Conspiracy
 - Law & Order: Legacies
 
-## Supported Platforms:
-- PS3
-- PS Vita
-- PS4
-- Nintendo Switch
-- Xbox 360
-- Android
-- iOS
-
 ## Notes and Limitations
 
-1. This is primarily aimed for PC-platform games. There is some support for console and mobile platforms. More information can be found in the documentation.
-2. It does not decrypt textures, please use `Telltale Explorer` to get the decrypted ones.
-3. MacOS support is not tested. Please report any issues!
+1. It does not decrypt textures, please use `Telltale Explorer` to get the decrypted ones.
+2. MacOS support is not tested. Please report any issues!
 
 ## Developers
 
