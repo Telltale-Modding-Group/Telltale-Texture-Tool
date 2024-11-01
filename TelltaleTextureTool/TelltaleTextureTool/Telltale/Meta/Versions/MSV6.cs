@@ -107,7 +107,7 @@ public class MSV6 : IMetaHeader
 
         for (int i = 0; i < mClassNames.Length; i++)
         {
-            metaInfo += string.Format("Meta mClassName {0} = {1}", i, mClassNames[i]) + Environment.NewLine;
+            metaInfo += string.Format("Meta mClassName {0} = {1}", i, mClassNames[i].mTypeNameCRC) + Environment.NewLine;
         }
 
         return metaInfo;

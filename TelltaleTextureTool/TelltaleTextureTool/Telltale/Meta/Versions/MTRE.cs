@@ -43,7 +43,7 @@ public class MTRE : IMetaHeader
     /// </summary>
     public MTRE() { }
 
-    public void WriteToBinary(BinaryWriter writer, TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None,bool printDebug = false)
+    public void WriteToBinary(BinaryWriter writer, TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None, bool printDebug = false)
     {
         ByteFunctions.WriteFixedString(writer, mMetaStreamVersion); // Meta Stream Keyword [4 bytes]
         writer.Write(mClassNamesLength); // mClassNamesLength [4 bytes]
@@ -60,7 +60,7 @@ public class MTRE : IMetaHeader
         }
     }
 
-    public void ReadFromBinary(BinaryReader reader, TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None,bool printDebug = false)
+    public void ReadFromBinary(BinaryReader reader, TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None, bool printDebug = false)
     {
         mMetaStreamVersion = ByteFunctions.ReadFixedString(reader, 4); // Meta Stream Keyword [4 bytes]
         mClassNamesLength = reader.ReadUInt32(); // mClassNamesLength [4 bytes]
@@ -109,12 +109,14 @@ public class MTRE : IMetaHeader
 
         for (int i = 0; i < mClassNames.Length; i++)
         {
-            metaInfo += "Meta mClassName " + i + " = " + mClassNames[i] + Environment.NewLine;
+            metaInfo += "mTypeNameCRC " + i + " = " + mClassNames[i].mTypeNameCRC + Environment.NewLine;
+            metaInfo += "mVersionCRC " + i + " = " + mClassNames[i].mVersionCRC + Environment.NewLine;
         }
 
         for (int i = 0; i < mUnhashedClassNames.Length; i++)
         {
-            metaInfo += "Meta mClassName " + i + " = " + mUnhashedClassNames[i] + Environment.NewLine;
+            metaInfo += "mClassName " + i + " = " + mUnhashedClassNames[i].className + Environment.NewLine;
+            metaInfo += "mVersionCRC " + i + " = " + mUnhashedClassNames[i].mVersionCRC + Environment.NewLine;
         }
 
         return metaInfo;

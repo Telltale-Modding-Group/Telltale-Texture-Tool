@@ -109,12 +109,14 @@ public class MBIN : IMetaHeader
 
         for (int i = 0; i < mClassNames.Length; i++)
         {
-            metaInfo += "Meta mClassName " + i + " = " + mClassNames[i] + Environment.NewLine;
+            metaInfo += "mTypeNameCRC " + i + " = " + mClassNames[i].mTypeNameCRC + Environment.NewLine;
+            metaInfo += "mVersionCRC " + i + " = " + mClassNames[i].mVersionCRC + Environment.NewLine;
         }
 
         for (int i = 0; i < mUnhashedClassNames.Length; i++)
         {
-            metaInfo += "Meta mClassName " + i + " = " + mUnhashedClassNames[i] + Environment.NewLine;
+            metaInfo += "mClassName " + i + " = " + mUnhashedClassNames[i].className + Environment.NewLine;
+            metaInfo += "mVersionCRC " + i + " = " + mUnhashedClassNames[i].mVersionCRC + Environment.NewLine;
         }
 
         return metaInfo;
