@@ -69,8 +69,11 @@ public enum TelltaleToolGame
     [Display(Name = "CSI: Deadly Intent")]
     CSI_DEADLY_INTENT, // LV4
 
-    [Display(Name = "Tales of Monkey Island")]
-    TALES_OF_MONKEY_ISLAND, // LV4
+    [Display(Name = "Tales of Monkey Island V1")]
+    TALES_OF_MONKEY_ISLAND_V1, // LV4
+
+    [Display(Name = "Tales of Monkey Island V2")]
+    TALES_OF_MONKEY_ISLAND_V2, // LV4
 
     [Display(Name = "CSI: Fatal Conspiracy")]
     CSI_FATAL_CONSPIRACY, // LV4
@@ -195,7 +198,8 @@ public static class TelltaleToolGameExtensions
             TelltaleToolGame.WALLACE_AND_GROMITS_GRAND_ADVENTURES_104 => "wag4",
             TelltaleToolGame.SAM_AND_MAX_SAVE_THE_WORLD_2007 => "sammax1_v2",
             TelltaleToolGame.CSI_DEADLY_INTENT => "csideadly",
-            TelltaleToolGame.TALES_OF_MONKEY_ISLAND => "monkeyisland",
+            TelltaleToolGame.TALES_OF_MONKEY_ISLAND_V1 => "monkeyisland_v1",
+            TelltaleToolGame.TALES_OF_MONKEY_ISLAND_V2 => "monkeyisland_v2",
             TelltaleToolGame.CSI_FATAL_CONSPIRACY => "csifatal",
             TelltaleToolGame.NELSON_TETHERS_PUZZLE_AGENT => "puzzleagent",
             TelltaleToolGame.POKER_NIGHT_AT_THE_INVENTORY => "pokernight",
@@ -257,7 +261,9 @@ public static class TelltaleToolGameExtensions
             "wag4" => TelltaleToolGame.WALLACE_AND_GROMITS_GRAND_ADVENTURES_104,
             "sammax1_v2" => TelltaleToolGame.SAM_AND_MAX_SAVE_THE_WORLD_2007,
             "csideadly" => TelltaleToolGame.CSI_DEADLY_INTENT,
-            "monkeyisland" => TelltaleToolGame.TALES_OF_MONKEY_ISLAND,
+            "monkeyisland" => TelltaleToolGame.TALES_OF_MONKEY_ISLAND_V1,
+            "monkeyisland_v1" => TelltaleToolGame.TALES_OF_MONKEY_ISLAND_V1,
+            "monkeyisland_v2" => TelltaleToolGame.TALES_OF_MONKEY_ISLAND_V2,
             "csifatal" => TelltaleToolGame.CSI_FATAL_CONSPIRACY,
             "puzzleagent" => TelltaleToolGame.NELSON_TETHERS_PUZZLE_AGENT,
             "pokernight" => TelltaleToolGame.POKER_NIGHT_AT_THE_INVENTORY,
