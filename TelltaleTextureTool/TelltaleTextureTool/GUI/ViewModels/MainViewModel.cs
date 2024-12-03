@@ -306,7 +306,7 @@ public partial class MainViewModel : ViewModelBase
                     Title = "Save File",
                     SuggestedFileName = DataGridSelectedItem.FileName,
                     ShowOverwritePrompt = true,
-                    DefaultExtension = DataGridSelectedItem.FileType is null ? "bin" : DataGridSelectedItem.FileType.Substring(1)
+                    DefaultExtension = DataGridSelectedItem.FileType is null ? "bin" : DataGridSelectedItem.FileType[1..]
                 });
 
                 if (storageFile is not null)
@@ -630,7 +630,7 @@ public partial class MainViewModel : ViewModelBase
                     return;
                 }
 
-                outputDirectoryPath = folderPath.First().Path.AbsolutePath;
+                outputDirectoryPath = folderPath[0].Path.AbsolutePath;
             }
 
             TextureType oldTextureType = GetTextureTypeFromItem(SelectedFromFormat.Name);
@@ -1170,7 +1170,7 @@ public partial class MainViewModel : ViewModelBase
         ImageProperties = new ImageProperties();
     }
 
-    private async Task HandleExceptionAsync(string message)
+    private static async Task HandleExceptionAsync(string message)
     {
         var mainWindow = GetMainWindow();
         var messageBox = MessageBoxes.GetErrorBox(message);
