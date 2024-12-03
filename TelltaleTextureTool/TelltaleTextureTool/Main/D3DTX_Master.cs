@@ -13,6 +13,7 @@ using TelltaleTextureTool.DirectX.Enums;
 using TelltaleTextureTool.Telltale.FileTypes.D3DTX;
 using TelltaleTextureTool.Telltale.Meta;
 using DrSwizzler;
+using System.Text;
 
 namespace TelltaleTextureTool.Main
 {
@@ -247,18 +248,18 @@ namespace TelltaleTextureTool.Main
 
         public string GetD3DTXDebugInfo()
         {
-            string allInfo = "";
+            StringBuilder debugInformation = new();
 
             if (metaVersion != MetaVersion.Unknown)
             {
-                allInfo += metaHeaderObject.GetDebugInfo();
+                debugInformation.Append(metaHeaderObject.GetDebugInfo());
             }
-            else allInfo += "Error! Meta data not found!" + Environment.NewLine;
+            else debugInformation.AppendLine("Error! Meta data not found!");
 
-            if (d3dtxObject != null) allInfo += d3dtxObject.GetDebugInfo(Game);
-            else allInfo += "Error! Data not found!";
+            if (d3dtxObject != null) debugInformation.Append(d3dtxObject.GetDebugInfo(Game));
+            else debugInformation.AppendLine("Error! Data not found!");
 
-            return allInfo;
+            return debugInformation.ToString();
         }
 
         /// <summary>
