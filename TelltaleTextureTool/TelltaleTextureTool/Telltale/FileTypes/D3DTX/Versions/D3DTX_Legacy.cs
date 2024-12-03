@@ -7,6 +7,7 @@ using TelltaleTextureTool.Utilities;
 using TelltaleTextureTool.DirectX;
 using TelltaleTextureTool.DirectX.Enums;
 using TelltaleTextureTool.Telltale.FileTypes.D3DTX;
+using System.Text;
 
 /*
  * NOTE:
@@ -595,7 +596,6 @@ namespace TelltaleTextureTool.TelltaleD3DTX
                 ByteFunctions.WriteBoolean(writer, mbWiiForceUncompressed.mbTelltaleBoolean);
                 writer.Write(mType);
                 writer.Write(mTextureDataFormats);
-                writer.Write(mTplTextureDataSize);
                 writer.Write((int)mAlphaMode);
                 ByteFunctions.WriteBoolean(writer, mbAlphaHDR.mbTelltaleBoolean);
                 ByteFunctions.WriteBoolean(writer, mbEncrypted.mbTelltaleBoolean);
@@ -1097,7 +1097,6 @@ namespace TelltaleTextureTool.TelltaleD3DTX
                     mbWiiForceUncompressed = new TelltaleBoolean(reader);
                     mType = reader.ReadUInt32();
                     mTextureDataFormats = reader.ReadUInt32();
-                    mTplTextureDataSize = reader.ReadUInt32();
                     mAlphaMode = (T3TextureAlphaMode)reader.ReadInt32();
                     mWiiTextureFormat = (WiiTextureFormat)reader.ReadInt32();
                     mbAlphaHDR = new TelltaleBoolean(reader);
@@ -1382,47 +1381,64 @@ namespace TelltaleTextureTool.TelltaleD3DTX
 
         public string GetDebugInfo(TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None)
         {
-            if (game == TelltaleToolGame.DEFAULT)
+            if (game is TelltaleToolGame.DEFAULT)
             {
                 return string.Empty;
             }
 
-            string d3dtxInfo = "Game: " + Enum.GetName(typeof(TelltaleToolGame), game) + "\n";
+            StringBuilder d3dtxInfo = new();
 
-            d3dtxInfo += "|||||| D3DTX Info ||||||\n";
-            d3dtxInfo += "Name: " + mName + "\n";
-            d3dtxInfo += "Import Name: " + mImportName + "\n";
-            d3dtxInfo += "Has Texture Data: " + mbHasTextureData.mbTelltaleBoolean + "\n";
-            d3dtxInfo += "Is Mip Mapped: " + mbIsMipMapped.mbTelltaleBoolean + "\n";
-            d3dtxInfo += "Is Wrap U: " + mbIsWrapU.mbTelltaleBoolean + "\n";
-            d3dtxInfo += "Is Wrap V: " + mbIsWrapV.mbTelltaleBoolean + "\n";
-            d3dtxInfo += "Is Filtered: " + mbIsFiltered.mbTelltaleBoolean + "\n";
-            d3dtxInfo += "Embed Mip Maps: " + mbEmbedMipMaps.mbTelltaleBoolean + "\n";
-            d3dtxInfo += "Num Mip Levels: " + mNumMipLevels + "\n";
-            d3dtxInfo += "D3D Format: " + mD3DFormat + "\n";
-            d3dtxInfo += "Width: " + mWidth + "\n";
-            d3dtxInfo += "Height: " + mHeight + "\n";
-            d3dtxInfo += "Wii Force Width: " + mWiiForceWidth + "\n";
-            d3dtxInfo += "Wii Force Height: " + mWiiForceHeight + "\n";
-            d3dtxInfo += "Wii Force Uncompressed: " + mbWiiForceUncompressed.mbTelltaleBoolean + "\n";
-            d3dtxInfo += "Type: " + mType + "\n";
-            d3dtxInfo += "Texture Data Formats: " + mTextureDataFormats + "\n";
-            d3dtxInfo += "TPL Texture Data Size: " + mTplTextureDataSize + "\n";
-            d3dtxInfo += "TPL Alpha Data Size: " + mTplAlphaDataSize + "\n";
-            d3dtxInfo += "JPEG Texture Data Size: " + mJPEGTextureDataSize + "\n";
-            d3dtxInfo += "Alpha Mode: " + mAlphaMode + "\n";
-            d3dtxInfo += "Wii Texture Format: " + mWiiTextureFormat + "\n";
-            d3dtxInfo += "Alpha HDR: " + mbAlphaHDR.mbTelltaleBoolean + "\n";
-            d3dtxInfo += "Encrypted: " + mbEncrypted.mbTelltaleBoolean + "\n";
-            d3dtxInfo += "Detail Map Brightness: " + mDetailMapBrightness + "\n";
-            d3dtxInfo += "Normal Map Format: " + mNormalMapFmt + "\n";
-            d3dtxInfo += "UV Offset: " + mUVOffset + "\n";
-            d3dtxInfo += "UV Scale: " + mUVScale + "\n";
-            d3dtxInfo += "Empty Buffer: " + mEmptyBuffer + "\n";
+            d3dtxInfo.AppendFormat("Game: {0}", Enum.GetName(typeof(TelltaleToolGame), game)).Append(Environment.NewLine);
 
-            d3dtxInfo += "|||||||||||||||||||||||||||||||||||||||";
+            d3dtxInfo.AppendLine("||||||||||| D3DTX Legacy Version Header |||||||||||");
 
-            return d3dtxInfo;
+            d3dtxInfo.AppendFormat("Sampler State Block Size: {0}", mSamplerState_BlockSize).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("SamplerState: {0}", mSamplerState).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Name Block Size: {0}", mName_BlockSize).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Name: {0}", mName).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Import Name Block Size: {0}", mImportName_BlockSize).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Import Name: {0}", mImportName).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Has Texture Data: {0}", mbHasTextureData.mbTelltaleBoolean).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Is Mip Mapped: {0}", mbIsMipMapped.mbTelltaleBoolean).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Is Wrap U: {0}", mbIsWrapU.mbTelltaleBoolean).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Is Wrap V: {0}", mbIsWrapV.mbTelltaleBoolean).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Is Filtered: {0}", mbIsFiltered.mbTelltaleBoolean).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Embed Mip Maps: {0}", mbEmbedMipMaps.mbTelltaleBoolean).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Num Mip Levels: {0}", mNumMipLevels).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("D3D Format: {0}", mD3DFormat).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Width: {0}", mWidth).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Height: {0}", mHeight).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Wii Force Width: {0}", mWiiForceWidth).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Wii Force Height: {0}", mWiiForceHeight).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Wii Force Uncompressed: {0}", mbWiiForceUncompressed.mbTelltaleBoolean).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Type: {0}", mType).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Texture Data Formats: {0}", mTextureDataFormats).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("TPL Texture Data Size: {0}", mTplTextureDataSize).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("TPL Alpha Data Size: {0}", mTplAlphaDataSize).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("JPEG Texture Data Size: {0}", mJPEGTextureDataSize).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Alpha Mode: {0}", mAlphaMode).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Wii Texture Format: {0}", mWiiTextureFormat).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Alpha HDR: {0}", mbAlphaHDR.mbTelltaleBoolean).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Encrypted: {0}", mbEncrypted.mbTelltaleBoolean).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Detail Map Brightness: {0}", mDetailMapBrightness).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Normal Map Format: {0}", mNormalMapFmt).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("UV Offset: {0}", mUVOffset).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("UV Scale: {0}", mUVScale).Append(Environment.NewLine);
+            d3dtxInfo.AppendFormat("Empty Buffer: {0}", mEmptyBuffer).Append(Environment.NewLine);
+
+            d3dtxInfo.AppendLine("||||||||||| Pixel Data |||||||||||");
+            d3dtxInfo.AppendFormat("Pixel Data Length: {0}", mPixelData.length).Append(Environment.NewLine);
+
+            d3dtxInfo.AppendLine("||||||||||| TPL Texture Data |||||||||||");
+            d3dtxInfo.AppendFormat("TPL Texture Data Length: {0}", mTplTextureDataSize).Append(Environment.NewLine);
+
+            d3dtxInfo.AppendLine("||||||||||| TPL Alpha Data |||||||||||");
+            d3dtxInfo.AppendFormat("TPL Alpha Data Length: {0}", mTplAlphaDataSize).Append(Environment.NewLine);
+
+            d3dtxInfo.AppendLine("||||||||||| JPEG Texture Data |||||||||||");
+            d3dtxInfo.AppendFormat("JPEG Texture Data Length: {0}", mJPEGTextureDataSize).Append(Environment.NewLine);
+
+            return d3dtxInfo.ToString();
         }
 
         public uint GetHeaderByteSize()

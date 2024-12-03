@@ -7,6 +7,7 @@ using TelltaleTextureTool.Utilities;
 using TelltaleTextureTool.DirectX;
 using TelltaleTextureTool.DirectX.Enums;
 using TelltaleTextureTool.Telltale.FileTypes.D3DTX;
+using System.Text;
 
 /*
  * NOTE:
@@ -422,57 +423,56 @@ public class D3DTX_V3 : ID3DTX
 
   public string GetDebugInfo(TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None)
   {
-    string d3dtxInfo = "";
+    StringBuilder d3dtxInfo = new();
 
-    d3dtxInfo += "||||||||||| D3DTX Version 3 Header |||||||||||" + Environment.NewLine;
-    d3dtxInfo += "mVersion = " + mVersion + Environment.NewLine;
-    d3dtxInfo += "mSamplerState_BlockSize = " + mSamplerState_BlockSize + Environment.NewLine;
-    d3dtxInfo += "mSamplerState = " + mSamplerState + Environment.NewLine;
-    d3dtxInfo += "mPlatformType_BlockSize = " + mPlatform_BlockSize + Environment.NewLine;
-    d3dtxInfo += "mPlatformType = " + Enum.GetName(typeof(T3PlatformType), (int)mPlatform) + " (" + mPlatform + ")" + Environment.NewLine;
-    d3dtxInfo += "mName_BlockSize = " + mName_BlockSize + Environment.NewLine;
-    d3dtxInfo += "mName = " + mName + Environment.NewLine;
-    d3dtxInfo += "mImportName_BlockSize = " + mImportName_BlockSize + Environment.NewLine;
-    d3dtxInfo += "mImportName = " + mImportName + Environment.NewLine;
-    d3dtxInfo += "mImportScale = " + mImportScale + Environment.NewLine;
-    d3dtxInfo += "mToolProps = " + mToolProps + Environment.NewLine;
-    d3dtxInfo += "mNumMipLevels = " + mNumMipLevels + Environment.NewLine;
-    d3dtxInfo += "mWidth = " + mWidth + Environment.NewLine;
-    d3dtxInfo += "mHeight = " + mHeight + Environment.NewLine;
-    d3dtxInfo += "mSurfaceFormat = " + Enum.GetName(typeof(T3SurfaceFormat), mSurfaceFormat) + " (" + (int)mSurfaceFormat + ")" + Environment.NewLine;
-    d3dtxInfo += "mResourceUsage = " + Enum.GetName(typeof(T3ResourceUsage), mResourceUsage) + " (" + (int)mResourceUsage + ")" + Environment.NewLine;
-    d3dtxInfo += "mType = " + Enum.GetName(typeof(T3TextureType), mType) + " (" + (int)mType + ")" + Environment.NewLine;
-    d3dtxInfo += "mNormalMapFormat = " + mNormalMapFormat + Environment.NewLine;
-    d3dtxInfo += "mHDRLightmapScale = " + mHDRLightmapScale + Environment.NewLine;
-    d3dtxInfo += "mAlphaMode = " + Enum.GetName(typeof(T3TextureAlphaMode), (int)mAlphaMode) + " (" + mAlphaMode + ")" + Environment.NewLine;
-    d3dtxInfo += "mColorMode = " + Enum.GetName(typeof(T3TextureColor), (int)mColorMode) + " (" + mColorMode + ")" + Environment.NewLine;
-    d3dtxInfo += "mUVOffset = " + mUVOffset + Environment.NewLine;
-    d3dtxInfo += "mUVScale = " + mUVScale + Environment.NewLine;
+    d3dtxInfo.AppendLine("||||||||||| D3DTX Version 3 Header |||||||||||");
+    d3dtxInfo.AppendFormat("mVersion: {0}", mVersion).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mSamplerState Block Size: {0}", mSamplerState_BlockSize).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mSamplerState: {0}", mSamplerState).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mPlatformType Block Size: {0}", mPlatform_BlockSize).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mPlatformType: {0} ({1})", Enum.GetName(typeof(T3PlatformType), (int)mPlatform), mPlatform).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mName Block Size: {0}", mName_BlockSize).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mName: {0}", mName).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mImportName Block Size: {0}", mImportName_BlockSize).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mImportName: {0}", mImportName).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mImportScale: {0}", mImportScale).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mToolProps: {0}", mToolProps).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mNumMipLevels: {0}", mNumMipLevels).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mWidth: {0}", mWidth).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mHeight: {0}", mHeight).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mSurfaceFormat: {0} ({1})", Enum.GetName(typeof(T3SurfaceFormat), mSurfaceFormat), (int)mSurfaceFormat).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mResourceUsage: {0} ({1})", Enum.GetName(typeof(T3ResourceUsage), mResourceUsage), (int)mResourceUsage).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mType: {0} ({1})", Enum.GetName(typeof(T3TextureType), mType), (int)mType).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mNormalMapFormat: {0}", mNormalMapFormat).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mHDRLightmapScale: {0}", mHDRLightmapScale).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mAlphaMode: {0} ({1})", Enum.GetName(typeof(T3TextureAlphaMode), (int)mAlphaMode), mAlphaMode).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mColorMode: {0} ({1})", Enum.GetName(typeof(T3TextureColor), (int)mColorMode), mColorMode).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mUVOffset: {0}", mUVOffset).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mUVScale: {0}", mUVScale).Append(Environment.NewLine);
 
-    d3dtxInfo += "----------- mToonRegions -----------" + Environment.NewLine;
-    d3dtxInfo += "mToonRegions_ArrayCapacity = " + mToonRegions_ArrayCapacity + Environment.NewLine;
-    d3dtxInfo += "mToonRegions_ArrayLength = " + mToonRegions_ArrayLength + Environment.NewLine;
+    d3dtxInfo.AppendLine("----------- mToonRegions -----------");
+    d3dtxInfo.AppendFormat("mToonRegions Array Capacity: {0}", mToonRegions_ArrayCapacity).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mToonRegions Array Length: {0}", mToonRegions_ArrayLength).Append(Environment.NewLine);
     for (int i = 0; i < mToonRegions_ArrayLength; i++)
     {
-      d3dtxInfo += "mToonRegion " + i + " = " + mToonRegions[i] + Environment.NewLine;
+      d3dtxInfo.AppendFormat("mToonRegion {0}: {1}", i, mToonRegions[i]).Append(Environment.NewLine);
     }
 
-    d3dtxInfo += "----------- mStreamHeader -----------" + Environment.NewLine;
-    d3dtxInfo += "mRegionCount = " + mStreamHeader.mRegionCount + Environment.NewLine;
-    d3dtxInfo += "mAuxDataCount = " + mStreamHeader.mAuxDataCount + Environment.NewLine;
-    d3dtxInfo += "mTotalDataSize = " + mStreamHeader.mTotalDataSize + Environment.NewLine;
+    d3dtxInfo.AppendLine("----------- mStreamHeader -----------");
+    d3dtxInfo.AppendFormat("mRegionCount: {0}", mStreamHeader.mRegionCount).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mAuxDataCount: {0}", mStreamHeader.mAuxDataCount).Append(Environment.NewLine);
+    d3dtxInfo.AppendFormat("mTotalDataSize: {0}", mStreamHeader.mTotalDataSize).Append(Environment.NewLine);
 
-    d3dtxInfo += "----------- mRegionHeaders -----------" + Environment.NewLine;
+    d3dtxInfo.AppendLine("----------- mRegionHeaders -----------");
     for (int i = 0; i < mStreamHeader.mRegionCount; i++)
     {
-      d3dtxInfo += "[mRegionHeader " + i + "]" + Environment.NewLine;
-      d3dtxInfo += "mMipIndex = " + mRegionHeaders[i].mMipIndex + Environment.NewLine;
-      d3dtxInfo += "mDataSize = " + mRegionHeaders[i].mDataSize + Environment.NewLine;
-      d3dtxInfo += "mPitch = " + mRegionHeaders[i].mPitch + Environment.NewLine;
+      d3dtxInfo.AppendFormat("[mRegionHeader {0}]", i).Append(Environment.NewLine);
+      d3dtxInfo.AppendFormat("mMipIndex: {0}", mRegionHeaders[i].mMipIndex).Append(Environment.NewLine);
+      d3dtxInfo.AppendFormat("mDataSize: {0}", mRegionHeaders[i].mDataSize).Append(Environment.NewLine);
+      d3dtxInfo.AppendFormat("mPitch: {0}", mRegionHeaders[i].mPitch).Append(Environment.NewLine);
     }
-    d3dtxInfo += "|||||||||||||||||||||||||||||||||||||||";
 
-    return d3dtxInfo;
+    return d3dtxInfo.ToString();
   }
 
   public void UpdateArrayCapacities()

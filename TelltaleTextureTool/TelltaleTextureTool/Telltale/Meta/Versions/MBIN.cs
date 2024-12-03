@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using TelltaleTextureTool.TelltaleEnums;
 using TelltaleTextureTool.TelltaleTypes;
 using TelltaleTextureTool.Utilities;
@@ -102,24 +103,26 @@ public class MBIN : IMetaHeader
 
     public string GetDebugInfo(TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None)
     {
-        string metaInfo = "||||||||||| Meta Header |||||||||||" + Environment.NewLine;
+        StringBuilder metaInfo = new();
 
-        metaInfo += "Meta Stream Keyword = " + mMetaStreamVersion + Environment.NewLine;
-        metaInfo += "Meta mClassNamesLength = " + mClassNamesLength + Environment.NewLine;
+        metaInfo.AppendLine("||||||||||| Meta Header |||||||||||");
+
+        metaInfo.AppendFormat("Meta Stream Keyword: {0}", mMetaStreamVersion).Append(Environment.NewLine);
+        metaInfo.AppendFormat("Meta Class Names Length: {0}", mClassNamesLength).Append(Environment.NewLine); ;
 
         for (int i = 0; i < mClassNames.Length; i++)
         {
-            metaInfo += "mTypeNameCRC " + i + " = " + mClassNames[i].mTypeNameCRC + Environment.NewLine;
-            metaInfo += "mVersionCRC " + i + " = " + mClassNames[i].mVersionCRC + Environment.NewLine;
+            metaInfo.AppendFormat("Meta Class Name CRC: {0}", mClassNames[i].mTypeNameCRC.mCrc64).Append(Environment.NewLine); ;
+            metaInfo.AppendFormat("Meta Class Version CRC: {0}", mClassNames[i].mVersionCRC).Append(Environment.NewLine); ;
         }
 
         for (int i = 0; i < mUnhashedClassNames.Length; i++)
         {
-            metaInfo += "mClassName " + i + " = " + mUnhashedClassNames[i].className + Environment.NewLine;
-            metaInfo += "mVersionCRC " + i + " = " + mUnhashedClassNames[i].mVersionCRC + Environment.NewLine;
+            metaInfo.AppendFormat("Meta Class Name: {0}", mUnhashedClassNames[i].className).Append(Environment.NewLine); ;
+            metaInfo.AppendFormat("Meta Class Version CRC: {0}", mUnhashedClassNames[i].mVersionCRC).Append(Environment.NewLine); ;
         }
 
-        return metaInfo;
+        return metaInfo.ToString();
     }
 
     public uint GetHeaderByteSize()

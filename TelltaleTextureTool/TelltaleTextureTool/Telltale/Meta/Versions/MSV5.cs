@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using TelltaleTextureTool.TelltaleEnums;
 using TelltaleTextureTool.TelltaleTypes;
 using TelltaleTextureTool.Utilities;
@@ -53,7 +54,7 @@ public class MSV5 : IMetaHeader
     /// </summary>
     public MSV5() { }
 
-    public void WriteToBinary(BinaryWriter writer, TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None,bool printDebug = false)
+    public void WriteToBinary(BinaryWriter writer, TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None, bool printDebug = false)
     {
         ByteFunctions.WriteFixedString(writer, mMetaStreamVersion); // Meta Stream Keyword [4 bytes]
         writer.Write(mDefaultSectionChunkSize); // Default Section Chunk Size [4 bytes] default section chunk size
@@ -68,7 +69,7 @@ public class MSV5 : IMetaHeader
         }
     }
 
-    public void ReadFromBinary(BinaryReader reader, TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None,bool printDebug = false)
+    public void ReadFromBinary(BinaryReader reader, TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None, bool printDebug = false)
     {
         mMetaStreamVersion = ByteFunctions.ReadFixedString(reader, 4); // Meta Stream Keyword [4 bytes]
         mDefaultSectionChunkSize = reader.ReadUInt32(); // Default Section Chunk Size [4 bytes] //default section chunk size
@@ -97,20 +98,23 @@ public class MSV5 : IMetaHeader
 
     public string GetDebugInfo(TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None)
     {
-        string metaInfo = "||||||||||| Meta Header |||||||||||" + Environment.NewLine;
+        StringBuilder metaInfo = new();
 
-        metaInfo += "Meta Stream Keyword = " + mMetaStreamVersion + Environment.NewLine;
-        metaInfo += "Meta Default Section Chunk Size = " + mDefaultSectionChunkSize + Environment.NewLine;
-        metaInfo += "Meta Debug Section Chunk Size = " + mDebugSectionChunkSize + Environment.NewLine;
-        metaInfo += "Meta Async Section Chunk Size = " + mAsyncSectionChunkSize + Environment.NewLine;
-        metaInfo += "Meta mClassNamesLength = " + mClassNamesLength + Environment.NewLine;
+        metaInfo.AppendLine("||||||||||| Meta Header |||||||||||");
+
+        metaInfo.AppendFormat("Meta Stream Keyword: {0}", mMetaStreamVersion).Append(Environment.NewLine);
+        metaInfo.AppendFormat("Meta Default Section Chunk Size: {0}", mDefaultSectionChunkSize).Append(Environment.NewLine);
+        metaInfo.AppendFormat("Meta Debug Section Chunk Size: {0}", mDebugSectionChunkSize).Append(Environment.NewLine);
+        metaInfo.AppendFormat("Meta Async Section Chunk Size: {0}", mAsyncSectionChunkSize).Append(Environment.NewLine);
+        metaInfo.AppendFormat("Meta Class Names Length: {0}", mClassNamesLength).Append(Environment.NewLine);
 
         for (int i = 0; i < mClassNames.Length; i++)
         {
-            metaInfo += "Meta mClassName " + i + " = " + mClassNames[i] + Environment.NewLine;
+            metaInfo.AppendFormat("Meta Class Name CRC: {0}", mClassNames[i].mTypeNameCRC.mCrc64).Append(Environment.NewLine); ;
+            metaInfo.AppendFormat("Meta Class Version CRC: {0}", mClassNames[i].mVersionCRC).Append(Environment.NewLine); ;
         }
 
-        return metaInfo;
+        return metaInfo.ToString();
     }
 
     public uint GetHeaderByteSize()
