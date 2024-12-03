@@ -227,7 +227,9 @@
                               CanUserResizeColumns="True"
                               IsReadOnly="true"
                               Background="#454545"
-                              VerticalAlignment="Stretch">
+                              VerticalAlignment="Stretch"
+                              SelectionMode="Single"
+                              ToolTip.Tip="Double clicking on a cell opens the file with the preferred program. Double clicking a folder opens it inside the app. Selecting a folder enables bulk conversion (From gets unlocked).">
                         <i:Interaction.Behaviors>
                             <ia:EventTriggerBehavior EventName="DoubleTapped"
                                                      SourceObject="TextureDirectoryFilesDataGrid">
