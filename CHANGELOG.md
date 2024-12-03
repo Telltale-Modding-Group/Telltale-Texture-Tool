@@ -3,7 +3,7 @@
 - Added support for custom Monkey Island textures (Thanks HeitorSpectre!)
 - Fixed `Puzzle Agent 2`, `Jurassic Park` and `Law & Order Legacies` writing. (Fixes #15, Thanks @webfischi!)
 - Fixed `Texas Hold'Em` and `Sam & Max Beyond Time and Space` reading and writing.
-- Added tooltips for the data grid. (Thanks @WeaselOnaStick!)
+- Added tooltips to the data grid. (Thanks @WeaselOnaStick!)
 - Removed multi-selection from the data grid. (Finally! Thanks @WeaselOnaStick!)
 - Improved `Debug Information` text.
 - Fixed meta class names not displaying.
