@@ -125,12 +125,12 @@ public unsafe static partial class TextureManager
     /// <param name="width">The width of the DDS image.</param>
     /// <param name="height">(Optional) The height of the DDS image. If not provided, it defaults to 0.</param>
     /// <returns>The pitch.</returns>
-    public static uint ComputePitch(DXGIFormat dxgiFormat, ulong width, ulong height = 1)
+    public static uint ComputePitch(DXGIFormat dxgiFormat, nuint width, nuint height = 1)
     {
         nuint rowPitch;
         nuint slicePitch;
 
-        DirectXTex.ComputePitch((int)dxgiFormat, width, height, (ulong*)&rowPitch, (ulong*)&slicePitch, CPFlags.None).ThrowIf();
+        DirectXTex.ComputePitch((int)dxgiFormat, width, height, &rowPitch,&slicePitch, CPFlags.None).ThrowIf();
         return (uint)rowPitch;
     }
 
@@ -342,7 +342,7 @@ public unsafe static partial class TextureManager
         return information.ToString();
     }
 
-    unsafe public static void ReverseChannels(Vector4* outPixels, Vector4* inPixels, ulong width, ulong y)
+    unsafe public static void ReverseChannels(Vector4* outPixels, Vector4* inPixels, nuint width, nuint y)
     {
         for (ulong j = 0; j < width; ++j)
         {
@@ -355,7 +355,7 @@ public unsafe static partial class TextureManager
         }
     }
 
-    unsafe public static void RemoveZ(Vector4* outPixels, Vector4* inPixels, ulong width, ulong y)
+    unsafe public static void RemoveZ(Vector4* outPixels, Vector4* inPixels, nuint width, nuint y)
     {
         for (ulong j = 0; j < width; ++j)
         {
@@ -365,7 +365,7 @@ public unsafe static partial class TextureManager
         }
     }
 
-    unsafe public static void RestoreZ(Vector4* outPixels, Vector4* inPixels, ulong width, ulong y)
+    unsafe public static void RestoreZ(Vector4* outPixels, Vector4* inPixels, nuint width, nuint y)
     {
         for (ulong j = 0; j < width; ++j)
         {
@@ -378,7 +378,7 @@ public unsafe static partial class TextureManager
         }
     }
 
-    unsafe public static void DefaultCopy(Vector4* outPixels, Vector4* inPixels, ulong width, ulong y)
+    unsafe public static void DefaultCopy(Vector4* outPixels, Vector4* inPixels, nuint width, nuint y)
     {
         for (ulong j = 0; j < width; ++j)
         {
@@ -486,7 +486,7 @@ public unsafe partial class Texture
             face = 0;
         }
 
-        var image = DirectXTex.GetImage(Image, (ulong)mip, (ulong)face, (ulong)slice);
+        var image = DirectXTex.GetImage(Image, mip,face,slice);
 
         ScratchImage destImage = DirectXTex.CreateScratchImage();
         byte[] pixels;
@@ -540,7 +540,7 @@ public unsafe partial class Texture
         pixels = GetSectionPixelData(mip, face);
         width = PreviewWidth;
         height = PreviewHeight;
-        pitch = ComputePitch(PreviewFormat, PreviewWidth, PreviewHeight);
+        pitch = ComputePitch(PreviewFormat, (nuint)PreviewWidth, (nuint)PreviewHeight);
         length = width * height * (DirectXTex.BitsPerPixel((int)PreviewFormat) / 8);
     }
 
@@ -929,11 +929,11 @@ public unsafe partial class Texture
 
         if (metadata.IsVolumemap())
         {
-            DirectXTex.GenerateMipMaps3D2(Image.GetImages(), Image.GetImageCount(), TexFilterFlags.Default, (ulong)mipLevels, ref destImage).ThrowIf();
+            DirectXTex.GenerateMipMaps3D2(Image.GetImages(), Image.GetImageCount(), TexFilterFlags.Default, mipLevels, ref destImage).ThrowIf();
         }
         else
         {
-            DirectXTex.GenerateMipMaps2(Image.GetImages(), Image.GetImageCount(), ref metadata, TexFilterFlags.Default, (ulong)mipLevels, ref destImage).ThrowIf();
+            DirectXTex.GenerateMipMaps2(Image.GetImages(), Image.GetImageCount(), ref metadata, TexFilterFlags.Default, mipLevels, ref destImage).ThrowIf();
         }
 
         Console.WriteLine("Mipmaps generated" + destImage.GetImageCount());
