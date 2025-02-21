@@ -1,3 +1,15 @@
+### Version 2.5.1
+
+- Added support for custom `Monkey Island` textures (Thanks HeitorSpectre!)
+- Fixed `Puzzle Agent 2`, `Jurassic Park` and `Law & Order Legacies` writing. (Fixes #15, Thanks @webfischi!)
+- Fixed `Texas Hold'Em` and `Sam & Max Beyond Time and Space` reading and writing.
+- Added tooltips to the data grid. (Thanks @WeaselOnaStick!)
+- Removed multi-selection from the data grid. (Finally! Thanks @WeaselOnaStick!)
+- Improved `Debug Information` text.
+- Fixed meta class names not displaying.
+- Bumped all Avalonia dependencies to 11.2.0.
+- Utilized StringBuilder to improve string performance.
+
 ### Version 2.5.0
 
 ### Main Window

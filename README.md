@@ -25,7 +25,7 @@ This is an application designed to preview and convert **Telltale textures** (fi
 
 ## Getting started
 
-#### [Quick Video Tutorial](https://www.youtube.com/watch?v=pjRhuKe72Qo)
+#### [YouTube Tutorial](https://www.youtube.com/watch?v=osOXQHbQ5OI)
 
 #### [Wiki](https://github.com/Telltale-Modding-Group/Telltale-Texture-Tool/wiki)
 
