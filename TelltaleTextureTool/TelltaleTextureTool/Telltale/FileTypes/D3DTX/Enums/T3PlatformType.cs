@@ -6,7 +6,7 @@ public enum T3PlatformType
 {
     [Display(Name = "Default Mode")]
     ePlatform_None = 0,
-    [Display(Name = "Non-Swizzled Platforms")]
+    [Display(Name = "Unknown Platform")]
     ePlatform_All = 1,
     [Display(Name = "PC")]
     ePlatform_PC = 2,
