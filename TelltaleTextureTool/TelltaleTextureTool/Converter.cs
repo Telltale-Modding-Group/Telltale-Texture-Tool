@@ -11,6 +11,8 @@ using Hexa.NET.DirectXTex;
 using TelltaleTextureTool.Telltale.FileTypes.D3DTX;
 using TelltaleTextureTool.TelltaleEnums;
 using TelltaleTextureTool.Graphics;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace TelltaleTextureTool;
 
@@ -35,71 +37,64 @@ public static class Converter
     }
 
     /// <summary>
-    /// Converts multiple texture files from one format to another.
+    /// Converts multiple texture files from one format to another using parallel processing.
     /// </summary>
     /// <param name="texPath">The path to the folder containing the texture files.</param>
     /// <param name="resultPath">The path to save the converted texture files.</param>
     /// <param name="options">The advanced options to apply to the texture files.</param>
     /// <param name="oldTextureType">The file type of the original texture files.</param>
     /// <param name="newTextureType">The file type to convert the texture files to.</param>
-    /// <returns>True if the bulk conversion is successful; otherwise, false.</returns>
-    /// <exception cref="FileNotFoundException">Thrown when no files with the specified file type were found in the directory.</exception>
-    /// <exception cref="Exception">Thrown when an invalid file type is provided or when one or more conversions fail.</exception>
-    public static bool ConvertBulk(string texPath, string resultPath, ImageAdvancedOptions options, TextureType oldTextureType, TextureType newTextureType = TextureType.Unknown)
+    /// <returns>True if all conversions succeeded; otherwise, throws AggregateException.</returns>
+    /// <exception cref="DirectoryNotFoundException">Thrown when source or destination directory is invalid.</exception>
+    /// <exception cref="FileNotFoundException">Thrown when no matching source files are found.</exception>
+    /// <exception cref="ArgumentException">Thrown when invalid texture types are provided.</exception>
+    /// <exception cref="AggregateException">Thrown when one or more conversions fail.</exception>
+    public static bool ConvertBulk(string texPath, string resultPath, ImageAdvancedOptions imageOptions, TextureType oldTextureType, TextureType newTextureType)
     {
-        // Gather the files from the texture folder path into an array
-        List<string> textures = new(Directory.GetFiles(texPath));
+        // Validate inputs
+        if (newTextureType == TextureType.Unknown)
+            throw new ArgumentException("Target texture type must be specified", nameof(newTextureType));
 
-        // Filter the array so we only get the files required to convert
-        textures = IOManagement.FilterFiles(textures, GetExtension(oldTextureType));
+        if (!Directory.Exists(texPath))
+            throw new DirectoryNotFoundException($"Source directory not found: {texPath}");
 
-        // If no image files were found, throw an exception
-        if (textures.Count < 1)
+        Directory.CreateDirectory(resultPath);
+
+        // Get and filter files
+        var supportedExtensions = GetExtension(oldTextureType);
+        var textures = Directory.EnumerateFiles(texPath)
+            .Where(f => supportedExtensions.Contains(Path.GetExtension(f), StringComparer.OrdinalIgnoreCase))
+            .ToList();
+
+        if (textures.Count == 0)
+            throw new FileNotFoundException($"No {oldTextureType} files found in {texPath}", texPath);
+
+        // Parallel processing with error handling
+        var exceptions = new ConcurrentQueue<Exception>();
+        var options = new ParallelOptions
         {
-            throw new FileNotFoundException($"No files with file type {Enum.GetName(oldTextureType)} were found in the directory.");
-        }
+            MaxDegreeOfParallelism = Environment.ProcessorCount
+        };
 
-        // Create an array of threads
-        Thread[] threads = new Thread[(int)Math.Ceiling(textures.Count / (double)30)];
-        int failedConversions = 0;
-        for (int i = 0; i < threads.Length; i++)
+        Parallel.ForEach(textures, options, texture =>
         {
-            var texturesMiniBulkList = textures.Skip(30 * i).Take(30);
-
-            // Create a new thread and pass the conversion method as a parameter
-            threads[i] = new Thread(() =>
+            try
             {
-                foreach (var texture in texturesMiniBulkList)
-                {
-                    try
-                    {
-                        ConvertTexture(texture, resultPath, options, oldTextureType, newTextureType);
-                    }
-                    catch (Exception)
-                    {
-                        // If an exception is thrown, increment the failedConversions count
-                        Interlocked.Increment(ref failedConversions);
-                    }
-                }
-            });
+                ConvertTexture(texture, resultPath, imageOptions, oldTextureType, newTextureType);
+            }
+            catch (Exception ex)
+            {
+                exceptions.Enqueue(new Exception(
+                    $"Failed to convert {Path.GetFileName(texture)}: {ex.Message}", ex));
+            }
+        });
 
-            // Start the thread
-            threads[i].Start();
-        }
+        // Throw an exception if any conversions failed
+        if (!exceptions.IsEmpty)
+            throw new AggregateException(
+                $"{exceptions.Count} conversion(s) failed. See inner exceptions for details.",
+                exceptions);
 
-        // Wait for all threads to finish
-        foreach (var thread in threads)
-        {
-            thread.Join();
-        }
-
-        // If there are failed conversions, throw an exception
-        if (failedConversions > 0)
-        {
-            throw new Exception($"{failedConversions} conversions failed. Please check the files and try again.");
-        }
-
-        // Return true to indicate successful bulk conversion
         return true;
     }
 
