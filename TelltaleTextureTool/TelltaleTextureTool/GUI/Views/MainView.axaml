@@ -752,6 +752,7 @@
                                     <!-- Set Stretch to Fill to ignore aspectf ratio -->
                                     <Image Name="ImagepreviewImage"
                                            Source="{Binding ImagePreview}"
+                                           RenderOptions.BitmapInterpolationMode="None"
                                            Stretch="Uniform"
                                            Margin="10" />
                                 </Border>
