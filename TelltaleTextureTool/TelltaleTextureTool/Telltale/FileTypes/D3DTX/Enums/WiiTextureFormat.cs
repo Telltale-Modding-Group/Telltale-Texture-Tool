@@ -4,5 +4,5 @@ public enum WiiTextureFormat
 {
     eTxWiiFormatDefault,
     eTxWiiFormatAlphaOnly,
-    eTxWiiFormatRGBA24
+    eTxWiiFormatRGBA24,
 }

@@ -54,7 +54,12 @@ public class MSV5 : IMetaHeader
     /// </summary>
     public MSV5() { }
 
-    public void WriteToBinary(BinaryWriter writer, TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None, bool printDebug = false)
+    public void WriteToBinary(
+        BinaryWriter writer,
+        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        T3PlatformType platform = T3PlatformType.ePlatform_None,
+        bool printDebug = false
+    )
     {
         ByteFunctions.WriteFixedString(writer, mMetaStreamVersion); // Meta Stream Keyword [4 bytes]
         writer.Write(mDefaultSectionChunkSize); // Default Section Chunk Size [4 bytes] default section chunk size
@@ -69,7 +74,12 @@ public class MSV5 : IMetaHeader
         }
     }
 
-    public void ReadFromBinary(BinaryReader reader, TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None, bool printDebug = false)
+    public void ReadFromBinary(
+        BinaryReader reader,
+        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        T3PlatformType platform = T3PlatformType.ePlatform_None,
+        bool printDebug = false
+    )
     {
         mMetaStreamVersion = ByteFunctions.ReadFixedString(reader, 4); // Meta Stream Keyword [4 bytes]
         mDefaultSectionChunkSize = reader.ReadUInt32(); // Default Section Chunk Size [4 bytes] //default section chunk size
@@ -89,29 +99,37 @@ public class MSV5 : IMetaHeader
             PrintConsole();
     }
 
-    public void SetMetaSectionChunkSizes(uint defaultSectionChunkSize, uint debugSectionChunkSize, uint asyncSectionChunkSize)
+    public void SetMetaSectionChunkSizes(
+        uint defaultSectionChunkSize,
+        uint debugSectionChunkSize,
+        uint asyncSectionChunkSize
+    )
     {
         mDefaultSectionChunkSize = defaultSectionChunkSize;
         mDebugSectionChunkSize = debugSectionChunkSize;
         mAsyncSectionChunkSize = asyncSectionChunkSize;
     }
 
-    public string GetDebugInfo(TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None)
+    public string GetDebugInfo(
+        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        T3PlatformType platform = T3PlatformType.ePlatform_None
+    )
     {
         StringBuilder metaInfo = new();
 
         metaInfo.AppendLine("||||||||||| Meta Header |||||||||||");
-
-        metaInfo.AppendFormat("Meta Stream Keyword: {0}", mMetaStreamVersion).Append(Environment.NewLine);
-        metaInfo.AppendFormat("Meta Default Section Chunk Size: {0}", mDefaultSectionChunkSize).Append(Environment.NewLine);
-        metaInfo.AppendFormat("Meta Debug Section Chunk Size: {0}", mDebugSectionChunkSize).Append(Environment.NewLine);
-        metaInfo.AppendFormat("Meta Async Section Chunk Size: {0}", mAsyncSectionChunkSize).Append(Environment.NewLine);
-        metaInfo.AppendFormat("Meta Class Names Length: {0}", mClassNamesLength).Append(Environment.NewLine);
+        metaInfo.AppendFormat("Meta Stream Keyword: {0}", mMetaStreamVersion).AppendLine();
+        metaInfo
+            .AppendFormat("Default Section Chunk Size: {0}", mDefaultSectionChunkSize)
+            .AppendLine();
+        metaInfo.AppendFormat("Debug Section Chunk Size: {0}", mDebugSectionChunkSize).AppendLine();
+        metaInfo.AppendFormat("Async Section Chunk Size: {0}", mAsyncSectionChunkSize).AppendLine();
+        metaInfo.AppendFormat("Meta Class Names Length: {0}", mClassNamesLength).AppendLine();
 
         for (int i = 0; i < mClassNames.Length; i++)
         {
-            metaInfo.AppendFormat("Meta Class Name CRC: {0}", mClassNames[i].mTypeNameCRC.mCrc64).Append(Environment.NewLine); ;
-            metaInfo.AppendFormat("Meta Class Version CRC: {0}", mClassNames[i].mVersionCRC).Append(Environment.NewLine); ;
+            metaInfo.AppendFormat("[Meta Class {0}]", i).AppendLine();
+            metaInfo.AppendFormat("{0}", mClassNames[i]).AppendLine();
         }
 
         return metaInfo.ToString();

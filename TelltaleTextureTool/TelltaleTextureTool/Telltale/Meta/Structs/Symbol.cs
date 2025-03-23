@@ -25,4 +25,6 @@ public struct Symbol
 
         return totalByteSize;
     }
+
+    public override readonly string ToString() => string.Format("[Symbol] {0}", mCrc64);
 }

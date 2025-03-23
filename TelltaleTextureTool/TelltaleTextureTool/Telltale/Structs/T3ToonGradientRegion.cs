@@ -20,15 +20,16 @@ public struct T3ToonGradientRegion
         writer.Write(mSize); //[4 bytes]
     }
 
-    public uint GetByteSize()
+    public readonly uint GetByteSize()
     {
         uint totalByteSize = 0;
 
-        totalByteSize += mColor.GetByteSize(); //mColor
-        totalByteSize += (uint)Marshal.SizeOf(mSize); //mSize [4 bytes]
+        totalByteSize += mColor.GetByteSize(); // mColor [4 bytes]
+        totalByteSize += (uint)Marshal.SizeOf(mSize); // mSize [4 bytes]
 
         return totalByteSize;
     }
 
-    public override string ToString() => string.Format("[T3ToonGradientRegion] mColor: {0} mSize: {1}", mColor.ToString(), mSize);
+    public override readonly string ToString() =>
+        string.Format("[T3ToonGradientRegion] mColor: {0}, mSize: {1}", mColor.ToString(), mSize);
 }

@@ -6,7 +6,7 @@ namespace TelltaleTextureTool.TelltaleTypes;
 /// <summary>
 /// This is a class name struct used in a meta header.
 /// This contains a CRC64'd string of a class name used in the file.
-/// The CRC64 string of a classname is usually all lowercase, and uses 
+/// The CRC64 string of a classname is usually all lowercase, and uses
 /// </summary>
 public struct ClassNames
 {
@@ -34,4 +34,11 @@ public struct ClassNames
 
         return totalByteSize;
     }
+
+    public override readonly string ToString() =>
+        string.Format(
+            "[MetaClass] mTypeNameCRC: {0}, mVersionCRC: {1}",
+            mTypeNameCRC.ToString(),
+            mVersionCRC
+        );
 }

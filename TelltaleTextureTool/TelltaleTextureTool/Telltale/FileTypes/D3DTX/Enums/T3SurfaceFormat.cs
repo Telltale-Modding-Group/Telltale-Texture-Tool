@@ -11,71 +11,71 @@
 // In Telltale the enum is represented using Hungarian notation (eSurface_formatName).
 public enum T3SurfaceFormat
 {
-
     // Note: Apparently, some of these formats are equivalent to each other. It's just that some are used for Direct3D9, while others are used for Direct3D11.
     #region DXGI_FORMATS / D3DFMT
 
-    // Equivalent to DXGI_FORMAT_B8G8R8A8_UNORM or Direct3D9 D3DFMT_A8R8G8B8
+    // I am using DXGI channel ordering.
+
+    // B8G8R8A8, Unorm
     ARGB8 = 0x0,
 
-    // Equivalent to DXGI_FORMAT_R16G16B16A16_UNORM or Direct3D9 D3DFMT_A16B16G16R16
+    // R16G16B16A16, Unorm
     // Note: Despite the name, the channels are not reversed. Poker Knight 2 has a single texture with this format and the colors are correct.
     ARGB16 = 0x1,
 
-    // Equivalent to DXGI_FORMAT_B5G6R5_UNORM or Direct3D9 D3DFMT_R5G6B5
+    // B5G6R5, Unorm
     RGB565 = 0x2,
 
-    // Equivalent to DXGI_FORMAT_B5G5R5A1_UNORM or Direct3D9 D3DFMT_A1R5G5B5
+    // B5G5R5A1, Unorm
     ARGB1555 = 0x3,
 
-    // Equivalent to DXGI_FORMAT_B4G4R4A4_UNORM or Direct3D9 D3DFMT_A4R4G4B4
+    // B4G4R4A4, Unorm
     ARGB4 = 0x4,
 
-    // Equivalent to DXGI_FORMAT_R10G10B10A2_UNORM or Direct3D9 D3DFMT_A2B10G10R10
-    // It could be DXGI_FORMAT_R10G10B10A2_UINT
+    // R10G10B10A2, Unorm
     ARGB2101010 = 0x5,
 
-    // Equivalent to DXGI_FORMAT_R16_UNORM or Direct3D9 D3DFMT_R16F
+    // R16, Unorm
     R16 = 0x6,
 
-    // Equivalent to DXGI_FORMAT_R16G16_UNORM or Direct3D9 D3DFMT_G16R16
+    // R16G16, Unorm
     RG16 = 0x7,
 
-    // Equivalent to DXGI_FORMAT_R16G16B16A16_UNORM or Direct3D9 D3DFMT_A16B16G16R16
+    // R16G16B16A16, Unorm
     RGBA16 = 0x8,
 
-    // Equivalent to = DXGI_FORMAT_R8G8_UNORM or Direct3D9 D3DFMT_G8R8
+    // R8G8, Unorm
     RG8 = 0x9,
 
-    // Equivalent to DXGI_FORMAT_R8G8B8A8_UNORM or Direct3D9 D3DFMT_A8B8G8R8
+    // R8G8B8A8, Unorm
     RGBA8 = 0xA,
 
-    // Equivalent to DXGI_FORMAT_R32_FLOAT or Direct3D9 D3DFMT_R32F
-    // It could be DXGI_FORMAT_R32_UINT
+    // R32, Float
+    // Type could be Uint.
     R32 = 0xB,
 
-    // Equivalent to DXGI_FORMAT_R32G32_FLOAT or Direct3D9 D3DFMT_G32R32
-    // It could be DXGI_FORMAT_R32G32_UINT
+    // R32G32, Float
+    // Type could be Uint.
     RG32 = 0xC,
 
-    // Equivalent to DXGI_FORMAT_R32G32B32A32_FLOAT or Direct3D9 D3DFMT_A32B32G32R32F
-    // It could be DXGI_FORMAT_R32G32B32A32_UINT
+    // R32G32B32A32, Float
     RGBA32 = 0xD,
 
-    // Equivalent to DXGI_FORMAT_R8_UNORM or Direct3D9 D3DFMT_L8
+    // R8, Unorm
+    // This is used for Luminance.
     R8 = 0xE,
 
-    // Equivalent to DXGI_FORMAT_R8G8B8A8_UNORM or Direct3D9 D3DFMT_A8B8G8R8
+    // R8G8B8A8, Sint
     RGBA8S = 0xF,
 
-    // Equivalent to DXGI_FORMAT_A8_UNORM or Direct3D9 D3DFMT_A8
+    // A8, Unorm
     A8 = 0x10,
 
-    // L8, AL8 and L16 are luminance formats, which are not supported by Direct3D11. 
+    // L8, AL8 and L16 are luminance formats, which are not supported by Direct3D11.
     // These will be mapped to DXGI_FORMAT_R8, DXGI_FORMAT_R8G8 and DXGI_FORMAT_R16_UNORM respectively.
     // For further accuracy, mapping them RGBA8 and RGBA16 would be more accurate on what they represent, but it's not necessary.
 
-    // Equivalent to DXGI_FORMAT_R8 or Direct3D9 D3DFMT_L8
+    // Equivalent to DXGI_FORMAT_R8_UNORM or Direct3D9 D3DFMT_L8
     L8 = 0x11, // Only one file found in Borderlands - mlaa_lookup
 
     // Equivalent to DXGI_FORMAT_R8G8 or Direct3D9 D3DFMT_A8L8
@@ -164,12 +164,12 @@ public enum T3SurfaceFormat
     // In Telltale Tool it is named eSurface_DXN
     BC5 = 0x44,
 
-    // CTX1 is a format that according to the limited information that exists online, is specific to the Xbox360 platform. 
-    // CTX1 is similar to DXT1 format in that it is a two channel texture designed for tangent space normal maps, but it is lower quality. 
-    // Information for this format is scarce, and so are tools regarding compressing/decompressing the format. 
+    // CTX1 is a format that according to the limited information that exists online, is specific to the Xbox360 platform.
+    // CTX1 is similar to DXT1 format in that it is a two channel texture designed for tangent space normal maps, but it is lower quality.
+    // Information for this format is scarce, and so are tools regarding compressing/decompressing the format.
     // We will ignore support for this format for the time being especially as Xbox360 also had support for DXT compressions which were likely more commonly used than this one.
-    // https://forum.xen-tax.com/viewtopic.php@p=83846.html 
-    // https://github.com/Xenomega/Alteration/blob/master/Alteration/Halo%203/Map%20File/Raw/BitmapRaw/DXTDecoder.cs 
+    // https://forum.xen-tax.com/viewtopic.php@p=83846.html
+    // https://github.com/Xenomega/Alteration/blob/master/Alteration/Halo%203/Map%20File/Raw/BitmapRaw/DXTDecoder.cs
     // https://fileadmin.cs.lth.se/cs/Personal/Michael_Doggett/talks/unc-xenos-doggett.pdf)
     CTX1 = 0x45,
 
@@ -196,7 +196,7 @@ public enum T3SurfaceFormat
     PVRTC4a = 0x53, //53h
 
     // ATC RGB
-    ATC_RGB = 0x60, //60h 
+    ATC_RGB = 0x60, //60h
 
     // ATC Explicit Alpha
     ATC_RGB1A = 0x61, //61h

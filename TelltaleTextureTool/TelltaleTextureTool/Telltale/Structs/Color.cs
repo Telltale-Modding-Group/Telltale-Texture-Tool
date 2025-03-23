@@ -38,5 +38,6 @@ public struct Color
         return totalByteSize;
     }
 
-    public override readonly string ToString() => string.Format("[Color] r: {0} g: {1} b: {2} a: {3}", r, g, b, a);
+    public override readonly string ToString() =>
+        string.Format("[Color] r: {0} g: {1} b: {2} a: {3}", r, g, b, a);
 }

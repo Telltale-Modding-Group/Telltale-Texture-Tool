@@ -21,10 +21,10 @@ public struct TelltaleBoolean
     {
         uint totalByteSize = 0;
 
-        totalByteSize += 1; //mbHasProps [1 bytes]
+        totalByteSize += 1; // mbHasProps [1 byte]
 
         return totalByteSize;
     }
 
-    public override readonly string ToString() => string.Format("[TelltaleBoolean] : {0} ", mbTelltaleBoolean);
+    public override readonly string ToString() => string.Format("{0}", mbTelltaleBoolean);
 }

@@ -44,5 +44,12 @@ public struct RenderSwizzleParams
         return totalByteSize;
     }
 
-    public override readonly string ToString() => string.Format("[RenderSwizzleParams]: {0} {1} {2} {3}", (int)mSwizzle1, (int)mSwizzle2, (int)mSwizzle3, (int)mSwizzle4);
+    public override readonly string ToString() =>
+        string.Format(
+            "[RenderSwizzleParams]: {0} {1} {2} {3}",
+            (int)mSwizzle1,
+            (int)mSwizzle2,
+            (int)mSwizzle3,
+            (int)mSwizzle4
+        );
 }

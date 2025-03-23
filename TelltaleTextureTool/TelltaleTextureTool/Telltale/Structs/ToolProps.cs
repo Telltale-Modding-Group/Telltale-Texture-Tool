@@ -12,11 +12,11 @@ public struct ToolProps
         mbHasProps = ByteFunctions.ReadTelltaleBoolean(reader);
     }
 
-    public readonly uint GetByteSize()
+    public static uint GetByteSize()
     {
         uint totalByteSize = 0;
 
-        totalByteSize += 1; //mbHasProps [1 bytes]
+        totalByteSize += 1; // mbHasProps [1 byte]
 
         return totalByteSize;
     }

@@ -44,7 +44,12 @@ public class MTRE : IMetaHeader
     /// </summary>
     public MTRE() { }
 
-    public void WriteToBinary(BinaryWriter writer, TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None, bool printDebug = false)
+    public void WriteToBinary(
+        BinaryWriter writer,
+        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        T3PlatformType platform = T3PlatformType.ePlatform_None,
+        bool printDebug = false
+    )
     {
         ByteFunctions.WriteFixedString(writer, mMetaStreamVersion); // Meta Stream Keyword [4 bytes]
         writer.Write(mClassNamesLength); // mClassNamesLength [4 bytes]
@@ -61,7 +66,12 @@ public class MTRE : IMetaHeader
         }
     }
 
-    public void ReadFromBinary(BinaryReader reader, TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None, bool printDebug = false)
+    public void ReadFromBinary(
+        BinaryReader reader,
+        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        T3PlatformType platform = T3PlatformType.ePlatform_None,
+        bool printDebug = false
+    )
     {
         mMetaStreamVersion = ByteFunctions.ReadFixedString(reader, 4); // Meta Stream Keyword [4 bytes]
         mClassNamesLength = reader.ReadUInt32(); // mClassNamesLength [4 bytes]
@@ -96,30 +106,36 @@ public class MTRE : IMetaHeader
             PrintConsole();
     }
 
-    public void SetMetaSectionChunkSizes(uint defaultSectionChunkSize, uint debugSectionChunkSize, uint asyncSectionChunkSize)
+    public void SetMetaSectionChunkSizes(
+        uint defaultSectionChunkSize,
+        uint debugSectionChunkSize,
+        uint asyncSectionChunkSize
+    )
     {
         return;
     }
 
-    public string GetDebugInfo(TelltaleToolGame game = TelltaleToolGame.DEFAULT, T3PlatformType platform = T3PlatformType.ePlatform_None)
+    public string GetDebugInfo(
+        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        T3PlatformType platform = T3PlatformType.ePlatform_None
+    )
     {
         StringBuilder metaInfo = new();
 
         metaInfo.AppendLine("||||||||||| Meta Header |||||||||||");
-
-        metaInfo.AppendFormat("Meta Stream Keyword: {0}", mMetaStreamVersion).Append(Environment.NewLine);
-        metaInfo.AppendFormat("Meta Class Names Length: {0}", mClassNamesLength).Append(Environment.NewLine); ;
+        metaInfo.AppendFormat("Meta Stream Keyword: {0}", mMetaStreamVersion).AppendLine();
+        metaInfo.AppendFormat("Meta Class Names Length: {0}", mClassNamesLength).AppendLine();
 
         for (int i = 0; i < mClassNames.Length; i++)
         {
-            metaInfo.AppendFormat("Meta Class Name CRC: {0}", mClassNames[i].mTypeNameCRC.mCrc64).Append(Environment.NewLine); ;
-            metaInfo.AppendFormat("Meta Class Version CRC: {0}", mClassNames[i].mVersionCRC).Append(Environment.NewLine); ;
+            metaInfo.AppendFormat("[Meta Class {0}]", i).AppendLine();
+            metaInfo.AppendFormat("{0}", mClassNames[i]).AppendLine();
         }
 
         for (int i = 0; i < mUnhashedClassNames.Length; i++)
         {
-            metaInfo.AppendFormat("Meta Class Name: {0}", mUnhashedClassNames[i].className).Append(Environment.NewLine); ;
-            metaInfo.AppendFormat("Meta Class Version CRC: {0}", mUnhashedClassNames[i].mVersionCRC).Append(Environment.NewLine); ;
+            metaInfo.AppendFormat("[Meta Class {0}]", i).AppendLine();
+            metaInfo.AppendFormat("{0}", mUnhashedClassNames[i]).AppendLine();
         }
 
         return metaInfo.ToString();
