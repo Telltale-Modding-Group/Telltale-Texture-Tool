@@ -98,34 +98,4 @@ public static class MessageBoxes
             Topmost = false,
         };
     }
-
-    /// <summary>
-    /// Creates and returns a confirmation dialog.
-    /// </summary>
-    /// <param name="message"></param>
-    /// <returns>The message box.</returns>
-    public static MessageBoxStandardParams GetDebugInformationBox(string message)
-    {
-        var bitmap = new Bitmap(AssetLoader.Open(new Uri(APP_ICON)));
-
-        return new MessageBoxStandardParams
-        {
-            ButtonDefinitions = ButtonEnum.Ok,
-            EnterDefaultButton = ClickEnum.Ok,
-            EscDefaultButton = ClickEnum.Ok,
-            ContentTitle = "Texture Debug Information",
-            ContentMessage = message,
-            Icon = Icon.Info,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            WindowIcon = new WindowIcon(bitmap),
-            CanResize = false,
-            FontFamily = "Consolas",
-            MaxWidth = 1000,
-            MaxHeight = 700,
-            SizeToContent = SizeToContent.WidthAndHeight,
-            ShowInCenter = true,
-            Topmost = false,
-            ContentHeader = "Texture Debug Information:"
-        };
-    }
 }

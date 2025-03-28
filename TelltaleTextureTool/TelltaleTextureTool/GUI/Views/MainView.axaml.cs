@@ -1,9 +1,15 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Controls.PanAndZoom;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Threading;
+using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.Input;
+using TelltaleTextureTool.GUI.ViewModels;
 using TelltaleTextureTool.ViewModels;
-using System;
 
 namespace TelltaleTextureTool.Views;
 
@@ -14,13 +20,6 @@ public partial class MainView : UserControl
         InitializeComponent();
 
         DataContext = new MainViewModel();
-
-        var viewModel = (MainViewModel)DataContext;
-        viewModel.ResetPanAndZoomCommand = new RelayCommand(ResetPanAndZoom);
-
-        DataContextChanged += OnDataContextChanged;
-        viewModel.ResetPanAndZoomCommand.Execute(null);
-        ResetPanAndZoom();
     }
 
     private void ResetPanAndZoom()
@@ -53,30 +52,64 @@ public partial class MainView : UserControl
 
     private void OnDataContextChanged(object sender, EventArgs e)
     {
+        if (DataContext is MainViewModel viewModel) { }
+    }
+
+    private void Binding_1(object? sender, Avalonia.Controls.SelectionChangedEventArgs e) { }
+
+    private void PreviewImageCommand_1(
+        object? sender,
+        Avalonia.Controls.SelectionChangedEventArgs e
+    ) { }
+
+    private void Binding(
+        object? sender,
+        Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e
+    ) { }
+
+    private void PreviewImageCommand_1(
+        object? sender,
+        Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e
+    ) { }
+
+    private void PreviewImageCommand(object? sender, Avalonia.Interactivity.RoutedEventArgs e) { }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
         if (DataContext is MainViewModel viewModel)
         {
+            viewModel.ResetPanAndZoomCommand = new RelayCommand(ResetPanAndZoom);
 
+            viewModel.NotificationManager = new WindowNotificationManager(
+                TopLevel.GetTopLevel(this)!
+            )
+            {
+                MaxItems = 5,
+                Position = NotificationPosition.BottomRight,
+            };
+
+            viewModel.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(viewModel.DataGridSelectedItem))
+                {
+                    // Scroll to the selected item
+                    Dispatcher.UIThread.Post(
+                        () =>
+                        {
+                            if (viewModel.DataGridSelectedItem != null)
+                            {
+                                TextureDirectoryFilesDataGrid.ScrollIntoView(
+                                    viewModel.DataGridSelectedItem,
+                                    null
+                                );
+                            }
+                        },
+                        DispatcherPriority.Background
+                    );
+                }
+            };
         }
-    }
-
-
-    private void Binding_1(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
-    {
-    }
-
-    private void PreviewImageCommand_1(object? sender, Avalonia.Controls.SelectionChangedEventArgs e)
-    {
-    }
-
-    private void Binding(object? sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
-    {
-    }
-
-    private void PreviewImageCommand_1(object? sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
-    {
-    }
-
-    private void PreviewImageCommand(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
+        ResetPanAndZoom();
     }
 }

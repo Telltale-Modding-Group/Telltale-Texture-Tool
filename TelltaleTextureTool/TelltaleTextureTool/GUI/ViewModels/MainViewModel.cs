@@ -1,31 +1,35 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Notifications;
+using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.Svg.Skia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using TelltaleTextureTool.Main;
-using TelltaleTextureTool.Utilities;
-using TelltaleTextureTool.Views;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
-using IImage = Avalonia.Media.IImage;
-using TelltaleTextureTool.DirectX;
-using System.ComponentModel;
-using Avalonia.Data.Converters;
-using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using System.Reflection;
-using TelltaleTextureTool.TelltaleEnums;
+using TelltaleTextureTool.Codecs;
 using TelltaleTextureTool.Graphics;
+using TelltaleTextureTool.TelltaleEnums;
+using TelltaleTextureTool.Utilities;
+using TelltaleTextureTool.Views;
+using IImage = Avalonia.Media.IImage;
+using Texture = TelltaleTextureTool.Graphics.Texture;
 
 namespace TelltaleTextureTool.ViewModels;
 
@@ -40,9 +44,10 @@ public class EnumDisplayNameConverter : IValueConverter
         FieldInfo field = value.GetType().GetField(value.ToString());
 
         // Get the Display attribute if present
-        DisplayAttribute attribute = field?.GetCustomAttributes(false)
-                                          .OfType<DisplayAttribute>()
-                                          .FirstOrDefault();
+        DisplayAttribute attribute = field
+            ?.GetCustomAttributes(false)
+            .OfType<DisplayAttribute>()
+            .FirstOrDefault();
 
         // Return the name if available, otherwise fall back to the enum value's name
         return attribute?.Name ?? value.ToString();
@@ -55,9 +60,10 @@ public class EnumDisplayNameConverter : IValueConverter
         {
             foreach (var field in targetType.GetFields())
             {
-                var attribute = field.GetCustomAttributes(false)
-                                     .OfType<DisplayAttribute>()
-                                     .FirstOrDefault();
+                var attribute = field
+                    .GetCustomAttributes(false)
+                    .OfType<DisplayAttribute>()
+                    .FirstOrDefault();
 
                 if (attribute?.Name == stringValue || field.Name == stringValue)
                 {
@@ -87,7 +93,7 @@ public partial class MainViewModel : ViewModelBase
 
     private readonly ObservableCollection<FormatItemViewModel> _ddsTypes =
     [
-        new FormatItemViewModel { Name = "D3DTX", ItemStatus = true},
+        new FormatItemViewModel { Name = "D3DTX", ItemStatus = true },
         new FormatItemViewModel { Name = "PNG", ItemStatus = true },
         new FormatItemViewModel { Name = "JPEG", ItemStatus = true },
         new FormatItemViewModel { Name = "BMP", ItemStatus = true },
@@ -97,9 +103,9 @@ public partial class MainViewModel : ViewModelBase
     ];
 
     private readonly ObservableCollection<FormatItemViewModel> _otherTypes =
-        [
-              new FormatItemViewModel { Name = "D3DTX", ItemStatus = true }
-            ];
+    [
+        new FormatItemViewModel { Name = "D3DTX", ItemStatus = true },
+    ];
 
     private readonly ObservableCollection<FormatItemViewModel> _folderTypes =
     [
@@ -113,125 +119,185 @@ public partial class MainViewModel : ViewModelBase
         new FormatItemViewModel { Name = "HDR", ItemStatus = true },
     ];
 
-    private readonly List<string> _allTypes = [".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff", ".d3dtx", ".dds", ".hdr", ".tga"];
-
-    // No idea if this is correct. This just sets a filter list.
-    public static FilePickerFileType AllowedTypes { get; } = new("All Supported Types")
-    {
-        Patterns = ["*.png", "*.jpg", "*.jpeg", "*.bmp", "*.tif", "*.tiff", "*.d3dtx", "*.dds", "*.hdr", "*.tga", "*.json"],
-        AppleUniformTypeIdentifiers = ["public.image"],
-        MimeTypes = ["image/png", "image/jpeg", "image/bmp", "image/tiff", "image/tga", "image/hdr", "image/vnd.ms-dds", "image/vnd.ms-d3dtx", "image/vnd.ms-ktx2"]
-    };
-
-    // No idea if this is correct
-    public static FilePickerFileType AllowedTTarchTypes { get; } = new("TTArch Types")
-    {
-        Patterns = ["*.ttarch", "*.ttarch2"]
-    };
-
     private readonly MainManager mainManager = MainManager.GetInstance();
     private readonly Uri _assetsUri = new("avares://TelltaleTextureTool/Assets/");
     private static readonly string ErrorSvgFilename = "error.svg";
 
     #endregion
 
+    public WindowNotificationManager? NotificationManager { get; set; }
+
     #region UI PROPERTIES
-    public ImageEffect[] ImageConversionModes { get; } = [
-        ImageEffect.DEFAULT,
-        ImageEffect.SWIZZLE_ABGR,
-        ImageEffect.RESTORE_Z,
-        ImageEffect.REMOVE_Z
+    public ImageEffect[] ImageConversionModes { get; } =
+        [
+            ImageEffect.None,
+            ImageEffect.SwizzleRB,
+            ImageEffect.SwizzleRGBA,
+            ImageEffect.RestoreZ,
+            ImageEffect.RemoveZ,
         ];
 
-    public T3PlatformType[] SwizzlePlatforms { get; } = [
-        T3PlatformType.ePlatform_All,
-        T3PlatformType.ePlatform_Xbox,
-        T3PlatformType.ePlatform_PS3,
-        T3PlatformType.ePlatform_PS4,
-        T3PlatformType.ePlatform_NX,
-        T3PlatformType.ePlatform_Vita
+    public Platform[] SwizzlePlatforms { get; } =
+        [
+            Platform.None,
+            Platform.Xbox360,
+            Platform.PS3,
+            Platform.PS4,
+            Platform.Switch,
+            Platform.PSVita,
         ];
 
-    public TelltaleToolGame[] Games { get; } = [
-     TelltaleToolGame.DEFAULT,
-     TelltaleToolGame.TEXAS_HOLD_EM_OG,  // LV?
-     TelltaleToolGame.TEXAS_HOLD_EM_V1,  // LV9
-     TelltaleToolGame.BONE_OUT_FROM_BONEVILLE, // LV11
-     TelltaleToolGame.CSI_3_DIMENSIONS, // LV12
-     TelltaleToolGame.SAM_AND_MAX_SAVE_THE_WORLD_2006, // LV13
-     TelltaleToolGame.BONE_THE_GREAT_COW_RACE, // LV11
-     TelltaleToolGame.CSI_HARD_EVIDENCE, // LV10
-     TelltaleToolGame.SAM_AND_MAX_BEYOND_TIME_AND_SPACE_OG, // LV9
-     TelltaleToolGame.SAM_AND_MAX_BEYOND_TIME_AND_SPACE_NEW,
-     TelltaleToolGame.STRONG_BADS_COOL_GAME_FOR_ATTRACTIVE_PEOPLE_101, // LV8
-     TelltaleToolGame.STRONG_BADS_COOL_GAME_FOR_ATTRACTIVE_PEOPLE_102, // LV8
-     TelltaleToolGame.STRONG_BADS_COOL_GAME_FOR_ATTRACTIVE_PEOPLE_103, // LV7
-     TelltaleToolGame.STRONG_BADS_COOL_GAME_FOR_ATTRACTIVE_PEOPLE_104, // LV7
-     TelltaleToolGame.STRONG_BADS_COOL_GAME_FOR_ATTRACTIVE_PEOPLE_105, // LV6
-     TelltaleToolGame.WALLACE_AND_GROMITS_GRAND_ADVENTURES_101, // LV5
-     TelltaleToolGame.WALLACE_AND_GROMITS_GRAND_ADVENTURES_102, // LV5
-     TelltaleToolGame.WALLACE_AND_GROMITS_GRAND_ADVENTURES_103, // LV5
-     TelltaleToolGame.WALLACE_AND_GROMITS_GRAND_ADVENTURES_104, // LV4
-     TelltaleToolGame.SAM_AND_MAX_SAVE_THE_WORLD_2007, // LV4
-     TelltaleToolGame.CSI_DEADLY_INTENT, // LV4
-     TelltaleToolGame.TALES_OF_MONKEY_ISLAND_V1, // LV4
-     TelltaleToolGame.TALES_OF_MONKEY_ISLAND_V2, // LV4
-     TelltaleToolGame.CSI_FATAL_CONSPIRACY, // LV4
-     TelltaleToolGame.NELSON_TETHERS_PUZZLE_AGENT, // LV3
-     TelltaleToolGame.POKER_NIGHT_AT_THE_INVENTORY, // LV3
-     TelltaleToolGame.SAM_AND_MAX_THE_DEVILS_PLAYHOUSE, // LV4
-     TelltaleToolGame.BACK_TO_THE_FUTURE_THE_GAME, // LV3
-     TelltaleToolGame.HECTOR_BADGE_OF_CARNAGE, // LV3
-     TelltaleToolGame.JURASSIC_PARK_THE_GAME, // LV2
-     TelltaleToolGame.PUZZLE_AGENT_2, // LV2
-     TelltaleToolGame.LAW_AND_ORDER_LEGACIES, // LV2
-     TelltaleToolGame.THE_WALKING_DEAD, // LV1
+    public TelltaleToolGame[] Games { get; } =
+        [
+            TelltaleToolGame.DEFAULT,
+            TelltaleToolGame.TEXAS_HOLD_EM_OG, // LV?
+            TelltaleToolGame.TEXAS_HOLD_EM_V1, // LV9
+            TelltaleToolGame.BONE_OUT_FROM_BONEVILLE, // LV11
+            TelltaleToolGame.CSI_3_DIMENSIONS, // LV12
+            TelltaleToolGame.SAM_AND_MAX_SAVE_THE_WORLD_101_2006, // LV13
+            TelltaleToolGame.BONE_THE_GREAT_COW_RACE, // LV11
+            TelltaleToolGame.CSI_HARD_EVIDENCE, // LV10
+            TelltaleToolGame.SAM_AND_MAX_BEYOND_TIME_AND_SPACE_201_OG, // LV9
+            TelltaleToolGame.SAM_AND_MAX_BEYOND_TIME_AND_SPACE_201_NEW,
+            TelltaleToolGame.STRONG_BADS_COOL_GAME_FOR_ATTRACTIVE_PEOPLE_101, // LV8
+            TelltaleToolGame.STRONG_BADS_COOL_GAME_FOR_ATTRACTIVE_PEOPLE_102, // LV8
+            TelltaleToolGame.STRONG_BADS_COOL_GAME_FOR_ATTRACTIVE_PEOPLE_103, // LV7
+            TelltaleToolGame.STRONG_BADS_COOL_GAME_FOR_ATTRACTIVE_PEOPLE_104, // LV7
+            TelltaleToolGame.STRONG_BADS_COOL_GAME_FOR_ATTRACTIVE_PEOPLE_105, // LV6
+            TelltaleToolGame.WALLACE_AND_GROMITS_GRAND_ADVENTURES_101, // LV5
+            TelltaleToolGame.WALLACE_AND_GROMITS_GRAND_ADVENTURES_102, // LV5
+            TelltaleToolGame.WALLACE_AND_GROMITS_GRAND_ADVENTURES_103, // LV5
+            TelltaleToolGame.WALLACE_AND_GROMITS_GRAND_ADVENTURES_104, // LV4
+            TelltaleToolGame.SAM_AND_MAX_SAVE_THE_WORLD_101_2007, // LV4
+            TelltaleToolGame.CSI_DEADLY_INTENT, // LV4
+            TelltaleToolGame.TALES_OF_MONKEY_ISLAND_V1, // LV4
+            TelltaleToolGame.TALES_OF_MONKEY_ISLAND_V2, // LV4
+            TelltaleToolGame.CSI_FATAL_CONSPIRACY, // LV4
+            TelltaleToolGame.NELSON_TETHERS_PUZZLE_AGENT, // LV3
+            TelltaleToolGame.POKER_NIGHT_AT_THE_INVENTORY, // LV3
+            TelltaleToolGame.SAM_AND_MAX_THE_DEVILS_PLAYHOUSE_301, // LV4
+            TelltaleToolGame.BACK_TO_THE_FUTURE_THE_GAME, // LV3
+            TelltaleToolGame.HECTOR_BADGE_OF_CARNAGE, // LV3
+            TelltaleToolGame.JURASSIC_PARK_THE_GAME, // LV2
+            TelltaleToolGame.PUZZLE_AGENT_2, // LV2
+            TelltaleToolGame.LAW_AND_ORDER_LEGACIES, // LV2
+            TelltaleToolGame.THE_WALKING_DEAD, // LV1
         ];
 
-    [ObservableProperty] private ImageProperties _imageProperties;
-    [ObservableProperty] private ImageAdvancedOptions _imageAdvancedOptions;
-    [ObservableProperty] private bool _isChecked = false;
-    [ObservableProperty] private FormatItemViewModel _selectedFromFormat;
-    [ObservableProperty] private FormatItemViewModel _selectedToFormat;
-    [ObservableProperty] private ObservableCollection<FormatItemViewModel> _fromFormatsList = [];
-    [ObservableProperty] private ObservableCollection<FormatItemViewModel> _toFormatsList = [];
-    [ObservableProperty] private bool _isFromSelectedComboboxEnable;
-    [ObservableProperty] private bool _isToSelectedComboboxEnable;
-    [ObservableProperty] private bool _versionConvertComboBoxStatus;
-    [ObservableProperty] private bool _saveButtonStatus;
-    [ObservableProperty] private bool _deleteButtonStatus;
-    [ObservableProperty] private bool _convertButtonStatus;
-    [ObservableProperty] private bool _debugButtonStatus;
-    [ObservableProperty] private bool _contextOpenFolderStatus;
-    [ObservableProperty] private bool _chooseOutputDirectoryCheckBoxEnabledStatus;
+    [ObservableProperty]
+    private ImageProperties _imageProperties = new();
 
-    [ObservableProperty] private int _selectedComboboxIndex;
-    [ObservableProperty] private int _selectedLegacyTitleIndex;
-    [ObservableProperty] private uint _maxMipCountButton;
-    [ObservableProperty] private string? _imageNamePreview;
-    [ObservableProperty] private IImage? _imagePreview;
-    [ObservableProperty] private string _fileText = string.Empty;
-    [ObservableProperty] private string _directoryPath = string.Empty;
-    [ObservableProperty] private bool _returnDirectoryButtonStatus;
-    [ObservableProperty] private bool _refreshDirectoryButtonStatus;
-    [ObservableProperty] private bool _chooseOutputDirectoryCheckboxStatus;
-    [ObservableProperty] private bool _isMipSliderVisible;
-    [ObservableProperty] private bool _isFaceSliderVisible;
-    [ObservableProperty] private bool _isImageInformationVisible = true;
-    [ObservableProperty] private bool _isDebugInformationVisible = false;
-    [ObservableProperty] private string _debugInfo = string.Empty;
-    [ObservableProperty] private uint _mipValue;
-    [ObservableProperty] private uint _faceValue;
-    [ObservableProperty] private uint _maxMipCount;
-    [ObservableProperty] private uint _maxFaceCount;
-    [ObservableProperty] private static ObservableCollection<WorkingDirectoryFile> _workingDirectoryFiles = [];
-    [ObservableProperty] private ObservableCollection<WorkingDirectoryFile> _archiveFiles = [];
-    [ObservableProperty] private ImageData _imageData = new();
+    [ObservableProperty]
+    private ImageAdvancedOptions _imageAdvancedOptions;
+
+    [ObservableProperty]
+    private DataGridColumnVisibilitySettings _columnSettings = new();
+
+    [ObservableProperty]
+    private FormatItemViewModel _selectedFromFormat = new();
+
+    [ObservableProperty]
+    private FormatItemViewModel _selectedToFormat = new();
+
+    [ObservableProperty]
+    private ObservableCollection<FormatItemViewModel> _fromFormatsList = [];
+
+    [ObservableProperty]
+    private ObservableCollection<FormatItemViewModel> _toFormatsList = [];
+
+    [ObservableProperty]
+    private bool _isFromSelectedComboboxEnable;
+
+    [ObservableProperty]
+    private bool _isToSelectedComboboxEnable;
+
+    [ObservableProperty]
+    private bool _versionConvertComboBoxStatus;
+
+    [ObservableProperty]
+    private bool _saveButtonStatus;
+
+    [ObservableProperty]
+    private bool _deleteButtonStatus;
+
+    [ObservableProperty]
+    private bool _convertButtonStatus;
+
+    [ObservableProperty]
+    private bool _contextOpenFolderStatus;
+
+    [ObservableProperty]
+    private bool _chooseOutputDirectoryCheckBoxEnabledStatus;
+
+    [ObservableProperty]
+    private int _selectedComboboxIndex;
+
+    [ObservableProperty]
+    private int _selectedLegacyTitleIndex;
+
+    [ObservableProperty]
+    private uint _maxMipCountButton;
+
+    [ObservableProperty]
+    private IImage? _imagePreview;
+
+    [ObservableProperty]
+    private string _directoryPath = string.Empty;
+
+    [ObservableProperty]
+    private bool _returnDirectoryButtonStatus;
+
+    [ObservableProperty]
+    private bool _refreshDirectoryButtonStatus;
+
+    [ObservableProperty]
+    private bool _chooseOutputDirectoryCheckboxStatus;
+
+    [ObservableProperty]
+    private bool _isMipSliderVisible;
+
+    [ObservableProperty]
+    private bool _isFaceSliderVisible;
+
+    [ObservableProperty]
+    private bool _isSliceSliderVisible;
+
+    [ObservableProperty]
+    private bool _isImageInformationVisible = true;
+
+    [ObservableProperty]
+    private bool _isDebugInformationVisible = false;
+
+    [ObservableProperty]
+    private string _debugInfo = string.Empty;
+
+    [ObservableProperty]
+    private uint _mipValue;
+
+    [ObservableProperty]
+    private uint _faceValue;
+
+    [ObservableProperty]
+    private uint _maxMipCount;
+
+    [ObservableProperty]
+    private uint _maxFaceCount;
+
+    [ObservableProperty]
+    private uint _sliceValue;
+
+    [ObservableProperty]
+    private uint _maxSliceCount;
+
+    [ObservableProperty]
+    private static ObservableCollection<FileSystemItem> _workingDirectoryFiles = [];
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor("ResetPanAndZoomCommand")]
-    private WorkingDirectoryFile _dataGridSelectedItem = new();
+    private FileSystemItem _dataGridSelectedItem = new();
 
+    private Texture? texture;
+    private readonly CodecManager codecManager = new();
 
     public class FormatItemViewModel
     {
@@ -241,24 +307,86 @@ public partial class MainViewModel : ViewModelBase
 
     public RelayCommand ResetPanAndZoomCommand { get; internal set; }
 
-    private void ResetPanAndZoom()
-    {
-        // Logic to reset pan and zoom
-        // This method will be linked with code-behind to reset the ZoomBorder.
-    }
+    public RelayCommand<Notification> DisplayErrorCommand { get; internal set; }
 
     #endregion
 
+    private static FilePickerFileType FileFilterTypes = new("")
+    {
+        Patterns = [],
+        AppleUniformTypeIdentifiers = [],
+        MimeTypes = [],
+    };
+
     public MainViewModel()
     {
-        ImagePreview = new SvgImage()
-        {
-            Source = SvgSource.Load(ErrorSvgFilename, _assetsUri)
-        };
+        ImagePreview = new SvgImage() { Source = SvgSource.Load(ErrorSvgFilename, _assetsUri) };
         ImageAdvancedOptions = new ImageAdvancedOptions(this);
+
+        FileFilterTypes = new FilePickerFileType("Supported Files")
+        {
+            Patterns = [.. codecManager.GetAllSupportedExtensions(), ".json"],
+            AppleUniformTypeIdentifiers = ["public.image"],
+            MimeTypes = ["image/*"],
+        };
     }
 
     #region MAIN MENU BUTTONS ACTIONS
+
+
+    private async Task<IStorageFolder?> DoOpenFolderPickerAsync()
+    {
+        // For learning purposes, we opted to directly get the reference
+        // for StorageProvider APIs here inside the ViewModel.
+
+        // For your real-world apps, you should follow the MVVM principles
+        // by making service classes and locating them with DI/IoC.
+
+        // See IoCFileOps project for an example of how to accomplish this.
+        if (
+            Application.Current?.ApplicationLifetime
+                is not IClassicDesktopStyleApplicationLifetime desktop
+            || desktop.MainWindow?.StorageProvider is not { } provider
+        )
+            throw new NullReferenceException("Missing StorageProvider instance.");
+
+        var folder = await provider.OpenFolderPickerAsync(
+            new FolderPickerOpenOptions()
+            {
+                Title = "Open Folder With D3DTX Files",
+                AllowMultiple = false,
+            }
+        );
+
+        return folder?.Count >= 1 ? folder[0] : null;
+    }
+
+    private async Task<IStorageFile?> DoOpenFilePickerAsync()
+    {
+        // For learning purposes, we opted to directly get the reference
+        // for StorageProvider APIs here inside the ViewModel.
+
+        // For your real-world apps, you should follow the MVVM principles
+        // by making service classes and locating them with DI/IoC.
+
+        // See IoCFileOps project for an example of how to accomplish this.
+        if (
+            Application.Current?.ApplicationLifetime
+                is not IClassicDesktopStyleApplicationLifetime desktop
+            || desktop.MainWindow?.StorageProvider is not { } provider
+        )
+            throw new NullReferenceException("Missing StorageProvider instance.");
+
+        var file = await provider.OpenFilePickerAsync(
+            new FilePickerOpenOptions()
+            {
+                Title = "Open Folder With D3DTX Files",
+                AllowMultiple = false,
+            }
+        );
+
+        return file?.Count >= 1 ? file[0] : null;
+    }
 
     // Open Directory Command
     [RelayCommand]
@@ -266,23 +394,58 @@ public partial class MainViewModel : ViewModelBase
     {
         try
         {
-            if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop ||
-                desktop.MainWindow?.StorageProvider is not { } provider)
-                throw new NullReferenceException("Missing StorageProvider instance.");
+            var folder = await DoOpenFolderPickerAsync();
+            if (folder is null)
+                return;
 
-            await mainManager.SetWorkingDirectoryPath(provider);
-
-            if (mainManager.GetWorkingDirectoryPath() != string.Empty)
-            {
-                ReturnDirectoryButtonStatus = true;
-                RefreshDirectoryButtonStatus = true;
-                DataGridSelectedItem = null;
-                await UpdateUiAsync();
-            }
+            //  mainManager.SetWorkingDirectoryPath(folder.TryGetLocalPath());
+            WorkingDirectoryFiles = mainManager
+                .GetWorkingDirectory()
+                .GetFiles(
+                    folder.TryGetLocalPath()
+                        ?? throw new ArgumentNullException(nameof(folder), "Folder path is null"),
+                    FileFilterTypes.Patterns
+                );
+            ReturnDirectoryButtonStatus = true;
+            RefreshDirectoryButtonStatus = true;
+            DataGridSelectedItem = null;
+            UpdateUi();
         }
         catch (Exception e)
         {
-            await HandleExceptionAsync(e.Message);
+            HandleException(e.Message);
+        }
+    }
+
+    // Open Directory Command
+    [RelayCommand]
+    public async Task OpenFileButton_Click()
+    {
+        try
+        {
+            var file = await DoOpenFilePickerAsync();
+            if (file is null)
+                return;
+
+            //  mainManager.SetWorkingDirectoryPath(folder.TryGetLocalPath());
+            WorkingDirectoryFiles = mainManager
+                .GetWorkingDirectory()
+                .GetFiles(
+                    Path.GetDirectoryName(file.TryGetLocalPath())
+                        ?? throw new ArgumentNullException(nameof(file), "File path is null"),
+                    FileFilterTypes.Patterns
+                );
+            ReturnDirectoryButtonStatus = true;
+            RefreshDirectoryButtonStatus = true;
+            DataGridSelectedItem =
+                WorkingDirectoryFiles.FirstOrDefault(x => x.FullPath == file.TryGetLocalPath())
+                ?? throw new ArgumentNullException(nameof(file), "File path is null");
+
+            UpdateUi();
+        }
+        catch (Exception e)
+        {
+            HandleException(e.Message);
         }
     }
 
@@ -291,61 +454,69 @@ public partial class MainViewModel : ViewModelBase
     {
         try
         {
-            if (DataGridSelectedItem is not null)
+            if (DataGridSelectedItem is null)
+                return;
+
+            var topLevel = GetMainWindow();
+
+            if (Directory.Exists(DataGridSelectedItem.FullPath))
             {
-                var topLevel = GetMainWindow();
+                throw new Exception("Cannot save a directory.");
+            }
 
-                if (Directory.Exists(DataGridSelectedItem.FilePath))
-                {
-                    throw new Exception("Cannot save a directory.");
-                }
-
-                // Start async operation to open the dialog.
-                var storageFile = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+            // Start async operation to open the dialog.
+            var storageFile = await topLevel.StorageProvider.SaveFilePickerAsync(
+                new FilePickerSaveOptions
                 {
                     Title = "Save File",
-                    SuggestedFileName = DataGridSelectedItem.FileName,
+                    SuggestedFileName = DataGridSelectedItem.Name,
                     ShowOverwritePrompt = true,
-                    DefaultExtension = DataGridSelectedItem.FileType is null ? "bin" : DataGridSelectedItem.FileType[1..]
-                });
-
-                if (storageFile is not null)
-                {
-                    var destinationFilePath = storageFile.Path.AbsolutePath;
-
-                    if (File.Exists(DataGridSelectedItem.FilePath))
-                        File.Copy(DataGridSelectedItem.FilePath, destinationFilePath, true);
+                    DefaultExtension = DataGridSelectedItem.Type is null
+                        ? "bin"
+                        : DataGridSelectedItem.Type[1..],
                 }
-            }
+            );
+
+            if (storageFile is null)
+                return;
+
+            var destinationFilePath = storageFile.Path.AbsolutePath;
+
+            if (File.Exists(DataGridSelectedItem.FullPath))
+                File.Copy(DataGridSelectedItem.FullPath, destinationFilePath, true);
         }
         catch (Exception ex)
         {
-            await HandleExceptionAsync("Error during saving the file. " + ex.Message);
+            HandleException("Error during saving the file. " + ex.Message);
         }
         finally
         {
-            await SafeRefreshDirectoryAsync();
-            await UpdateUiAsync();
+            SafeRefreshDirectory();
+            UpdateUi();
         }
     }
 
     [RelayCommand]
-    public async Task AddFilesButton_Click()
+    public async Task AddFiles()
     {
         try
         {
-            if (string.IsNullOrEmpty(DirectoryPath) || !Directory.Exists(DirectoryPath)) return;
+            if (string.IsNullOrEmpty(DirectoryPath) || !Directory.Exists(DirectoryPath))
+                return;
 
             var topLevel = GetMainWindow();
 
             // Start async operation to open the dialog.
-            var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
-            {
-                Title = "Open Files",
-                AllowMultiple = true,
-                SuggestedStartLocation = await topLevel.StorageProvider.TryGetFolderFromPathAsync(DirectoryPath),
-                FileTypeFilter = [AllowedTypes]
-            });
+            var files = await topLevel.StorageProvider.OpenFilePickerAsync(
+                new FilePickerOpenOptions()
+                {
+                    Title = "Open Files",
+                    AllowMultiple = true,
+                    SuggestedStartLocation =
+                        await topLevel.StorageProvider.TryGetFolderFromPathAsync(DirectoryPath),
+                    FileTypeFilter = [FileFilterTypes],
+                }
+            );
 
             foreach (var file in files)
             {
@@ -356,8 +527,10 @@ public partial class MainViewModel : ViewModelBase
                 {
                     var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.Name);
                     var extension = Path.GetExtension(file.Name);
-                    destinationFilePath = Path.Combine(DirectoryPath,
-                        $"{fileNameWithoutExtension}({i++}){extension}");
+                    destinationFilePath = Path.Combine(
+                        DirectoryPath,
+                        $"{fileNameWithoutExtension}({i++}){extension}"
+                    );
                 }
 
                 File.Copy(new Uri(file.Path.ToString()).LocalPath, destinationFilePath);
@@ -365,21 +538,20 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            await HandleExceptionAsync("Error during adding files. Some files were not copied. " + ex.Message);
+            HandleException("Error during adding files. Some files were not copied. " + ex.Message);
         }
 
-        await SafeRefreshDirectoryAsync();
-        await UpdateUiAsync();
+        SafeRefreshDirectory();
+        UpdateUi();
     }
 
     // Delete Command
     [RelayCommand]
-    public async Task DeleteFileButton_Click()
+    public async Task DeleteFile()
     {
-        var workingDirectoryFile =
-            DataGridSelectedItem;
+        var workingDirectoryFile = DataGridSelectedItem;
 
-        var textureFilePath = workingDirectoryFile.FilePath;
+        var textureFilePath = workingDirectoryFile.FullPath;
 
         try
         {
@@ -390,13 +562,16 @@ public partial class MainViewModel : ViewModelBase
             else if (Directory.Exists(textureFilePath))
             {
                 var mainWindow = GetMainWindow();
-                var messageBox =
-                    MessageBoxes.GetConfirmationBox("Are you sure you want to delete this directory?");
+                var messageBox = MessageBoxes.GetConfirmationBox(
+                    "Are you sure you want to delete this directory?"
+                );
 
-                var result = await MessageBoxManager.GetMessageBoxStandard(messageBox)
+                var result = await MessageBoxManager
+                    .GetMessageBoxStandard(messageBox)
                     .ShowWindowDialogAsync(mainWindow);
 
-                if (result is not ButtonResult.Yes) return;
+                if (result is not ButtonResult.Yes)
+                    return;
 
                 Directory.Delete(textureFilePath);
             }
@@ -407,31 +582,27 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            await HandleExceptionAsync(ex.Message);
+            HandleException(ex.Message);
         }
         finally
         {
             DataGridSelectedItem = null;
-            await SafeRefreshDirectoryAsync();
-            await UpdateUiAsync();
+            SafeRefreshDirectory();
+            UpdateUi();
         }
     }
 
     [RelayCommand]
     public void HelpButton_Click()
     {
-        mainManager.OpenAppHelp();
+        MainManager.OpenAppHelp();
     }
-
 
     [RelayCommand]
     public void AboutButton_Click()
     {
         var mainWindow = GetMainWindow();
-        var aboutWindow = new AboutWindow
-        {
-            DataContext = new AboutViewModel()
-        };
+        var aboutWindow = new AboutWindow { DataContext = new AboutViewModel() };
 
         aboutWindow.ShowDialog(mainWindow);
     }
@@ -441,62 +612,16 @@ public partial class MainViewModel : ViewModelBase
     #region CONTEXT MENU ACTIONS
 
     [RelayCommand]
-    public async Task ContextMenuAddFilesCommand()
-    {
-        try
-        {
-            if (string.IsNullOrEmpty(DirectoryPath) || !Directory.Exists(DirectoryPath)) return;
-
-            var topLevel = GetMainWindow();
-
-            // Start async operation to open the dialog.
-            var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
-            {
-                Title = "Open Files",
-                AllowMultiple = true
-            });
-
-            foreach (var file in files)
-            {
-                var destinationFilePath = Path.Combine(DirectoryPath, file.Name);
-
-                var i = 1;
-                while (File.Exists(destinationFilePath))
-                {
-                    var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.Name);
-                    var extension = Path.GetExtension(file.Name);
-                    destinationFilePath = Path.Combine(DirectoryPath,
-                        $"{fileNameWithoutExtension}({i++}){extension}");
-                }
-
-                File.Copy(file.Path.AbsolutePath, destinationFilePath);
-            }
-        }
-        catch (Exception ex)
-        {
-            await HandleExceptionAsync("Error during adding files. Some files were not copied." + ex.Message);
-        }
-        finally
-        {
-
-        }
-
-        await SafeRefreshDirectoryAsync();
-        await UpdateUiAsync();
-    }
-
-    [RelayCommand]
-    public async Task ContextMenuOpenFileCommand()
+    public void ContextMenuOpenFileCommand()
     {
         try
         {
             if (DataGridSelectedItem is null)
                 return;
 
-            var workingDirectoryFile =
-                DataGridSelectedItem;
+            var workingDirectoryFile = DataGridSelectedItem;
 
-            var filePath = workingDirectoryFile.FilePath;
+            var filePath = workingDirectoryFile.FullPath;
 
             if (!File.Exists(filePath) && !Directory.Exists(filePath))
                 throw new DirectoryNotFoundException("Directory was not found");
@@ -505,7 +630,7 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            await HandleExceptionAsync(ex.Message);
+            HandleException(ex.Message);
         }
     }
 
@@ -520,19 +645,22 @@ public partial class MainViewModel : ViewModelBase
 
             // get our selected file object from the working directory
             var workingDirectoryFile = DataGridSelectedItem;
-            if (!Directory.Exists(workingDirectoryFile.FilePath))
+            if (!Directory.Exists(workingDirectoryFile.FullPath))
                 throw new DirectoryNotFoundException("Directory not found.");
 
-            await mainManager.SetWorkingDirectoryPath(workingDirectoryFile.FilePath);
+            mainManager.SetWorkingDirectoryPath(workingDirectoryFile.FullPath);
+            WorkingDirectoryFiles = mainManager
+                .GetWorkingDirectory()
+                .GetFiles(workingDirectoryFile.FullPath, FileFilterTypes.Patterns);
         }
         catch (Exception ex)
         {
-            await HandleExceptionAsync(ex.Message);
+            HandleException(ex.Message);
         }
         finally
         {
             ContextOpenFolderStatus = false;
-            await UpdateUiAsync();
+            UpdateUi();
         }
     }
 
@@ -541,7 +669,8 @@ public partial class MainViewModel : ViewModelBase
     {
         try
         {
-            if (DirectoryPath is null) return;
+            if (DirectoryPath is null)
+                return;
 
             if (DataGridSelectedItem is null)
             {
@@ -550,15 +679,15 @@ public partial class MainViewModel : ViewModelBase
             }
             else
             {
-                if (File.Exists(DataGridSelectedItem.FilePath))
-                    await OpenFileExplorer(DataGridSelectedItem.FilePath);
-                else if (Directory.Exists(DataGridSelectedItem.FilePath))
-                    await OpenFileExplorer(DataGridSelectedItem.FilePath);
+                if (File.Exists(DataGridSelectedItem.FullPath))
+                    await OpenFileExplorer(DataGridSelectedItem.FullPath);
+                else if (Directory.Exists(DataGridSelectedItem.FullPath))
+                    await OpenFileExplorer(DataGridSelectedItem.FullPath);
             }
         }
         catch (Exception ex)
         {
-            await HandleExceptionAsync(ex.Message);
+            HandleException(ex.Message);
         }
     }
 
@@ -571,13 +700,7 @@ public partial class MainViewModel : ViewModelBase
         }
     }
 
-    [RelayCommand]
-    public async Task ContextDeleteFileCommand()
-    {
-        await DeleteFileButton_Click();
-    }
-
-    public async Task SafeRefreshDirectoryAsync()
+    public void SafeRefreshDirectory()
     {
         try
         {
@@ -585,7 +708,7 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            await HandleExceptionAsync(ex.Message);
+            HandleException(ex.Message);
         }
     }
 
@@ -598,19 +721,12 @@ public partial class MainViewModel : ViewModelBase
     /// Error dialogs appear when something goes wrong with the conversion process.
     /// </summary>
     [RelayCommand]
-    public async Task ConvertButton_Click()
+    public async Task ConvertButton_Click(IList selectedItems)
     {
         try
         {
-            if (DataGridSelectedItem is null) return;
-
-            var workingDirectoryFile =
-                DataGridSelectedItem;
-
-            string? textureFilePath = workingDirectoryFile.FilePath;
-
-            if (!File.Exists(textureFilePath) && !Directory.Exists(textureFilePath))
-                throw new DirectoryNotFoundException("File/Directory was not found.");
+            if (DataGridSelectedItem is null)
+                return;
 
             string outputDirectoryPath = mainManager.GetWorkingDirectoryPath();
 
@@ -619,11 +735,13 @@ public partial class MainViewModel : ViewModelBase
                 var topLevel = GetMainWindow();
 
                 // Start async operation to open the dialog.
-                var folderPath = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-                {
-                    Title = "Choose your output folder location.",
-                    AllowMultiple = false,
-                });
+                var folderPath = await topLevel.StorageProvider.OpenFolderPickerAsync(
+                    new FolderPickerOpenOptions
+                    {
+                        Title = "Choose your output folder location.",
+                        AllowMultiple = false,
+                    }
+                );
 
                 if (folderPath is null || folderPath.Count is 0)
                 {
@@ -633,12 +751,42 @@ public partial class MainViewModel : ViewModelBase
                 outputDirectoryPath = folderPath[0].Path.AbsolutePath;
             }
 
+            string? textureFilePath = DataGridSelectedItem.FullPath;
+
             TextureType oldTextureType = GetTextureTypeFromItem(SelectedFromFormat.Name);
             TextureType newTextureType = GetTextureTypeFromItem(SelectedToFormat.Name);
 
             if (File.Exists(textureFilePath))
             {
-                Converter.ConvertTexture(textureFilePath, outputDirectoryPath, ImageAdvancedOptions, oldTextureType, newTextureType);
+                // Converter.ConvertTexture(
+                //     textureFilePath,
+                //     outputDirectoryPath,
+                //     ImageAdvancedOptions,
+                //     oldTextureType,
+                //     newTextureType
+                // );
+                string finalTexturePath =
+                    DataGridSelectedItem.Name + GetExtensionFromTextureType(newTextureType);
+
+                string finalPath = Path.Combine(outputDirectoryPath, finalTexturePath);
+
+                CodecOptions codecOptions = new()
+                {
+                    TelltaleToolGame = ImageAdvancedOptions.GameID,
+                    IsLegacyConsole = ImageAdvancedOptions.IsLegacyConsole,
+                };
+
+                Texture toConvertTexture = codecManager.LoadFromFile(
+                    DataGridSelectedItem.FullPath,
+                    codecOptions
+                );
+
+                // if (ImageAdvancedOptions.IsDeswizzle)
+                // {
+                //     toConvertTexture.SwizzleTexture(Platform.Switch, false);
+                // }
+
+                codecManager.SaveToFile(finalPath, toConvertTexture, codecOptions);
             }
             else if (Directory.Exists(textureFilePath))
             {
@@ -647,27 +795,35 @@ public partial class MainViewModel : ViewModelBase
                     outputDirectoryPath = textureFilePath;
                 }
 
-                if (Converter.ConvertBulk(textureFilePath, outputDirectoryPath, ImageAdvancedOptions, oldTextureType, newTextureType))
+                if (
+                    Converter.ConvertBulk(
+                        textureFilePath,
+                        outputDirectoryPath,
+                        ImageAdvancedOptions,
+                        oldTextureType,
+                        newTextureType
+                    )
+                )
                 {
                     var mainWindow = GetMainWindow();
-                    var messageBox = MessageBoxes.GetSuccessBox("All textures have been converted successfully!");
-                    await MessageBoxManager.GetMessageBoxStandard(messageBox).ShowWindowDialogAsync(mainWindow);
+                    var messageBox = MessageBoxes.GetSuccessBox(
+                        "All textures have been converted successfully!"
+                    );
+                    await MessageBoxManager
+                        .GetMessageBoxStandard(messageBox)
+                        .ShowWindowDialogAsync(mainWindow);
                 }
             }
+
+            // Generate JSON file
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.StackTrace);
-            var mainWindow = GetMainWindow();
-            var messageBox =
-                MessageBoxes.GetErrorBox(ex.Message);
-            await MessageBoxManager.GetMessageBoxStandard(messageBox).ShowWindowDialogAsync(mainWindow);
-            Logger.Log(ex);
+            HandleImagePreviewError(ex);
         }
         finally
         {
-            mainManager.RefreshWorkingDirectory();
-            await UpdateUiAsync();
+            UpdateUi();
         }
     }
 
@@ -685,52 +841,24 @@ public partial class MainViewModel : ViewModelBase
             "TIFF" => TextureType.TIFF,
             "TGA" => TextureType.TGA,
             "HDR" => TextureType.HDR,
-            _ => TextureType.Unknown
+            _ => TextureType.Unknown,
         };
     }
 
-    /// <summary>
-    /// Debug button command. It shows the debug information of the selected texture.
-    /// </summary>
-    /// <returns></returns>
-    [RelayCommand]
-    public async Task DebugButton_Click()
+    private static string GetExtensionFromTextureType(TextureType textureType)
     {
-        try
+        return textureType switch
         {
-            if (DataGridSelectedItem is null) return;
-
-            var workingDirectoryFile =
-                DataGridSelectedItem;
-
-            string? textureFilePath = workingDirectoryFile.FilePath;
-
-            string debugInfo = string.Empty;
-
-            if (workingDirectoryFile.FileType is ".d3dtx")
-            {
-                var d3dtx = new D3DTX_Master();
-                d3dtx.ReadD3DTXFile(textureFilePath, ImageAdvancedOptions.GameID, ImageAdvancedOptions.IsLegacyConsole);
-
-                debugInfo = d3dtx.GetD3DTXDebugInfo();
-            }
-            else if (workingDirectoryFile.FileType is ".dds" or ".png" or ".jpg" or ".jpeg" or ".bmp" or ".tga" or ".tif" or ".tiff" or ".hdr")
-            {
-                TextureType textureType = GetTextureTypeFromItem(workingDirectoryFile.FileType.ToUpperInvariant().Remove(0, 1));
-                debugInfo = TextureManager.GetTextureDebugInfo(textureFilePath, textureType);
-            }
-            else
-            {
-                debugInfo = string.Empty;
-            }
-
-            DebugInfo = debugInfo;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.StackTrace);
-            await HandleExceptionAsync(ex.Message);
-        }
+            TextureType.D3DTX => ".d3dtx",
+            TextureType.DDS => ".dds",
+            TextureType.PNG => ".png",
+            TextureType.JPEG => ".jpg",
+            TextureType.BMP => ".bmp",
+            TextureType.TIFF => ".tiff",
+            TextureType.TGA => ".tga",
+            TextureType.HDR => ".hdr",
+            _ => string.Empty,
+        };
     }
 
     #endregion
@@ -738,36 +866,21 @@ public partial class MainViewModel : ViewModelBase
     ///<summary>
     /// Updates our application UI, mainly the data grid.
     ///</summary>
-    private async Task UpdateUiAsync()
+    private void UpdateUi()
     {
         // Update our texture directory UI
         try
         {
             DirectoryPath = mainManager.GetWorkingDirectoryPath();
-            mainManager.RefreshWorkingDirectory();
-            var workingDirectoryFiles = mainManager.GetWorkingDirectoryFiles();
 
-            for (int i = WorkingDirectoryFiles.Count - 1; i >= 0; i--)
-            {
-                if (!workingDirectoryFiles.Contains(WorkingDirectoryFiles[i]))
-                {
-                    WorkingDirectoryFiles.RemoveAt(i);
-                }
-            }
-
-            // Add items from the list to the observable collection if they are not already present
-            foreach (var item in workingDirectoryFiles)
-            {
-                if (!WorkingDirectoryFiles.Contains(item))
-                {
-                    WorkingDirectoryFiles.Add(item);
-                }
-            }
+            WorkingDirectoryFiles = mainManager
+                .GetWorkingDirectory()
+                .UpdateFiles(WorkingDirectoryFiles);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.StackTrace);
-            await HandleExceptionAsync("Error during updating UI. " + ex.Message);
+            HandleException("Error during updating UI. " + ex.Message);
         }
     }
 
@@ -778,19 +891,22 @@ public partial class MainViewModel : ViewModelBase
     {
         try
         {
-            if (Directory.GetParent(DirectoryPath) is null) return;
-            WorkingDirectoryFiles.Clear();
-            await mainManager.SetWorkingDirectoryPath(Directory.GetParent(DirectoryPath).ToString());
+            if (Directory.GetParent(DirectoryPath) is null)
+                return;
+            DirectoryPath = Directory.GetParent(DirectoryPath).ToString();
+            WorkingDirectoryFiles = mainManager
+                .GetWorkingDirectory()
+                .GetFiles(DirectoryPath, FileFilterTypes.Patterns);
             DataGridSelectedItem = null;
         }
         catch (Exception ex)
         {
-            await HandleExceptionAsync(ex.Message);
+            HandleException(ex.Message);
         }
         finally
         {
-            await PreviewImage();
-            await UpdateUiAsync();
+            PreviewImage();
+            UpdateUi();
         }
     }
 
@@ -806,7 +922,10 @@ public partial class MainViewModel : ViewModelBase
 
     private static Window GetMainWindow()
     {
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
+        if (
+            Application.Current?.ApplicationLifetime
+            is IClassicDesktopStyleApplicationLifetime lifetime
+        )
             return lifetime.MainWindow;
 
         throw new Exception("Main Parent Window Not Found");
@@ -826,7 +945,7 @@ public partial class MainViewModel : ViewModelBase
             { ".tif", _otherTypes },
             { ".tiff", _otherTypes },
             { ".hdr", _otherTypes },
-            {string.Empty, _folderTypes}
+            { string.Empty, _folderTypes },
         };
 
         if (itemExtension is null)
@@ -895,7 +1014,7 @@ public partial class MainViewModel : ViewModelBase
             TextureType.TIFF => 5,
             TextureType.TGA => 6,
             TextureType.HDR => 7,
-            _ => 0
+            _ => 0,
         };
     }
 
@@ -906,38 +1025,36 @@ public partial class MainViewModel : ViewModelBase
         try
         {
             var source = args.Source;
-            if (source is null) return;
+            if (source is null)
+                return;
             if (source is Border)
             {
                 if (DataGridSelectedItem is null)
                     return;
 
-                var workingDirectoryFile =
-                    DataGridSelectedItem;
+                var workingDirectoryFile = DataGridSelectedItem;
 
-                var filePath = workingDirectoryFile.FilePath;
+                var filePath = workingDirectoryFile.FullPath;
 
                 if (!File.Exists(filePath) && !Directory.Exists(filePath))
                     throw new DirectoryNotFoundException("Directory was not found");
 
-                if (File.Exists(workingDirectoryFile.FilePath))
+                if (File.Exists(workingDirectoryFile.FullPath))
                 {
                     mainManager.OpenFile(filePath);
                 }
                 else
                 {
-                    await mainManager.SetWorkingDirectoryPath(workingDirectoryFile.FilePath);
-                    WorkingDirectoryFiles.Clear();
-                    await UpdateUiAsync();
+                    DirectoryPath = workingDirectoryFile.FullPath;
+                    WorkingDirectoryFiles = mainManager
+                        .GetWorkingDirectory()
+                        .GetFiles(DirectoryPath, FileFilterTypes.Patterns);
                 }
             }
         }
         catch (Exception ex)
         {
-            var mainWindow = GetMainWindow();
-            var messageBox = MessageBoxes.GetErrorBox(ex.Message);
-
-            await MessageBoxManager.GetMessageBoxStandard(messageBox).ShowWindowDialogAsync(mainWindow);
+            HandleImagePreviewError(ex);
         }
         finally
         {
@@ -950,23 +1067,23 @@ public partial class MainViewModel : ViewModelBase
         if (DataGridSelectedItem is not null)
         {
             var workingDirectoryFile = DataGridSelectedItem;
-            var path = workingDirectoryFile.FilePath;
+            var path = workingDirectoryFile.FullPath;
             var extension = Path.GetExtension(path).ToLowerInvariant();
 
             if (!File.Exists(path) && !Directory.Exists(path))
             {
                 ResetUIElements();
                 mainManager.RefreshWorkingDirectory();
-                UpdateUiAsync().Wait();
-                throw new Exception("File or directory do not exist anymore! Refreshing the directory.");
+                UpdateUi();
+                throw new Exception(
+                    "File or directory do not exist anymore! Refreshing the directory."
+                );
             }
 
-            DebugButtonStatus = extension is ".d3dtx" || extension is ".dds";
             SaveButtonStatus = File.Exists(path);
             DeleteButtonStatus = true;
             ContextOpenFolderStatus = Directory.Exists(path);
             ChooseOutputDirectoryCheckBoxEnabledStatus = true;
-
 
             if (extension == string.Empty && !Directory.Exists(path))
             {
@@ -991,40 +1108,31 @@ public partial class MainViewModel : ViewModelBase
     {
         SaveButtonStatus = false;
         DeleteButtonStatus = false;
-        DebugButtonStatus = false;
         ConvertButtonStatus = false;
         IsFromSelectedComboboxEnable = false;
         IsToSelectedComboboxEnable = false;
         VersionConvertComboBoxStatus = false;
         ChooseOutputDirectoryCheckBoxEnabledStatus = false;
-        DebugButtonStatus = false;
         ChooseOutputDirectoryCheckboxStatus = false;
 
         ImageProperties = new ImageProperties();
-        ImagePreview = new SvgImage()
-        {
-            Source = SvgSource.Load(ErrorSvgFilename, _assetsUri)
-        };
-        ImageNamePreview = string.Empty;
-
-        ImageData.Reset();
-
-        MaxMipCount = ImageData.MaxMip;
-        MaxFaceCount = ImageData.MaxFace;
+        ImagePreview = new SvgImage() { Source = SvgSource.Load(ErrorSvgFilename, _assetsUri) };
+        DebugInfo = string.Empty;
 
         IsFaceSliderVisible = MaxFaceCount != 0;
         IsMipSliderVisible = MaxMipCount != 0;
+        IsSliceSliderVisible = MaxSliceCount != 0;
     }
 
     [RelayCommand]
-    public async Task UpdateUIElementsOnItemChange()
+    public void UpdateUIElementsOnItemChange()
     {
-        await PreviewImage();
+        PreviewImage();
         ResetPanAndZoomCommand.Execute(null);
     }
 
     [RelayCommand]
-    public async Task PreviewImage()
+    public void PreviewImage()
     {
         try
         {
@@ -1034,120 +1142,196 @@ public partial class MainViewModel : ViewModelBase
                 return;
 
             var workingDirectoryFile = DataGridSelectedItem;
-            var filePath = workingDirectoryFile.FilePath;
+            var filePath = workingDirectoryFile.FullPath;
             var extension = Path.GetExtension(filePath).ToLowerInvariant();
 
-            if (Directory.Exists(filePath))
+            texture = null;
+            GC.Collect();
+
+            if (!codecManager.GetAllSupportedExtensions().Contains(extension))
             {
+                ImageProperties = new ImageProperties { Name = workingDirectoryFile.Name };
+                DebugInfo = string.Empty;
+                UpdateBitmap();
+                IsImageInformationVisible = false;
                 return;
             }
 
-            ImageNamePreview = workingDirectoryFile.FileName + workingDirectoryFile.FileType;
-
-            TextureType textureType = TextureType.Unknown;
-            if (extension != string.Empty)
-                textureType = GetTextureTypeFromItem(extension.ToUpperInvariant().Remove(0, 1));
-
-            ImageData.Initialize(filePath, textureType, ImageAdvancedOptions.GameID, ImageAdvancedOptions.IsLegacyConsole);
-
-            if (textureType is TextureType.Unknown)
+            CodecOptions codecOptions = new()
             {
-                ImageData.Reset();
+                TelltaleToolGame = ImageAdvancedOptions.GameID,
+                IsLegacyConsole = ImageAdvancedOptions.IsLegacyConsole,
+            };
+
+            texture = codecManager.LoadFromFile(filePath, codecOptions);
+
+            var metadata = texture.Metadata;
+
+            ImageProperties = new ImageProperties
+            {
+                Name = workingDirectoryFile.Name,
+                Width = metadata.Width.ToString(),
+                Height = metadata.Height.ToString(),
+                Depth = metadata.Depth.ToString(),
+                PixelFormat = metadata.PixelFormatInfo.PixelFormat.ToString(),
+                SurfaceGamma = metadata.PixelFormatInfo.ColorSpace.ToString(),
+                ArraySize = metadata.ArraySize.ToString(),
+                MipMapCount = metadata.MipLevels.ToString(),
+                TextureLayout = metadata.Dimension.ToString(),
+                AlphaMode = metadata.IsPremultipliedAlpha ? "Premultiplied" : "Straight",
+                IsCubemap = metadata.IsCubemap ? "Yes" : "No",
+                IsVolumemap = metadata.IsVolumemap ? "Yes" : "No",
+            };
+
+            if (ImageAdvancedOptions.EnableSwizzle && ImageAdvancedOptions.IsDeswizzle)
+            {
+                texture.SwizzleTexture(ImageAdvancedOptions.PlatformType, false);
             }
 
-            ImageAdvancedOptions = ImageData.GetImageAdvancedOptions(ImageAdvancedOptions);
+            texture.ConvertToRGBA8();
 
-            if (textureType is not TextureType.Unknown)
-            {
-                ImageData.ApplyEffects(ImageAdvancedOptions);
+            // Apply effects here
+            MaxMipCount = metadata.MipLevels - 1;
+            MaxFaceCount = metadata.ArraySize - 1;
+            MaxSliceCount = metadata.Depth - 1;
+
+            if (texture.Metadata.IsCubemap){
+                MaxFaceCount /= 6;
             }
-
-            await DebugButton_Click();
-
-            MaxMipCount = ImageData.MaxMip;
-            MaxFaceCount = ImageData.MaxFace;
 
             IsFaceSliderVisible = MaxFaceCount != 0;
             IsMipSliderVisible = MaxMipCount != 0;
+            IsSliceSliderVisible = MaxSliceCount != 0;
 
-            MaxMipCountButton = ImageData.DDSImage.GetMaxMipLevels();
+            DebugInfo = texture.Metadata.ExtraMetadata.DebugInformation;
 
-            ImageProperties = ImageData.ImageProperties;
+            UpdateBitmap();
 
-            if (textureType is not TextureType.Unknown)
+            // ImageAdvancedOptions = ImageData.GetImageAdvancedOptions(ImageAdvancedOptions);
+
+            // ImageData.Initialize(
+            //     filePath,
+            //     textureType,
+            //     ImageAdvancedOptions.GameID,
+            //     ImageAdvancedOptions.IsLegacyConsole
+            // );
+
+            // if (textureType is TextureType.Unknown)
+            // {
+            //     ImageData.Reset();
+            // }
+
+            // if (textureType is not TextureType.Unknown)
+            // {
+            //     ImageData.ApplyEffects(ImageAdvancedOptions);
+            // }
+
+            // MaxMipCountButton = ImageData.DDSImage.GetMaxMipLevels();
+        }
+        catch (Exception ex)
+        {
+            texture = null;
+            UpdateBitmap();
+            Console.WriteLine(ex.StackTrace);
+            HandleImagePreviewError(ex);
+        }
+    }
+
+    [RelayCommand]
+    public void UpdateBitmap()
+    {
+        try
+        {
+            if (texture != null)
             {
-                ImagePreview = ImageData.GetBitmapFromScratchImage(MipValue, FaceValue);
+                if (texture.Metadata.IsCubemap)
+                {
+                    ImagePreview = ImageData.GetBitmap(
+                        texture.GetImage(MipValue, 0, 0).Width * 4,
+                        texture.GetImage(MipValue, 0, 0).Height * 3,
+                        texture.GetCubemapImage(0, MipValue)
+                    );
+                }
+                else
+                {
+                    ImagePreview = ImageData.GetBitmap(
+                        texture.GetImage(MipValue, FaceValue, SliceValue).Width,
+                        texture.GetImage(MipValue, FaceValue, SliceValue).Height,
+                        texture.GetRGBA8Pixels(MipValue, FaceValue, SliceValue)
+                    );
+                }
             }
             else
             {
                 ImagePreview = new SvgImage
                 {
-                    Source = SvgSource.Load(ErrorSvgFilename, _assetsUri)
+                    Source = SvgSource.Load(ErrorSvgFilename, _assetsUri),
                 };
             }
+            // if (DataGridSelectedItem is null)
+            //     return;
+
+            // var workingDirectoryFile = DataGridSelectedItem;
+            // var filePath = workingDirectoryFile.FilePath;
+            // var extension = Path.GetExtension(filePath).ToLowerInvariant();
+
+            // ImageData.ApplyEffects(ImageAdvancedOptions);
+
+            // MaxMipCount = ImageData.MaxMip;
+            // MaxFaceCount = ImageData.MaxFace;
+
+            // IsFaceSliderVisible = MaxFaceCount != 0;
+            // IsMipSliderVisible = MaxMipCount != 0;
+
+            // ImageProperties = ImageData.ImageProperties;
+
+            // if (textureType is not TextureType.Unknown)
+            // {
+            //     ImagePreview = ImageData.GetBitmapFromScratchImage(MipValue, FaceValue);
+            // }
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.StackTrace);
-            await HandleImagePreviewErrorAsync(ex);
-        }
-    }
-
-    [RelayCommand]
-    public async Task UpdateBitmap()
-    {
-        try
-        {
-            if (DataGridSelectedItem is null)
-                return;
-
-            var workingDirectoryFile = DataGridSelectedItem;
-            var filePath = workingDirectoryFile.FilePath;
-            var extension = Path.GetExtension(filePath).ToLowerInvariant();
-
-            TextureType textureType = TextureType.Unknown;
-            if (extension != string.Empty)
-                textureType = GetTextureTypeFromItem(extension.ToUpperInvariant().Remove(0, 1));
-
-            if (textureType is TextureType.Unknown)
-            {
-                return;
-            }
-
-            ImageData.ApplyEffects(ImageAdvancedOptions);
-
-            MaxMipCount = ImageData.MaxMip;
-            MaxFaceCount = ImageData.MaxFace;
-
-            IsFaceSliderVisible = MaxFaceCount != 0;
-            IsMipSliderVisible = MaxMipCount != 0;
-
-            ImageProperties = ImageData.ImageProperties;
-
-            if (textureType is not TextureType.Unknown)
-            {
-                ImagePreview = ImageData.GetBitmapFromScratchImage(MipValue, FaceValue);
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.StackTrace);
-            await HandleImagePreviewErrorAsync(ex);
+            HandleImagePreviewError(ex);
         }
     }
 
     protected override async void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
-        if (e.PropertyName is nameof(MipValue) || e.PropertyName is nameof(FaceValue))
+        if (
+            e.PropertyName is nameof(MipValue)
+            || e.PropertyName is nameof(FaceValue)
+            || e.PropertyName is nameof(SliceValue)
+            || e.PropertyName is nameof(ImageAdvancedOptions)
+        )
         {
-            if (ImageData.CurrentTextureType is not TextureType.Unknown)
-                ImagePreview = ImageData.GetBitmapFromScratchImage(MipValue, FaceValue);
-            else { ImagePreview = new SvgImage { Source = SvgSource.Load(ErrorSvgFilename, _assetsUri) }; }
+            if (e.PropertyName is nameof(MipValue))
+            {
+                MaxSliceCount = (uint)
+                    Math.Max(0, (int)(texture.Metadata.Depth >> (int)MipValue) - 1);
+                IsSliceSliderVisible = MaxSliceCount != 0;
+
+                if (SliceValue > MaxSliceCount)
+                {
+                    SliceValue = MaxSliceCount;
+                }
+            }
+
+            UpdateBitmap();
         }
-        if (e.PropertyName is nameof(ImageAdvancedOptions))
+        if (e.PropertyName is nameof(ColumnSettings.IsNameVisible))
         {
-            await UpdateBitmap();
+            Console.WriteLine(ColumnSettings.IsNameVisible);
+
+            Console.WriteLine(ColumnSettings.IsExtensionVisible);
+
+            Console.WriteLine(ColumnSettings.IsSizeVisible);
+
+            Console.WriteLine(ColumnSettings.IsCreatedDateVisible);
+
+            Console.WriteLine(ColumnSettings.IsCreatedDateVisible);
         }
     }
 
@@ -1159,21 +1343,23 @@ public partial class MainViewModel : ViewModelBase
 
     private async Task RefreshUiAsync()
     {
-        await SafeRefreshDirectoryAsync();
-        await UpdateUiAsync();
+        SafeRefreshDirectory();
+        UpdateUi();
     }
 
-    private async Task HandleImagePreviewErrorAsync(Exception ex)
+    private void HandleImagePreviewError(Exception ex)
     {
-        await HandleExceptionAsync("Error during previewing image.\nError message: " + ex.Message);
-        ImagePreview = new SvgImage { Source = SvgSource.Load(ErrorSvgFilename, _assetsUri) };
+        Console.WriteLine(ex.StackTrace);
+        HandleException(ex.Message);
+        // ImagePreview = new SvgImage { Source = SvgSource.Load(ErrorSvgFilename, _assetsUri) };
+        Console.WriteLine(ex.StackTrace);
         ImageProperties = new ImageProperties();
     }
 
-    private static async Task HandleExceptionAsync(string message)
+    private void HandleException(string message)
     {
-        var mainWindow = GetMainWindow();
-        var messageBox = MessageBoxes.GetErrorBox(message);
-        await MessageBoxManager.GetMessageBoxStandard(messageBox).ShowWindowDialogAsync(mainWindow);
+        NotificationManager?.Show(
+            new Notification("Error", message, NotificationType.Error, TimeSpan.FromSeconds(5))
+        );
     }
 }
