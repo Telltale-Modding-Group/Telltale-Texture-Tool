@@ -773,7 +773,6 @@ public partial class MainViewModel : ViewModelBase
                 CodecOptions codecOptions = new()
                 {
                     TelltaleToolGame = ImageAdvancedOptions.GameID,
-                    IsLegacyConsole = ImageAdvancedOptions.IsLegacyConsole,
                 };
 
                 Texture toConvertTexture = codecManager.LoadFromFile(
@@ -1157,11 +1156,7 @@ public partial class MainViewModel : ViewModelBase
                 return;
             }
 
-            CodecOptions codecOptions = new()
-            {
-                TelltaleToolGame = ImageAdvancedOptions.GameID,
-                IsLegacyConsole = ImageAdvancedOptions.IsLegacyConsole,
-            };
+            CodecOptions codecOptions = new() { TelltaleToolGame = ImageAdvancedOptions.GameID };
 
             texture = codecManager.LoadFromFile(filePath, codecOptions);
 
@@ -1195,7 +1190,8 @@ public partial class MainViewModel : ViewModelBase
             MaxFaceCount = metadata.ArraySize - 1;
             MaxSliceCount = metadata.Depth - 1;
 
-            if (texture.Metadata.IsCubemap){
+            if (texture.Metadata.IsCubemap)
+            {
                 MaxFaceCount /= 6;
             }
 

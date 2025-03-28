@@ -226,7 +226,7 @@ public static class Converter
         }
 
         D3DTX_Master d3dtxFile = new();
-        d3dtxFile.ReadD3DTXFile(sourceFilePath, options.GameID, options.IsLegacyConsole);
+        d3dtxFile.ReadD3DTXFile(sourceFilePath, options.GameID);
 
         // DDS_Master ddsFile = new(d3dtxFile);
 
