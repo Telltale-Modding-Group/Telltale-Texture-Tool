@@ -12,4 +12,5 @@
         MinWidth="600"
         MinHeight="250">
     <views:MainView />
+	
 </Window>

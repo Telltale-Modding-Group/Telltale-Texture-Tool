@@ -550,7 +550,7 @@ class BlowFish
         ];
     }
 
-    private ulong[] SetupS0()
+    private static ulong[] SetupS0()
     {
         return
         [
@@ -813,7 +813,7 @@ class BlowFish
         ];
     }
 
-    private ulong[] SetupS1()
+    private static ulong[] SetupS1()
     {
         return
         [
@@ -1076,7 +1076,7 @@ class BlowFish
         ];
     }
 
-    private ulong[] SetupS2()
+    private static ulong[] SetupS2()
     {
         return
         [
@@ -1339,7 +1339,7 @@ class BlowFish
         ];
     }
 
-    private ulong[] SetupS3()
+    private static ulong[] SetupS3()
     {
         return
         [
