@@ -3,12 +3,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Controls.PanAndZoom;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Threading;
-using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.Input;
-using TelltaleTextureTool.GUI.ViewModels;
 using TelltaleTextureTool.ViewModels;
 
 namespace TelltaleTextureTool.Views;
