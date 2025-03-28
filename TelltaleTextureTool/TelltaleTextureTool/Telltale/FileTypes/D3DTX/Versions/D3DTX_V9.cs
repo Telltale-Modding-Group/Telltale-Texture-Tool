@@ -401,6 +401,22 @@ public class D3DTX_V9 : ID3DTX
         //--------------------------STORING D3DTX IMAGE DATA--------------------------
         mPixelData = [];
 
+        if (mStreamHeader.mAuxDataCount > 0)
+        {
+            uint size = reader.ReadUInt32();
+            reader.ReadUInt32();
+            reader.ReadUInt32();
+            reader.ReadUInt32();
+            reader.ReadUInt32();
+            reader.ReadUInt32();
+            List<byte> array = new List<byte>();
+            for (int i = 0; i < size - 4 - 20; i++)
+            {
+                array.Add(reader.ReadByte());
+            }
+            Console.WriteLine("AUX DATA: " + BitConverter.ToString(array.ToArray()));
+        }
+
         for (int i = 0; i < mStreamHeader.mRegionCount; i++)
         {
             int dataSize = (int)mRegionHeaders[i].mDataSize;

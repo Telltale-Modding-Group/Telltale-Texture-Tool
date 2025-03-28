@@ -400,8 +400,8 @@ namespace TelltaleTextureTool.TelltaleD3DTX
                 is TelltaleToolGame.WALLACE_AND_GROMITS_GRAND_ADVENTURES_104
                     or TelltaleToolGame.TALES_OF_MONKEY_ISLAND_V1
                     or TelltaleToolGame.CSI_DEADLY_INTENT
-                    or TelltaleToolGame.SAM_AND_MAX_THE_DEVILS_PLAYHOUSE
-                    or TelltaleToolGame.SAM_AND_MAX_SAVE_THE_WORLD_2007
+                    or TelltaleToolGame.SAM_AND_MAX_THE_DEVILS_PLAYHOUSE_301
+                    or TelltaleToolGame.SAM_AND_MAX_SAVE_THE_WORLD_101_2007
             )
             {
                 writer.Write(mName_BlockSize);
@@ -604,7 +604,7 @@ namespace TelltaleTextureTool.TelltaleD3DTX
             if (
                 game
                 is TelltaleToolGame.TEXAS_HOLD_EM_V1
-                    or TelltaleToolGame.SAM_AND_MAX_BEYOND_TIME_AND_SPACE_NEW
+                    or TelltaleToolGame.SAM_AND_MAX_BEYOND_TIME_AND_SPACE_201_NEW
             )
             {
                 writer.Write(mName_BlockSize);
@@ -637,7 +637,7 @@ namespace TelltaleTextureTool.TelltaleD3DTX
             if (
                 game
                 is TelltaleToolGame.CSI_HARD_EVIDENCE
-                    or TelltaleToolGame.SAM_AND_MAX_BEYOND_TIME_AND_SPACE_OG
+                    or TelltaleToolGame.SAM_AND_MAX_BEYOND_TIME_AND_SPACE_201_OG
             )
             {
                 writer.Write(mName_BlockSize);
@@ -716,7 +716,7 @@ namespace TelltaleTextureTool.TelltaleD3DTX
                 ByteFunctions.WriteBoolean(writer, mbAlphaHDR.mbTelltaleBoolean);
             }
 
-            if (game is TelltaleToolGame.SAM_AND_MAX_SAVE_THE_WORLD_2006)
+            if (game is TelltaleToolGame.SAM_AND_MAX_SAVE_THE_WORLD_101_2006)
             {
                 writer.Write(mName_BlockSize);
                 ByteFunctions.WriteString(writer, mName);
@@ -925,8 +925,8 @@ namespace TelltaleTextureTool.TelltaleD3DTX
                 is TelltaleToolGame.WALLACE_AND_GROMITS_GRAND_ADVENTURES_104
                     or TelltaleToolGame.TALES_OF_MONKEY_ISLAND_V1
                     or TelltaleToolGame.CSI_DEADLY_INTENT
-                    or TelltaleToolGame.SAM_AND_MAX_THE_DEVILS_PLAYHOUSE
-                    or TelltaleToolGame.SAM_AND_MAX_SAVE_THE_WORLD_2007
+                    or TelltaleToolGame.SAM_AND_MAX_THE_DEVILS_PLAYHOUSE_301
+                    or TelltaleToolGame.SAM_AND_MAX_SAVE_THE_WORLD_101_2007
             )
             {
                 mName_BlockSize = reader.ReadInt32();
@@ -1136,7 +1136,7 @@ namespace TelltaleTextureTool.TelltaleD3DTX
             if (
                 game
                 is TelltaleToolGame.TEXAS_HOLD_EM_V1
-                    or TelltaleToolGame.SAM_AND_MAX_BEYOND_TIME_AND_SPACE_NEW
+                    or TelltaleToolGame.SAM_AND_MAX_BEYOND_TIME_AND_SPACE_201_NEW
             )
             {
                 mName_BlockSize = reader.ReadInt32();
@@ -1194,7 +1194,7 @@ namespace TelltaleTextureTool.TelltaleD3DTX
                 mDetailMapBrightness = reader.ReadSingle();
             }
 
-            if (game is TelltaleToolGame.SAM_AND_MAX_BEYOND_TIME_AND_SPACE_OG)
+            if (game is TelltaleToolGame.SAM_AND_MAX_BEYOND_TIME_AND_SPACE_201_OG)
             {
                 mName_BlockSize = reader.ReadInt32();
                 mName = ByteFunctions.ReadString(reader);
@@ -1274,7 +1274,7 @@ namespace TelltaleTextureTool.TelltaleD3DTX
                 mbEncrypted = new TelltaleBoolean(reader);
             }
 
-            if (game is TelltaleToolGame.SAM_AND_MAX_SAVE_THE_WORLD_2006)
+            if (game is TelltaleToolGame.SAM_AND_MAX_SAVE_THE_WORLD_101_2006)
             {
                 mName_BlockSize = reader.ReadInt32();
                 mName = ByteFunctions.ReadString(reader);
@@ -1312,7 +1312,7 @@ namespace TelltaleTextureTool.TelltaleD3DTX
                 }
             }
 
-            if (mTextureDataFormats is 128 or 256 or 512)
+            if (mTextureDataFormats is 128 or 256 or 512 or 258)
             {
                 mEmptyBuffer = reader.ReadInt32(); //mEmptyBuffer [4 bytes]
             }
