@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -41,18 +41,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.2.2" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.2" />
+    <PackageReference Include="Avalonia" Version="11.2.5" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.5" />
     <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="11.2.0" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.2.2" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.2.2" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.2.5" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.2.5" />
     <PackageReference Include="Avalonia.Svg.Skia" Version="11.2.0.2" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.2" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.2" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.2.0.1" />
-    <PackageReference Include="BCnEncoder.Net" Version="2.1.0" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
-    <PackageReference Include="DrSwizzler" Version="1.0.8" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.5" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.5" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.2.0.14" />
+    <PackageReference Include="BCnEncoder.Net" Version="2.2.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="DrSwizzler" Version="1.1.0" />
     <PackageReference Include="Hexa.NET.DirectXTex" Version="2.0.4" />
 
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
