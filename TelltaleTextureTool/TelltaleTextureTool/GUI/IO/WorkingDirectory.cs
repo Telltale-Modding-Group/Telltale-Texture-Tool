@@ -1,100 +1,106 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
 namespace TelltaleTextureTool;
 
-public class WorkingDirectoryFile : IEquatable<WorkingDirectoryFile>
-{
-    public string FileName { get; set; } = string.Empty;
-    public string FileType { get; set; }= string.Empty;
-    public DateTime FileLastWrite { get; set; } = DateTime.MinValue;
-    public string FilePath { get; set; } = string.Empty;
-
-    public bool Equals(WorkingDirectoryFile other)
-    {
-        return FileName == other.FileName &&
-                 FileType == other.FileType &&
-                 FilePath == other.FilePath;
-    }
-}
-
-
 public class WorkingDirectory
 {
-    public string WorkingDirectoryPath = string.Empty;
-    public List<WorkingDirectoryFile> WorkingDirectoryFiles = [];
-
-    //hardcoded filters
-    public List<string> filterFileExtensions = [".d3dtx", ".dds", ".png", ".jpg", ".jpeg", ".tiff", ".tif", ".bmp", ".json", ".tga", ".hdr", ""];
+    public DirectoryInfo SelectedDirectory = new(Environment.SystemDirectory);
+    public List<FileSystemInfo> SelectedItems = [];
+    public IEnumerable<string> FilterFileExtensions = [];
 
     /// <summary>
     /// Gets the files from the provided directory path.
     /// </summary>
     /// <param name="directoryPath"></param>
     /// <exception cref="DirectoryNotFoundException"></exception>
-    public void GetFiles(string directoryPath)
+    public ObservableCollection<FileSystemItem> GetFiles(
+        string directoryPath,
+        IEnumerable<string> filterExtensions
+    )
     {
         if (!Directory.Exists(directoryPath))
         {
             throw new DirectoryNotFoundException("Selected directory cannot be found.");
         }
 
-        if (directoryPath != WorkingDirectoryPath)
+        if (directoryPath != SelectedDirectory.FullName)
         {
-            WorkingDirectoryFiles.Clear();
+            SelectedDirectory = new DirectoryInfo(directoryPath);
+            SelectedItems = [];
+            FilterFileExtensions = filterExtensions;
         }
 
-        var deletedFiles = new List<WorkingDirectoryFile>();
+        SelectedItems = [];
 
-        foreach (var file in WorkingDirectoryFiles)
+        SelectedItems = [.. SelectedItems.Concat(SelectedDirectory.GetDirectories())];
+
+        foreach (var item in FilterFileExtensions)
         {
-            if (!File.Exists(file.FilePath) && !Directory.Exists(file.FilePath))
-            {
-                deletedFiles.Add(file);
-            }
-            else if (File.Exists(file.FilePath) && file.FileType == "")
-            {
-                deletedFiles.Add(file);
-            }
+            SelectedItems = [.. SelectedItems.Concat(SelectedDirectory.GetFiles("*" + item))];
         }
 
-        WorkingDirectoryPath = directoryPath;
-
-        List<string> directoryItems = new(Directory.GetFiles(WorkingDirectoryPath).Concat(Directory.GetDirectories(WorkingDirectoryPath)));
-
-        foreach (string file in directoryItems)
-        {
-            string fileName = Path.GetFileNameWithoutExtension(file);
-            string fileExt = Path.GetExtension(file).ToLower();
-
-            if (!filterFileExtensions.Contains(fileExt))
-            {
-                continue;
-            }
-
-            WorkingDirectoryFile workingDirectoryFile = new()
-            {
-                FileName = fileName,
-                FileType = fileExt,
-                FilePath = file,
-                FileLastWrite = File.GetLastWriteTime(file)
-            };
-
-            if (!WorkingDirectoryFiles.Contains(workingDirectoryFile))
-            {
-                Console.WriteLine("Adding file: " + fileName);
-                WorkingDirectoryFiles.Add(workingDirectoryFile);
-            }
-            else
-            {
-                WorkingDirectoryFiles[WorkingDirectoryFiles.IndexOf(workingDirectoryFile)].FileLastWrite = File.GetLastWriteTime(file);
-            }
-        }
-
-        WorkingDirectoryFiles = WorkingDirectoryFiles.Except(deletedFiles).ToList();
+        return [.. SelectedItems.Select(CreateFileSystemItem)];
     }
 
-    public string GetWorkingDirectoryPath() => WorkingDirectoryPath;
+    private FileSystemItem CreateFileSystemItem(FileSystemInfo info)
+    {
+        return new FileSystemItem
+        {
+            // Icon = _iconService.GetIcon(info.FullName),
+            Name = info.Name,
+            FullPath = info.FullName,
+            Type = info is DirectoryInfo ? "Folder" : info.Extension,
+            ModifiedDate = info.LastWriteTime,
+            CreatedDate = info.CreationTime,
+            IsDirectory = info is DirectoryInfo,
+            Size = info is FileInfo file ? file.Length : 0,
+        };
+    }
+
+    /// <summary>
+    /// Gets the files from the provided directory path.
+    /// </summary>
+    /// <param name="directoryPath"></param>
+    /// <exception cref="DirectoryNotFoundException"></exception>
+    public ObservableCollection<FileSystemItem> UpdateFiles(
+        ObservableCollection<FileSystemItem> files
+    )
+    {
+        var updatedFiles = GetFiles(SelectedDirectory.FullName, FilterFileExtensions);
+
+        // Update existing files and remove deleted ones
+        for (int i = files.Count - 1; i >= 0; i--) // Iterate backwards for safe removal
+        {
+            var file = files[i];
+            var matchingUpdatedFile = updatedFiles.FirstOrDefault(x => x.FullPath == file.FullPath);
+
+            if (matchingUpdatedFile != null)
+            {
+                // Update existing file metadata
+                file.CreatedDate = matchingUpdatedFile.CreatedDate;
+                file.ModifiedDate = matchingUpdatedFile.ModifiedDate;
+            }
+            else if (!File.Exists(file.FullPath))
+            {
+                // Remove files that no longer exist
+                files.RemoveAt(i);
+            }
+        }
+
+        // Add new files not already in the collection
+        var newFiles = updatedFiles
+            .Where(uf => !files.Any(f => f.FullPath == uf.FullPath))
+            .ToList();
+
+        foreach (var newFile in newFiles)
+        {
+            files.Add(CreateFileSystemItem(new FileInfo(newFile.FullPath)));
+        }
+
+        return files;
+    }
 }

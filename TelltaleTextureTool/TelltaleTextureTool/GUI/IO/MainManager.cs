@@ -1,11 +1,11 @@
-﻿using TelltaleTextureTool.Utilities;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
-using System;
-using System.Runtime.InteropServices;
+using TelltaleTextureTool.Utilities;
 
 namespace TelltaleTextureTool;
 
@@ -16,10 +16,11 @@ namespace TelltaleTextureTool;
 public sealed class MainManager
 {
     // App version
-    public readonly string AppVersion = "v2.5.0";
+    public readonly string AppVersion = "v2.5.2";
 
     // Weblink for getting help with the application
-    private const string AppHelpLink = "https://github.com/Telltale-Modding-Group/Telltale-Texture-Tool/wiki";
+    private const string AppHelpLink =
+        "https://github.com/Telltale-Modding-Group/Telltale-Texture-Tool/wiki";
 
     private WorkingDirectory _workingDirectory;
     private static MainManager? _instance;
@@ -30,34 +31,20 @@ public sealed class MainManager
         _workingDirectory = new WorkingDirectory();
     }
 
+    public WorkingDirectory GetWorkingDirectory() => _workingDirectory;
+
     public static MainManager GetInstance() => _instance ??= new MainManager();
 
     /// <summary>
     /// Sets the current working directory path using a folder picker.
     /// </summary>
     /// <param name="provider"></param>
-    public async Task SetWorkingDirectoryPath(IStorageProvider provider)
+    public void SetWorkingDirectoryPath(string path)
     {
-        string path = await IOManagement.GetFilePathAsync(provider,
-            "Locate your folder containing your extracted .d3dtx textures.");
-
         if (string.IsNullOrEmpty(path))
             return;
 
-        _workingDirectory.GetFiles(path);
-    }
-
-    /// <summary>
-    /// Sets the current working directory path with the provided path.
-    /// </summary>
-    /// <param name="path"></param>
-    public Task SetWorkingDirectoryPath(string path)
-    {
-        if (string.IsNullOrEmpty(path))
-            return Task.CompletedTask;
-
-        _workingDirectory.GetFiles(path);
-        return Task.CompletedTask;
+        _workingDirectory.GetFiles(path, _workingDirectory.FilterFileExtensions);
     }
 
     /// <summary>
@@ -74,7 +61,7 @@ public sealed class MainManager
         {
             FileName = directoryPath,
             UseShellExecute = true,
-            Verb = "open"
+            Verb = "open",
         };
 
         //start the process
@@ -104,19 +91,21 @@ public sealed class MainManager
         }
         else
         {
-            throw new NotSupportedException("Unknown operating system.");
+            throw new NotSupportedException(
+                "'Open File Explorer' is unsupported on this operating system.'"
+            );
         }
     }
 
     /// <summary>
     /// Opens the default web explorer and directs the user to the help page.
     /// </summary>
-    public void OpenAppHelp()
+    public static void OpenAppHelp()
     {
         var processStartInfo = new ProcessStartInfo
         {
             FileName = AppHelpLink,
-            UseShellExecute = true
+            UseShellExecute = true,
         };
 
         Process.Start(processStartInfo);
@@ -127,12 +116,13 @@ public sealed class MainManager
     /// </summary>
     public void RefreshWorkingDirectory()
     {
-        _workingDirectory.GetFiles(_workingDirectory.WorkingDirectoryPath);
+        _workingDirectory.GetFiles(
+            _workingDirectory.SelectedDirectory.FullName,
+            _workingDirectory.FilterFileExtensions
+        );
     }
 
-    public bool WorkingDirectory_Path_Exists() => Directory.Exists(_workingDirectory.WorkingDirectoryPath);
+    public string GetWorkingDirectoryPath() => _workingDirectory.SelectedDirectory.FullName;
 
-    public string GetWorkingDirectoryPath() => _workingDirectory.WorkingDirectoryPath;
-
-    public List<WorkingDirectoryFile> GetWorkingDirectoryFiles() => _workingDirectory.WorkingDirectoryFiles;
+    public List<FileSystemInfo> GetWorkingDirectoryFiles() => _workingDirectory.SelectedItems;
 }
