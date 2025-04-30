@@ -24,5 +24,7 @@ public partial class DataGridColumnVisibilitySettings : ObservableObject
 
     [ObservableProperty]
     public bool _isSizeVisible = false;
-}
 
+    [ObservableProperty]
+    public bool _isMipSliderVisible = false;
+}

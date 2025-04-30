@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
 	<AssemblyName>TelltaleTextureTool</AssemblyName>
-	<Version>2.5.0</Version>
-	<AssemblyVersion>2.5.0.0</AssemblyVersion>
+	<Version>2.6.0</Version>
+	<AssemblyVersion>2.6.0.0</AssemblyVersion>
     <OutputType>WinExe</OutputType>
     <RootNamespace>TelltaleTextureTool</RootNamespace>
     <ApplicationIcon>Assets\main_icon.ico</ApplicationIcon>
@@ -41,15 +41,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.2.5" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.5" />
+    <PackageReference Include="Avalonia" Version="11.2.8" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.8" />
     <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="11.2.0" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.2.5" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.2.5" />
-    <PackageReference Include="Avalonia.Svg.Skia" Version="11.2.0.2" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.5" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.5" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.2.0.14" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.2.8" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.2.8" />
+    <PackageReference Include="Avalonia.Svg.Skia" Version="11.2.7" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.8" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.8" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.2.7" />
     <PackageReference Include="BCnEncoder.Net" Version="2.2.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="DrSwizzler" Version="1.1.0" />

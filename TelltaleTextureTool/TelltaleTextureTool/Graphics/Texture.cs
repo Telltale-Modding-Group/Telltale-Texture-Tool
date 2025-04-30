@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Nodes;
 using TelltaleTextureTool.Codecs;
 using TelltaleTextureTool.TelltaleEnums;
 
@@ -105,6 +106,7 @@ public partial class ExtraMetadata
     public Platform UnswizzleMode { get; set; }
     public Platform SwizzleMode { get; set; }
     public string DebugInformation { get; set; } = string.Empty;
+    public string JsonData { get; set; } = string.Empty;
 }
 
 public partial class ExtraMetadata { }

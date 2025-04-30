@@ -4,21 +4,15 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
-using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
-using Avalonia.Svg.Skia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MsBox.Avalonia;
@@ -32,49 +26,6 @@ using IImage = Avalonia.Media.IImage;
 using Texture = TelltaleTextureTool.Graphics.Texture;
 
 namespace TelltaleTextureTool.ViewModels;
-
-public class EnumDisplayNameConverter : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        if (value is null)
-            return string.Empty;
-
-        // Get the field in the enum type that matches the current enum value
-        FieldInfo field = value.GetType().GetField(value.ToString());
-
-        // Get the Display attribute if present
-        DisplayAttribute attribute = field
-            ?.GetCustomAttributes(false)
-            .OfType<DisplayAttribute>()
-            .FirstOrDefault();
-
-        // Return the name if available, otherwise fall back to the enum value's name
-        return attribute?.Name ?? value.ToString();
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        // Reverse the conversion if needed
-        if (value is string stringValue)
-        {
-            foreach (var field in targetType.GetFields())
-            {
-                var attribute = field
-                    .GetCustomAttributes(false)
-                    .OfType<DisplayAttribute>()
-                    .FirstOrDefault();
-
-                if (attribute?.Name == stringValue || field.Name == stringValue)
-                {
-                    return Enum.Parse(targetType, field.Name);
-                }
-            }
-        }
-
-        throw new InvalidOperationException("Cannot convert back.");
-    }
-}
 
 public partial class MainViewModel : ViewModelBase
 {
@@ -120,9 +71,6 @@ public partial class MainViewModel : ViewModelBase
     ];
 
     private readonly MainManager mainManager = MainManager.GetInstance();
-    private readonly Uri _assetsUri = new("avares://TelltaleTextureTool/Assets/");
-    private static readonly string ErrorSvgFilename = "error.svg";
-
     #endregion
 
     public WindowNotificationManager? NotificationManager { get; set; }
@@ -221,6 +169,9 @@ public partial class MainViewModel : ViewModelBase
     private bool _deleteButtonStatus;
 
     [ObservableProperty]
+    private bool _hasImage;
+
+    [ObservableProperty]
     private bool _convertButtonStatus;
 
     [ObservableProperty]
@@ -293,6 +244,9 @@ public partial class MainViewModel : ViewModelBase
     private static ObservableCollection<FileSystemItem> _workingDirectoryFiles = [];
 
     [ObservableProperty]
+    private static ObservableCollection<FileSystemItem> _filteredDirectoryFiles = [];
+
+    [ObservableProperty]
     [NotifyCanExecuteChangedFor("ResetPanAndZoomCommand")]
     private FileSystemItem _dataGridSelectedItem = new();
 
@@ -320,7 +274,6 @@ public partial class MainViewModel : ViewModelBase
 
     public MainViewModel()
     {
-        ImagePreview = new SvgImage() { Source = SvgSource.Load(ErrorSvgFilename, _assetsUri) };
         ImageAdvancedOptions = new ImageAdvancedOptions(this);
 
         FileFilterTypes = new FilePickerFileType("Supported Files")
@@ -330,6 +283,23 @@ public partial class MainViewModel : ViewModelBase
             MimeTypes = ["image/*"],
         };
     }
+
+    public enum BackgroundType
+    {
+        Transparent,
+        Checkerboard,
+        White,
+        Black,
+    }
+
+    [ObservableProperty]
+    private string _errorMessage = string.Empty;
+
+    [ObservableProperty]
+    private string _searchTextBoxText = string.Empty;
+
+    [ObservableProperty]
+    private BackgroundType _imageBackground = BackgroundType.Checkerboard;
 
     #region MAIN MENU BUTTONS ACTIONS
 
@@ -360,6 +330,9 @@ public partial class MainViewModel : ViewModelBase
 
         return folder?.Count >= 1 ? folder[0] : null;
     }
+
+    // [ObservableProperty]
+    // public bool _hasImage => ImagePreview != null;
 
     private async Task<IStorageFile?> DoOpenFilePickerAsync()
     {
@@ -398,7 +371,7 @@ public partial class MainViewModel : ViewModelBase
             if (folder is null)
                 return;
 
-            //  mainManager.SetWorkingDirectoryPath(folder.TryGetLocalPath());
+            mainManager.SetWorkingDirectoryPath(folder.TryGetLocalPath());
             WorkingDirectoryFiles = mainManager
                 .GetWorkingDirectory()
                 .GetFiles(
@@ -406,14 +379,16 @@ public partial class MainViewModel : ViewModelBase
                         ?? throw new ArgumentNullException(nameof(folder), "Folder path is null"),
                     FileFilterTypes.Patterns
                 );
+
+            DataGridSelectedItem = FilteredDirectoryFiles.FirstOrDefault();
             ReturnDirectoryButtonStatus = true;
             RefreshDirectoryButtonStatus = true;
             DataGridSelectedItem = null;
             UpdateUi();
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            HandleException(e.Message);
+            HandleException(ex);
         }
     }
 
@@ -435,17 +410,22 @@ public partial class MainViewModel : ViewModelBase
                         ?? throw new ArgumentNullException(nameof(file), "File path is null"),
                     FileFilterTypes.Patterns
                 );
+            FilteredDirectoryFiles = new ObservableCollection<FileSystemItem>(
+                WorkingDirectoryFiles
+            );
+            SearchTextBoxText = string.Empty;
+
             ReturnDirectoryButtonStatus = true;
             RefreshDirectoryButtonStatus = true;
             DataGridSelectedItem =
-                WorkingDirectoryFiles.FirstOrDefault(x => x.FullPath == file.TryGetLocalPath())
+                FilteredDirectoryFiles.FirstOrDefault(x => x.FullPath == file.TryGetLocalPath())
                 ?? throw new ArgumentNullException(nameof(file), "File path is null");
 
             UpdateUi();
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            HandleException(e.Message);
+            HandleException(ex);
         }
     }
 
@@ -487,7 +467,7 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            HandleException("Error during saving the file. " + ex.Message);
+            HandleException(ex);
         }
         finally
         {
@@ -538,7 +518,7 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            HandleException("Error during adding files. Some files were not copied. " + ex.Message);
+            HandleException(ex);
         }
 
         SafeRefreshDirectory();
@@ -582,7 +562,7 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            HandleException(ex.Message);
+            HandleException(ex);
         }
         finally
         {
@@ -593,13 +573,13 @@ public partial class MainViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public void HelpButton_Click()
+    public static void HelpButton_Click()
     {
         MainManager.OpenAppHelp();
     }
 
     [RelayCommand]
-    public void AboutButton_Click()
+    public static void AboutButton_Click()
     {
         var mainWindow = GetMainWindow();
         var aboutWindow = new AboutWindow { DataContext = new AboutViewModel() };
@@ -630,8 +610,40 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            HandleException(ex.Message);
+            HandleException(ex);
         }
+    }
+
+    partial void OnSearchTextBoxTextChanged(string value)
+    {
+        FilterFiles();
+    }
+
+    private void FilterFiles()
+    {
+        if (string.IsNullOrWhiteSpace(SearchTextBoxText))
+        {
+            FilteredDirectoryFiles = new ObservableCollection<FileSystemItem>(
+                WorkingDirectoryFiles
+            );
+        }
+        else
+        {
+            var searchTerm = SearchTextBoxText.ToLower();
+            FilteredDirectoryFiles = new ObservableCollection<FileSystemItem>(
+                WorkingDirectoryFiles.Where(file =>
+                    file.Name.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
+                    || (
+                        file.FullPath?.ToLower()
+                            .Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
+                        ?? false
+                    )
+                )
+            );
+        }
+
+        // Notify that FilteredFiles has changed
+        OnPropertyChanged(nameof(FilteredDirectoryFiles));
     }
 
     [RelayCommand]
@@ -652,10 +664,14 @@ public partial class MainViewModel : ViewModelBase
             WorkingDirectoryFiles = mainManager
                 .GetWorkingDirectory()
                 .GetFiles(workingDirectoryFile.FullPath, FileFilterTypes.Patterns);
+            SearchTextBoxText = string.Empty;
+            FilteredDirectoryFiles = new ObservableCollection<FileSystemItem>(
+                WorkingDirectoryFiles
+            );
         }
         catch (Exception ex)
         {
-            HandleException(ex.Message);
+            HandleException(ex);
         }
         finally
         {
@@ -687,7 +703,7 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            HandleException(ex.Message);
+            HandleException(ex);
         }
     }
 
@@ -708,7 +724,7 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            HandleException(ex.Message);
+            HandleException(ex);
         }
     }
 
@@ -875,11 +891,17 @@ public partial class MainViewModel : ViewModelBase
             WorkingDirectoryFiles = mainManager
                 .GetWorkingDirectory()
                 .UpdateFiles(WorkingDirectoryFiles);
+            FilteredDirectoryFiles = new ObservableCollection<FileSystemItem>(
+                WorkingDirectoryFiles
+            );
+            SearchTextBoxText = string.Empty;
+
+            OnPropertyChanged(nameof(FilteredDirectoryFiles));
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.StackTrace);
-            HandleException("Error during updating UI. " + ex.Message);
+            HandleException(ex);
         }
     }
 
@@ -892,15 +914,21 @@ public partial class MainViewModel : ViewModelBase
         {
             if (Directory.GetParent(DirectoryPath) is null)
                 return;
+
             DirectoryPath = Directory.GetParent(DirectoryPath).ToString();
             WorkingDirectoryFiles = mainManager
                 .GetWorkingDirectory()
                 .GetFiles(DirectoryPath, FileFilterTypes.Patterns);
             DataGridSelectedItem = null;
+
+            FilteredDirectoryFiles = new ObservableCollection<FileSystemItem>(
+                WorkingDirectoryFiles
+            );
+            SearchTextBoxText = string.Empty;
         }
         catch (Exception ex)
         {
-            HandleException(ex.Message);
+            HandleException(ex);
         }
         finally
         {
@@ -1048,6 +1076,10 @@ public partial class MainViewModel : ViewModelBase
                     WorkingDirectoryFiles = mainManager
                         .GetWorkingDirectory()
                         .GetFiles(DirectoryPath, FileFilterTypes.Patterns);
+                    FilteredDirectoryFiles = new ObservableCollection<FileSystemItem>(
+                        WorkingDirectoryFiles
+                    );
+                    SearchTextBoxText = string.Empty;
                 }
             }
         }
@@ -1115,9 +1147,24 @@ public partial class MainViewModel : ViewModelBase
         ChooseOutputDirectoryCheckboxStatus = false;
 
         ImageProperties = new ImageProperties();
-        ImagePreview = new SvgImage() { Source = SvgSource.Load(ErrorSvgFilename, _assetsUri) };
         DebugInfo = string.Empty;
+        SearchTextBoxText = string.Empty;
+        ImagePreview = null;
+        HasImage = false;
 
+        texture = null;
+
+        ResetTextureValues();
+    }
+
+    public void ResetTextureValues()
+    {
+        MipValue = 0;
+        FaceValue = 0;
+        SliceValue = 0;
+        MaxMipCount = 0;
+        MaxFaceCount = 0;
+        MaxSliceCount = 0;
         IsFaceSliderVisible = MaxFaceCount != 0;
         IsMipSliderVisible = MaxMipCount != 0;
         IsSliceSliderVisible = MaxSliceCount != 0;
@@ -1140,17 +1187,18 @@ public partial class MainViewModel : ViewModelBase
             if (DataGridSelectedItem is null)
                 return;
 
+            texture = null;
+            HasImage = false;
+            DebugInfo = string.Empty;
+            GC.Collect();
+
             var workingDirectoryFile = DataGridSelectedItem;
             var filePath = workingDirectoryFile.FullPath;
             var extension = Path.GetExtension(filePath).ToLowerInvariant();
 
-            texture = null;
-            GC.Collect();
-
             if (!codecManager.GetAllSupportedExtensions().Contains(extension))
             {
                 ImageProperties = new ImageProperties { Name = workingDirectoryFile.Name };
-                DebugInfo = string.Empty;
                 UpdateBitmap();
                 IsImageInformationVisible = false;
                 return;
@@ -1195,8 +1243,17 @@ public partial class MainViewModel : ViewModelBase
                 MaxFaceCount /= 6;
             }
 
+            if (ColumnSettings.IsMipSliderVisible)
+            {
+                IsMipSliderVisible = MaxMipCount != 0;
+            }
+            else
+            {
+                IsMipSliderVisible = false;
+                MipValue = 0;
+            }
+
             IsFaceSliderVisible = MaxFaceCount != 0;
-            IsMipSliderVisible = MaxMipCount != 0;
             IsSliceSliderVisible = MaxSliceCount != 0;
 
             DebugInfo = texture.Metadata.ExtraMetadata.DebugInformation;
@@ -1226,7 +1283,6 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            texture = null;
             UpdateBitmap();
             Console.WriteLine(ex.StackTrace);
             HandleImagePreviewError(ex);
@@ -1240,6 +1296,7 @@ public partial class MainViewModel : ViewModelBase
         {
             if (texture != null)
             {
+                HasImage = true;
                 if (texture.Metadata.IsCubemap)
                 {
                     ImagePreview = ImageData.GetBitmap(
@@ -1259,10 +1316,8 @@ public partial class MainViewModel : ViewModelBase
             }
             else
             {
-                ImagePreview = new SvgImage
-                {
-                    Source = SvgSource.Load(ErrorSvgFilename, _assetsUri),
-                };
+                HasImage = false;
+                ResetTextureValues();
             }
             // if (DataGridSelectedItem is null)
             //     return;
@@ -1293,9 +1348,41 @@ public partial class MainViewModel : ViewModelBase
         }
     }
 
-    protected override async void OnPropertyChanged(PropertyChangedEventArgs e)
+    [RelayCommand]
+    private void ToggleMipSliderVisibility(bool isVisible)
+    {
+        if (!isVisible)
+        {
+            MipValue = 0;
+            IsMipSliderVisible = false;
+            UpdateBitmap();
+        }
+        else
+        {
+            IsMipSliderVisible = MaxMipCount != 0;
+        }
+    }
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
+        // if (e.PropertyName is nameof(ColumnSettings.IsMipSliderVisible))
+        // {
+        //     if (!ColumnSettings.IsMipSliderVisible)
+        //     {
+        //         IsMipSliderVisible = false;
+        //         MipValue = 0;
+        //         UpdateBitmap();
+        //     }
+        //     else
+        //     {
+        //         IsMipSliderVisible = MaxMipCount != 0;
+        //     }
+        // }
+        if (e.PropertyName is nameof(ColumnSettings.IsSizeVisible))
+        {
+            Console.WriteLine("Size column visibility changed.");
+        }
         if (
             e.PropertyName is nameof(MipValue)
             || e.PropertyName is nameof(FaceValue)
@@ -1317,18 +1404,6 @@ public partial class MainViewModel : ViewModelBase
 
             UpdateBitmap();
         }
-        if (e.PropertyName is nameof(ColumnSettings.IsNameVisible))
-        {
-            Console.WriteLine(ColumnSettings.IsNameVisible);
-
-            Console.WriteLine(ColumnSettings.IsExtensionVisible);
-
-            Console.WriteLine(ColumnSettings.IsSizeVisible);
-
-            Console.WriteLine(ColumnSettings.IsCreatedDateVisible);
-
-            Console.WriteLine(ColumnSettings.IsCreatedDateVisible);
-        }
     }
 
     private static Task OpenFileExplorer(string path)
@@ -1345,17 +1420,15 @@ public partial class MainViewModel : ViewModelBase
 
     private void HandleImagePreviewError(Exception ex)
     {
-        Console.WriteLine(ex.StackTrace);
-        HandleException(ex.Message);
-        // ImagePreview = new SvgImage { Source = SvgSource.Load(ErrorSvgFilename, _assetsUri) };
-        Console.WriteLine(ex.StackTrace);
+        HandleException(ex);
         ImageProperties = new ImageProperties();
     }
 
-    private void HandleException(string message)
+    private void HandleException(Exception ex)
     {
+        Console.WriteLine(ex.StackTrace);
         NotificationManager?.Show(
-            new Notification("Error", message, NotificationType.Error, TimeSpan.FromSeconds(5))
+            new Notification("Error", ex.Message, NotificationType.Error, TimeSpan.FromSeconds(5))
         );
     }
 }

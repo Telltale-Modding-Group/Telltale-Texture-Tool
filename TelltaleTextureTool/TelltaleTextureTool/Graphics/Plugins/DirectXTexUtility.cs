@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Hexa.NET.DirectXTex;
+using HexaGen.Runtime;
 using TelltaleTextureTool.Codecs;
 using TelltaleTextureTool.DirectX.Enums;
 using DirectXImage = Hexa.NET.DirectXTex.Image;
@@ -203,11 +204,26 @@ public static class DirectXTexUtility
         var dxgiFormat = GetDXGIFormat(pixelFormatInfo);
         var scratchImage = DirectXTex.CreateScratchImage();
 
-        TexFilterFlags filterFlags = TexFilterFlags.Default;
-        // filterFlags |= TexFilterFlags.ForceWic;
+        // DirectXTexMetadata dxMetadata = new()
+        // {
+        //     Width = dxImage.Width,
+        //     Height = dxImage.Height,
+        //     Depth = 1,
+        //     ArraySize = 1,
+        //     MipLevels = 1,
+        //     Format = (int)dxgiFormat,
+        //     Dimension = DirectXTexDimension.Texture2D,
+        // };
 
-        DirectXTex.Convert(&dxImage, (int)dxgiFormat, filterFlags, 0.5f, &scratchImage).ThrowIf();
+     //   scratchImage.Initialize(ref dxMetadata, CPFlags.None).ThrowIf();
 
+        TexFilterFlags filterFlags = TexFilterFlags.ForceNonWic;
+       // filterFlags |= TexFilterFlags.ForceWic;
+         filterFlags |= TexFilterFlags.ForceNonWic;
+
+       
+        HResult r = DirectXTex.Convert(&dxImage, (int)dxgiFormat, filterFlags, 0.5f, &scratchImage);
+        var f = r.Code;
         var pixels = GetPixelsFromDirectXScratchImage(scratchImage);
 
         var newPixelFormatInfo = GetPixelFormatInfo((DXGIFormat)scratchImage.GetMetadata().Format);

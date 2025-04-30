@@ -163,8 +163,8 @@ public static partial class D3DTXHelper
             // In order of T3SurfaceFormat enum
             //--------------------ARGB8--------------------
             T3SurfaceFormat.ARGB8 => gamma == T3SurfaceGamma.sRGB
-                ? DXGIFormat.B8G8R8A8_UNORM_SRGB
-                : DXGIFormat.B8G8R8A8_UNORM,
+                ? DXGIFormat.R8G8B8A8_UNORM_SRGB
+                : DXGIFormat.R8G8B8A8_UNORM,
             //--------------------ARGB16--------------------
             T3SurfaceFormat.ARGB16 => DXGIFormat.R16G16B16A16_UNORM,
             //--------------------RGB565--------------------

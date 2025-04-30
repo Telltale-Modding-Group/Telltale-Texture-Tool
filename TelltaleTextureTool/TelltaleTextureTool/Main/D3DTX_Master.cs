@@ -426,22 +426,20 @@ namespace TelltaleTextureTool.Main
 
         public void WriteD3DTXJSON(string fileName, string destinationDirectory)
         {
-            byte[] jsonBytes = WriteD3DTXJSONToBytes();
-
             string newPath =
                 destinationDirectory
                 + Path.DirectorySeparatorChar
                 + fileName
                 + Main_Shared.jsonExtension;
 
-            File.WriteAllBytes(newPath, jsonBytes);
+            File.WriteAllBytes(newPath, Encoding.UTF8.GetBytes(SerializeJSONData()));
         }
 
-        public byte[] WriteD3DTXJSONToBytes()
+        public string SerializeJSONData()
         {
             if (d3dtxObject == null)
             {
-                return [];
+                return string.Empty;
             }
 
             D3DTX_JSON conversionTypeObject = new()
@@ -453,12 +451,7 @@ namespace TelltaleTextureTool.Main
             List<object> jsonObjects = [conversionTypeObject, metaHeaderObject, d3dtxObject];
 
             // Serialize to JSON string first
-            string jsonString = JsonConvert.SerializeObject(jsonObjects, Formatting.Indented);
-
-            // Convert the JSON string to a byte array (UTF-8 encoded)
-            byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonString);
-
-            return jsonBytes;
+            return JsonConvert.SerializeObject(jsonObjects, Formatting.Indented);
         }
 
         public void ModifyD3DTX(D3DTXMetadata metadata, ImageSection[] sections)

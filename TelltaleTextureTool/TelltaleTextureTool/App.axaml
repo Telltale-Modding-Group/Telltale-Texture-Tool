@@ -1,30 +1,33 @@
-<Application xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:avalonia="clr-namespace:HyperText.Avalonia;assembly=HyperText.Avalonia"
-             xmlns:ads="clr-namespace:MsBox;assembly=MsBox.Avalonia"
-             xmlns:avalonia1="clr-namespace:MsBox.Avalonia;assembly=MsBox.Avalonia"
-             xmlns:mscontrols="clr-namespace:MsBox.Avalonia.Controls;assembly=MsBox.Avalonia"
-             x:Class="TelltaleTextureTool.App"
-             RequestedThemeVariant="Dark">
-    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+<Application
+    x:Class="TelltaleTextureTool.App"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ads="clr-namespace:MsBox;assembly=MsBox.Avalonia"
+    xmlns:avalonia="clr-namespace:HyperText.Avalonia;assembly=HyperText.Avalonia"
+    xmlns:avalonia1="clr-namespace:MsBox.Avalonia;assembly=MsBox.Avalonia"
+    xmlns:mscontrols="clr-namespace:MsBox.Avalonia.Controls;assembly=MsBox.Avalonia"
+    RequestedThemeVariant="Default">
+    <!--  "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options.  -->
     <Application.Resources>
         <Color x:Key="MainPanelColor">#333333</Color>
         <Color x:Key="PanelSplitterColor">#454545</Color>
-        <Color x:Key="ButtonColor">#1f2124</Color>
+        <GridLength x:Key="SliderPreContentMargin">0</GridLength>
+        <GridLength x:Key="SliderPostContentMargin">0</GridLength>
+
+     
+
     </Application.Resources>
     <Application.Styles>
+        
         <!-- <Style Selector="ads:MsBox"> -->
         <!-- <Setter Property="Background" Value="#FFDDDDDD" /> -->
         <!-- </Style> -->
-		
-        <Style Selector="mscontrols|MsBoxStandardView">
+        <!-- <Style Selector="mscontrols|MsBoxStandardView">
             <Setter Property="Background"
                     Value="{DynamicResource ButtonColor}" />
-        </Style>
-		
-
-		<!-- this is pointover for expander -->
-		<Style Selector="Expander:pointerover/template/ToggleButton">
+        </Style>-->
+        <!--  this is pointover for expander  -->
+        <!-- <Style Selector="Expander:pointerover/template/ToggleButton">
 			<Setter Property="Background"
                     Value="{DynamicResource ButtonColor}" />
 		</Style>
@@ -32,10 +35,8 @@
 		<Style Selector="Expander/template/ToggleButton">
 			<Setter Property="Background"
                     Value="{DynamicResource ButtonColor}" />
-		</Style>
-
-
-		<!--<Style Selector="Expander:pointerover/template/Border#ToggleButtonBackground">
+		</Style>-->
+        <!-- <Style Selector="Expander:pointerover/template/Border#ToggleButtonBackground">
 			<Setter Property="Background"
                     Value="#ff0000" />
 		</Style>
@@ -43,109 +44,47 @@
 			<Setter Property="Background"
                     Value="#ff0000" />
 		</Style>-->
-
-		<!--<Style Selector="Expander/template/ToggleButton:pointerover">
+        <!-- <Style Selector="Expander/template/ToggleButton:pointerover">
 			<Setter Property="Background"
                     Value="#ff0000" />
 		</Style>-->
-
-
-		<Style Selector="Expander /template/ ToggleButton:pointerover /template/ Border#ToggleButtonBackground">
+        <!-- <Style Selector="Expander /template/ ToggleButton:pointerover /template/ Border#ToggleButtonBackground">
 			<Setter Property="Background"
                     Value="{DynamicResource ButtonColor}" />
-		</Style>
-		
-		<Style Selector="Slider/template/Grid#SliderContainer">
-			<Setter Property="VerticalAlignment" Value="Stretch" />
-			<Setter Property="Height" Value="50" />
-				<Setter Property="Margin" Value="0" />
-		</Style>
+		</Style>-->
+        <Style Selector="Slider:horizontal">
 
-		<Style Selector="Slider/template/TickBar#TopTickBar">
-			<Setter Property="Margin" Value="0" />
-			<Setter Property="Height" Value="0" />
-		</Style>
+            <Style Selector="^ Track">
+                <Style Selector="^ RepeatButton Border">
+                    <Setter Property="CornerRadius" Value="0" />
+                    <Setter Property="Height" Value="{Binding Height, RelativeSource={RelativeSource AncestorType=Slider}}" />
 
-		<Style Selector="Slider/template/TickBar#BottomTickBar">
-			<Setter Property="Margin" Value="0" />
-			<Setter Property="Height" Value="0" />
-		</Style>
+                </Style>
+                <!-- <Style Selector="^ RepeatButton#PART_DecreaseButton">
+                    <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource AncestorType=Slider}}" />
+                </Style>
+                <Style Selector="^ RepeatButton#PART_IncreaseButton">
+                    <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource AncestorType=Slider}}" />
+                </Style> -->
+                <Setter Property="Height" Value="{Binding Height, RelativeSource={RelativeSource AncestorType=Slider}}" />
+            </Style>
 
-		<Style Selector="Slider/template/RepeatButton#PART_IncreaseButton">
-			<Setter Property="Background" Value="{DynamicResource PanelSplitterColor}" />
-			<Setter Property="HorizontalAlignment" Value="Stretch" />
-			<Setter Property="VerticalAlignment" Value="Stretch" />
-			<Setter Property="Margin" Value="0" />
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate>
-						<Border Background="{DynamicResource PanelSplitterColor}"
-								BorderBrush="{TemplateBinding BorderBrush}"
-								BorderThickness="{TemplateBinding BorderThickness}">
-							<!-- Customize the content of the button here -->
-					
-						</Border>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
+            <Style Selector="^ Thumb">
+                <Style Selector="^ Border">
+                    <!-- <Setter Property="Background" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Slider}}" /> -->
+                    <Setter Property="CornerRadius" Value="2" />
+                    <Setter Property="BorderThickness" Value="2" />
+                    <!-- <Setter Property="Margin" Value="3,1,3,1" /> -->
+                    <Setter Property="Height" Value="{Binding Height, RelativeSource={RelativeSource AncestorType=Slider}}" />
 
-		<!-- Style for the Decrease Button -->
-		<Style Selector="Slider/template/RepeatButton#PART_DecreaseButton">
-			<Setter Property="Background" Value="{DynamicResource PanelSplitterColor}" />
-			<Setter Property="HorizontalAlignment" Value="Stretch" />
-			<Setter Property="VerticalAlignment" Value="Stretch" />
-			<Setter Property="Margin" Value="0" />
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate>
-						<Border Background="{DynamicResource PanelSplitterColor}"
-								BorderBrush="{TemplateBinding BorderBrush}"
-								BorderThickness="{TemplateBinding BorderThickness}">
-							<!-- Customize the content of the button here -->
-				
-						</Border>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
+                </Style>
+            </Style>
+            <!-- <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource AncestorType=Slider}}}" /> -->
 
-		<Style Selector="Slider/template/Thumb">
-			<Setter Property="Background" Value="{DynamicResource PanelSplitterColor}" />
-			<Setter Property="HorizontalAlignment" Value="Stretch" />
-			<Setter Property="VerticalAlignment" Value="Stretch" />
-			<Setter Property="Margin" Value="0" />
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate>
-						<Grid Background="{DynamicResource PanelSplitterColor}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-							<Border Background="{DynamicResource PanelSplitterColor}" Margin="0,1,0,1"
-								BorderBrush="{DynamicResource PanelSplitterColor}"
-								BorderThickness="2"
-								
-								 >
-								<!-- Customize the content of the Thumb here -->
-								<Label CornerRadius="3" Width="12" Background="Gray" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
-							</Border>
-						</Grid>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
+        </Style>
 
-
-		<!-- Thumb PointerOver State -->
-		<Style Selector="Thumb:pointerover">
-			<Setter Property="Background" Value="Transparent" />
-		</Style>
-
-		<!-- Thumb Pressed State -->
-		<Style Selector="Thumb:pressed">
-			<Setter Property="Background" Value="Transparent" />
-		</Style>
-
-		<!--https://github.com/AvaloniaUI/Avalonia/issues/3016--><!--
-		<Style Selector="ListBox.RadioButtonListBox">
+        <!--  https://github.com/AvaloniaUI/Avalonia/issues/3016  -->
+        <!-- <Style Selector="ListBox.RadioButtonListBox">
 			<Setter Property="BorderBrush" Value="Transparent"/>
 		</Style>
 		<Style Selector="ListBox.RadioButtonListBox ListBoxItem">
@@ -161,19 +100,15 @@
 				</Setter.Value>
 			</Setter>
 		</Style>-->
-
-		<FluentTheme>
+        <FluentTheme>
             <FluentTheme.Palettes>
-                 <!--Palette for Light theme variant--> 
-                <ColorPaletteResources x:Key="Light"
-                                       Accent="Green"
-                                       RegionColor="White"
-                                       ErrorText="Red" />
-                 <!--Palette for Dark theme variant--> 
-                <ColorPaletteResources x:Key="Dark"
-                                       Accent="DarkGreen"
-                                       RegionColor="Black"
-                                       ErrorText="Yellow" />
+                <!--  Palette for Light theme variant  -->
+                <!--  Palette for Dark theme variant  -->
+                <ColorPaletteResources
+                    x:Key="Dark"
+                    Accent="DarkGreen"
+                    ErrorText="Yellow"
+                    RegionColor="#2B2B2B" />
             </FluentTheme.Palettes>
         </FluentTheme>
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />

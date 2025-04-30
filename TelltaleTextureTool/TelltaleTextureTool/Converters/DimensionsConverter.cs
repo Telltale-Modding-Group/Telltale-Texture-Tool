@@ -23,7 +23,12 @@ namespace TelltaleTextureTool.ViewModels
                 && values[3] is string dimension
             )
             {
-                if (width == string.Empty || height == string.Empty || depth == string.Empty || dimension == string.Empty)
+                if (
+                    width == string.Empty
+                    || height == string.Empty
+                    || depth == string.Empty
+                    || dimension == string.Empty
+                )
                 {
                     return string.Empty;
                 }

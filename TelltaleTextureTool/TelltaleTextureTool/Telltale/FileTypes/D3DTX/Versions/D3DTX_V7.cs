@@ -233,11 +233,7 @@ public class D3DTX_V7 : ID3DTX
         writer.Write((int)mSurfaceGamma); //mSurfaceGamma [4 bytes]
         writer.Write((int)mResourceUsage); //mResourceUsage [4 bytes]
         writer.Write((int)mType); //mType [4 bytes]
-        writer.Write(mSwizzleSize); //mSwizzleSize [4 bytes]
-        writer.Write(mSwizzle.mSwizzle1); //mSwizzle A [1 byte]
-        writer.Write(mSwizzle.mSwizzle1); //mSwizzle B [1 byte]
-        writer.Write(mSwizzle.mSwizzle1); //mSwizzle C [1 byte]
-        writer.Write(mSwizzle.mSwizzle1); //mSwizzle D [1 byte]
+        mSwizzle.WriteBinaryData(writer);
         writer.Write(mSpecularGlossExponent); //mSpecularGlossExponent [4 bytes]
         writer.Write(mHDRLightmapScale); //mHDRLightmapScale [4 bytes]
         writer.Write(mToonGradientCutoff); //mToonGradientCutoff [4 bytes]
@@ -606,7 +602,6 @@ public class D3DTX_V7 : ID3DTX
 
         for (int i = 0; i < mStreamHeader.mRegionCount; i++)
         {
-            totalSize += 4; //[4 bytes]
             totalSize += 4; //[4 bytes]
             totalSize += 4; //[4 bytes]
             totalSize += 4; //[4 bytes]

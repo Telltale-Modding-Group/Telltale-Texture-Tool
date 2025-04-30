@@ -6,12 +6,14 @@ namespace TelltaleTextureTool;
 // A simple logger class that logs exceptions to a text file
 public class Logger
 {
-    static readonly string CrashesDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Crashes");
+    static readonly string CrashesDirectory = Path.Combine(
+        Directory.GetCurrentDirectory(),
+        "CrashLogs"
+    );
 
     private static Logger? _instance;
 
     public static Logger Instance() => _instance ??= new Logger();
-
 
     static Logger()
     {
