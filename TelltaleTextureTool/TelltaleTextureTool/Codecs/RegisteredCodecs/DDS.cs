@@ -1,5 +1,5 @@
 using System;
-using System.Linq;
+using System.IO;
 using Hexa.NET.DirectXTex;
 using TelltaleTextureTool.DirectX.Enums;
 using TelltaleTextureTool.Graphics;
@@ -28,7 +28,7 @@ public class DdsCodec : IImageCodec
         ScratchImage newImage = DirectXTexUtility.CreateScratchImageFromTexture(input);
         Blob blob = DirectXTex.CreateBlob();
 
-        DDSFlags flags = DDSFlags.None;
+        var flags = DDSFlags.None;
 
         if (options.ForceDx9Legacy)
         {
@@ -37,7 +37,7 @@ public class DdsCodec : IImageCodec
 
         try
         {
-            var metadata = newImage.GetMetadata();
+            DirectXTexMetadata metadata = newImage.GetMetadata();
 
             DirectXTex
                 .SaveToDDSMemory2(
@@ -58,20 +58,25 @@ public class DdsCodec : IImageCodec
         }
     }
 
-    public Texture LoadFromMemory(byte[] data, CodecOptions options)
+    public Texture LoadFromMemory(Stream input, CodecOptions options)
     {
         ScratchImage scratchImage = DirectXTex.CreateScratchImage();
         DirectXTexMetadata texMetadata = new();
 
-        Texture texture;
-
+        byte[] buffer;
+        using (var ms = new MemoryStream())
+        {
+            input.CopyTo(ms);
+            buffer = ms.ToArray();
+        }
+        
         unsafe
         {
-            fixed (byte* pData = data)
+            fixed (byte* pData = buffer)
             {
                 var res = DirectXTex.LoadFromDDSMemory(
                     pData,
-                    (nuint)data.Length,
+                    (nuint)input.Length,
                     DDSFlags.None,
                     ref texMetadata,
                     ref scratchImage
@@ -85,7 +90,7 @@ public class DdsCodec : IImageCodec
             }
         }
 
-        texture = DirectXTexUtility.LoadFromScratchImage(scratchImage);
+        Texture texture = DirectXTexUtility.LoadFromScratchImage(scratchImage);
 
         scratchImage.Release();
 

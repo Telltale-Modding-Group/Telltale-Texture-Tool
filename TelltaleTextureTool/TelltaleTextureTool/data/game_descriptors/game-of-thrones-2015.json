@@ -1,0 +1,10 @@
+{
+    "name": "Batman: The Enemy Within",
+    "description": "",
+    "blowfishKey": "GoT",
+    "isTtarch2": true,
+    "ttarchVersion": 3,
+    "luaVersion": "5.1.2",
+    "metaStreamVersion": "MSV5",
+    "enableOodleCompression": false
+}

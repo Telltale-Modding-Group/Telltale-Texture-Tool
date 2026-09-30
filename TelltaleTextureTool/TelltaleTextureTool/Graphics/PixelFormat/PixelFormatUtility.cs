@@ -74,7 +74,7 @@ public static class PixelFormatUtility
         };
     }
 
-    public static uint GetBytesPerBlock(PixelFormat pixelFormat)
+    public static uint GetBlockSize(PixelFormat pixelFormat)
     {
         return pixelFormat switch
         {
@@ -177,7 +177,7 @@ public static class PixelFormatUtility
             // TODO: I need to add PVRTC
             uint blockWidth = Math.Max(1, (width + 3) / 4);
             uint blockHeight = Math.Max(1, (height + 3) / 4);
-            uint blockBytes = GetBytesPerBlock(pixelFormat);
+            uint blockBytes = GetBlockSize(pixelFormat);
 
             pitch = blockWidth * blockBytes;
             slice = pitch * blockHeight;

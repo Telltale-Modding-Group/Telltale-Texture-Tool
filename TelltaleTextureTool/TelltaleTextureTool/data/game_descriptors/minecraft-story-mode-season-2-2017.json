@@ -1,0 +1,10 @@
+{
+    "name": "Minecraft: Story Mode - Season 2",
+    "description": "",
+    "blowfishKey": "Mcsm2",
+    "isTtarch2": false,
+    "ttarchVersion": 4,
+    "luaVersion": "5.2.3",
+    "metaStreamVersion": "MSV6",
+    "enableOodleCompression": true
+}

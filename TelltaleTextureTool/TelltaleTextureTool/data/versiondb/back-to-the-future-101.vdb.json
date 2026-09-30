@@ -1,0 +1,1 @@
+[{"type":"Vector2","crc32":1845259340,"members":[{"name":"x","type":"float","flags":0},{"name":"y","type":"float","flags":0}]},{"type":"Symbol","crc32":2222126035,"members":[{"name":"mCrc64","type":"unsigned__int64","flags":0}]},{"type":"T3SamplerStateBlock","crc32":2722235157,"members":[{"name":"mData","type":"unsignedint","flags":0}]}]

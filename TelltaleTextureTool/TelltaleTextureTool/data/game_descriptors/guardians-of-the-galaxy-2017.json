@@ -1,0 +1,10 @@
+{
+    "name": "Guardians of the Galaxy: The Telltale Series",
+    "description": "",
+    "blowfishKey": "GotG",
+    "isTtarch2": true,
+    "ttarchVersion": 4,
+    "luaVersion": "5.2.3",
+    "metaStreamVersion": "MSV6",
+    "enableOodleCompression": true
+}

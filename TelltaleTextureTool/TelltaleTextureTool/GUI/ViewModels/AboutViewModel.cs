@@ -1,5 +1,5 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace TelltaleTextureTool.ViewModels;
 
-public class AboutViewModel : ViewModelBase
-{
-}
+public class AboutViewModel : ObservableObject { }

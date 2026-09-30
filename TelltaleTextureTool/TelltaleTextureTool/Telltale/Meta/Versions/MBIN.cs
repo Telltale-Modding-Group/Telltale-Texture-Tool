@@ -48,7 +48,7 @@ public class MBIN : IMetaHeader
 
     public void WriteToBinary(
         BinaryWriter writer,
-        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        TelltaleToolGame game = TelltaleToolGame.NONE,
         T3PlatformType platform = T3PlatformType.ePlatform_None,
         bool printDebug = false
     )
@@ -70,7 +70,7 @@ public class MBIN : IMetaHeader
 
     public void ReadFromBinary(
         BinaryReader reader,
-        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        TelltaleToolGame game = TelltaleToolGame.NONE,
         T3PlatformType platform = T3PlatformType.ePlatform_None,
         bool printDebug = false
     )
@@ -116,7 +116,7 @@ public class MBIN : IMetaHeader
     }
 
     public string GetDebugInfo(
-        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        TelltaleToolGame game = TelltaleToolGame.NONE,
         T3PlatformType platform = T3PlatformType.ePlatform_None
     )
     {

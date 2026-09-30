@@ -4,7 +4,7 @@ namespace TelltaleTextureTool.Codecs;
 
 public partial class CodecOptions
 {
-    public TelltaleToolGame TelltaleToolGame { get; set; } = TelltaleToolGame.DEFAULT;
+    public TelltaleToolGame TelltaleToolGame { get; set; } = TelltaleToolGame.NONE;
     public bool IsLegacyConsole { get; set; }
     public Platform UnswizzleMode { get; set; }
     public bool DecompressOnLoad { get; set; }

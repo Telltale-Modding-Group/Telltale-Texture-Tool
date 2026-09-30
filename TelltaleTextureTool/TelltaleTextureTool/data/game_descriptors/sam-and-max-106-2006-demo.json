@@ -1,0 +1,10 @@
+{
+    "name": "Sam & Max: 106 Demo",
+    "description": "",
+    "blowfishKey": "SamMax106Demo",
+    "isTtarch2": true,
+    "ttarchVersion": 3,
+    "luaVersion": "5.0",
+    "metaStreamVersion": "MBIN",
+    "enableOodleCompression": false
+}

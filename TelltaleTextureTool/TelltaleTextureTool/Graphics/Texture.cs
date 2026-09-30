@@ -71,7 +71,7 @@ public class Image : ICloneable
         byte[] pixels
     )
     {
-        var (rowPitch, slicePitch) = PixelFormatUtility.ComputePitch(
+        (uint rowPitch, uint slicePitch) = PixelFormatUtility.ComputePitch(
             pixelFormat.PixelFormat,
             width,
             height

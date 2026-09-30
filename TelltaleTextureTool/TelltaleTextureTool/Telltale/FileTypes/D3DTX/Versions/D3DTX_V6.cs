@@ -208,7 +208,7 @@ public class D3DTX_V6 : ID3DTX
 
     public void WriteToBinary(
         BinaryWriter writer,
-        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        TelltaleToolGame game = TelltaleToolGame.NONE,
         T3PlatformType platform = T3PlatformType.ePlatform_None,
         bool printDebug = false
     )
@@ -279,7 +279,7 @@ public class D3DTX_V6 : ID3DTX
 
     public void ReadFromBinary(
         BinaryReader reader,
-        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        TelltaleToolGame game = TelltaleToolGame.NONE,
         T3PlatformType platform = T3PlatformType.ePlatform_None,
         bool printDebug = false
     )
@@ -488,7 +488,7 @@ public class D3DTX_V6 : ID3DTX
     }
 
     public string GetDebugInfo(
-        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        TelltaleToolGame game = TelltaleToolGame.NONE,
         T3PlatformType platform = T3PlatformType.ePlatform_None
     )
     {

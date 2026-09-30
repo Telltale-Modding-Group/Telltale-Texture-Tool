@@ -1,0 +1,10 @@
+{
+    "name": "Bone: Act 1 & 2 Combo Pack",
+    "description": "Bone: Act 1",
+    "blowfishKey": "BoneAct1ComboPack",
+    "isTtarch2": false,
+    "ttarchVersion": 4,
+    "luaVersion": "5.0",
+    "metaStreamVersion": "MBIN",
+    "enableOodleCompression": false
+}

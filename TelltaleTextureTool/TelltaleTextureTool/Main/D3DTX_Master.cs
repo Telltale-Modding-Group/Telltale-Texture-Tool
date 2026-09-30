@@ -14,6 +14,8 @@ using TelltaleTextureTool.TelltaleD3DTX;
 using TelltaleTextureTool.TelltaleEnums;
 using TelltaleTextureTool.TelltaleTypes;
 using TelltaleTextureTool.Utilities;
+using TelltaleToolKit.Serialization.Binary;
+using TelltaleToolKit.T3Types.Textures;
 using PixelFormat = TelltaleTextureTool.Graphics.PixelFormat;
 
 namespace TelltaleTextureTool.Main
@@ -23,6 +25,16 @@ namespace TelltaleTextureTool.Main
     /// </summary>
     public class D3DTX_Master
     {
+
+
+        public static void WriteJSON(T3Texture t3Texture, MetaStreamConfiguration configuration)
+        {
+            
+        }
+        
+
+        public T3Texture Texture;
+        
         public IMetaHeader? metaHeaderObject;
 
         public MetaVersion metaVersion;
@@ -31,7 +43,7 @@ namespace TelltaleTextureTool.Main
 
         public D3DTXMetadata? d3dtxMetadata;
 
-        public TelltaleToolGame Game { get; set; } = TelltaleToolGame.DEFAULT;
+        public TelltaleToolGame Game { get; set; } = TelltaleToolGame.NONE;
         public T3PlatformType Platform { get; set; } = T3PlatformType.ePlatform_None;
 
         public struct D3DTX_JSON
@@ -52,7 +64,7 @@ namespace TelltaleTextureTool.Main
 
         public void ReadD3DTXBytes(
             byte[] bytes,
-            TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+            TelltaleToolGame game = TelltaleToolGame.NONE,
             bool isLegacyConsole = false
         )
         {
@@ -90,7 +102,7 @@ namespace TelltaleTextureTool.Main
             metaHeaderObject = MetaHeaderFactory.CreateMetaHeader(metaVersion);
             metaHeaderObject.ReadFromBinary(
                 reader,
-                TelltaleToolGame.DEFAULT,
+                TelltaleToolGame.NONE,
                 T3PlatformType.ePlatform_None
             );
 
@@ -103,36 +115,36 @@ namespace TelltaleTextureTool.Main
                 case 1:
                 case 2:
                 case 3:
-                    Game = TelltaleToolGame.DEFAULT;
+                    Game = TelltaleToolGame.NONE;
                     d3dtxObject = new D3DTX_V3();
                     break;
                 case 4:
-                    Game = TelltaleToolGame.DEFAULT;
+                    Game = TelltaleToolGame.NONE;
                     d3dtxObject = new D3DTX_V4();
                     break;
                 case 5:
-                    Game = TelltaleToolGame.DEFAULT;
+                    Game = TelltaleToolGame.NONE;
                     d3dtxObject = new D3DTX_V5();
                     break;
                 case 6:
-                    Game = TelltaleToolGame.DEFAULT;
+                    Game = TelltaleToolGame.NONE;
                     d3dtxObject = new D3DTX_V6();
                     break;
                 case 7:
-                    Game = TelltaleToolGame.DEFAULT;
+                    Game = TelltaleToolGame.NONE;
                     d3dtxObject = new D3DTX_V7();
                     break;
                 case 8:
-                    Game = TelltaleToolGame.DEFAULT;
+                    Game = TelltaleToolGame.NONE;
                     d3dtxObject = new D3DTX_V8();
                     break;
                 case 9:
-                    Game = TelltaleToolGame.DEFAULT;
+                    Game = TelltaleToolGame.NONE;
                     d3dtxObject = new D3DTX_V9();
                     break;
                 case -1:
 
-                    if (game == TelltaleToolGame.DEFAULT)
+                    if (game == TelltaleToolGame.NONE)
                     {
                         Game = TryToInitializeLegacyD3DTX(reader);
                     }
@@ -163,7 +175,7 @@ namespace TelltaleTextureTool.Main
         /// <param name="setD3DTXVersion"></param>
         public void ReadD3DTXFile(
             string filePath,
-            TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+            TelltaleToolGame game = TelltaleToolGame.NONE,
             bool isLegacyConsole = false
         )
         {
@@ -182,7 +194,7 @@ namespace TelltaleTextureTool.Main
                 );
             }
 
-            if (game >= TelltaleToolGame.POKER_NIGHT_2 || game == TelltaleToolGame.DEFAULT)
+            if (game >= TelltaleToolGame.POKER_NIGHT_2 || game == TelltaleToolGame.NONE)
             {
                 ConvertJSONObjectToD3dtx(jsonObject);
                 return;
@@ -312,11 +324,6 @@ namespace TelltaleTextureTool.Main
         /// <param name="filePath"></param>
         public void ReadD3DTXJSON(string filePath)
         {
-            if (!File.Exists(filePath))
-            {
-                return;
-            }
-
             string jsonText = File.ReadAllText(filePath);
 
             // parse the data into a json array
@@ -369,31 +376,31 @@ namespace TelltaleTextureTool.Main
                 case 1:
                 case 2:
                 case 3:
-                    Game = TelltaleToolGame.DEFAULT;
+                    Game = TelltaleToolGame.NONE;
                     d3dtxObject = jObject.ToObject<D3DTX_V3>();
                     break;
                 case 4:
-                    Game = TelltaleToolGame.DEFAULT;
+                    Game = TelltaleToolGame.NONE;
                     d3dtxObject = jObject.ToObject<D3DTX_V4>();
                     break;
                 case 5:
-                    Game = TelltaleToolGame.DEFAULT;
+                    Game = TelltaleToolGame.NONE;
                     d3dtxObject = jObject.ToObject<D3DTX_V5>();
                     break;
                 case 6:
-                    Game = TelltaleToolGame.DEFAULT;
+                    Game = TelltaleToolGame.NONE;
                     d3dtxObject = jObject.ToObject<D3DTX_V6>();
                     break;
                 case 7:
-                    Game = TelltaleToolGame.DEFAULT;
+                    Game = TelltaleToolGame.NONE;
                     d3dtxObject = jObject.ToObject<D3DTX_V7>();
                     break;
                 case 8:
-                    Game = TelltaleToolGame.DEFAULT;
+                    Game = TelltaleToolGame.NONE;
                     d3dtxObject = jObject.ToObject<D3DTX_V8>();
                     break;
                 case 9:
-                    Game = TelltaleToolGame.DEFAULT;
+                    Game = TelltaleToolGame.NONE;
                     d3dtxObject = jObject.ToObject<D3DTX_V9>();
                     break;
             }
@@ -538,14 +545,9 @@ namespace TelltaleTextureTool.Main
 
         public bool IsLegacyD3DTX()
         {
-            return Game != TelltaleToolGame.DEFAULT;
+            return Game != TelltaleToolGame.NONE;
         }
-
-        public bool IsInitialized()
-        {
-            return Game != TelltaleToolGame.UNKNOWN;
-        }
-
+        
         public bool HasDDSHeader()
         {
             foreach (var region in GetPixelData())
@@ -587,90 +589,6 @@ namespace TelltaleTextureTool.Main
         {
             public RegionStreamHeader Header { get; set; }
             public byte[] PixelData { get; set; }
-        }
-
-        public List<RegionData> GetMappedData()
-        {
-            RegionStreamHeader[] regionHeaders = GetRegionStreamHeaders();
-            List<byte[]> pixelData = GetPixelData(); // Your List<byte[]> here
-
-            return regionHeaders
-                .Zip(
-                    pixelData,
-                    (header, data) => new RegionData { Header = header, PixelData = data }
-                )
-                .ToList();
-        }
-
-        public List<RegionData> GetRegionDataSortedByMips()
-        {
-            List<RegionData> mappedData = GetMappedData();
-            mappedData = mappedData
-                .Select((x, index) => new { Data = x, Index = index })
-                .OrderBy(x => x.Data.Header.mMipIndex)
-                .ThenBy(x => x.Data.Header.mFaceIndex)
-                .ThenBy(x => x.Index)
-                .Select(x => x.Data)
-                .ToList();
-            return mappedData;
-        }
-
-        public static byte[] GetSliceData(RegionData region, uint sliceIndex)
-        {
-            if (sliceIndex > (region.Header.mDataSize / region.Header.mSlicePitch))
-            {
-                throw new ArgumentException("Slice index out of bounds!");
-            }
-
-            int sliceSize = region.Header.mSlicePitch;
-            int sliceOffset = (int)(sliceIndex * sliceSize);
-
-            return region.PixelData.Skip(sliceOffset).Take(sliceSize).ToArray();
-        }
-
-        public static byte[] ExtractSingleMipFromRegion(
-            RegionData region,
-            PixelFormat pixelFormat,
-            uint width,
-            uint height,
-            uint depth
-        )
-        {
-            var pitches = PixelFormatUtility.ComputePitch(pixelFormat, width, height);
-            var slicePitch = pitches.slicePitch;
-
-            return region.PixelData.Skip((int)(slicePitch * depth)).Take((int)slicePitch).ToArray();
-        }
-
-        public static void RemoveMip(
-            RegionData region,
-            PixelFormat pixelFormat,
-            uint width,
-            uint height,
-            uint depth
-        )
-        {
-            if (region.Header.mMipCount <= 1)
-            {
-                return;
-            }
-
-            var (rowPitch, slicePitch) = PixelFormatUtility.ComputePitch(
-                pixelFormat,
-                width,
-                height
-            );
-
-            region.Header.mMipCount -= 1;
-            region.Header.mPitch = (int)rowPitch;
-            region.Header.mSlicePitch = (int)slicePitch;
-            region.Header.mDataSize = (uint)region.Header.mSlicePitch * depth;
-            region.PixelData = region.PixelData.Skip((int)(slicePitch * depth)).ToArray();
-        }
-
-        public bool IsLegacyConsole()
-        {
-            return Platform != T3PlatformType.ePlatform_None;
         }
     }
 }

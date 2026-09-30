@@ -93,7 +93,7 @@ public partial class Texture
 
     public void ConvertToRGBA32F()
     {
-         for (int i = 0; i < Images.Length; i++)
+        for (int i = 0; i < Images.Length; i++)
         {
             Images[i] = PixelFormatDecoder.DecodeImageToRGBA32F(Images[i]);
         }
@@ -352,6 +352,24 @@ public partial class Texture
     // {
     //     DirectXTexUtility.GenerateMipMaps(this, maxMips);
     // }
+    public uint GetMaxPossibleMipCount()
+    {
+        uint maxMips = 0;
+
+        uint width = Metadata.Width;
+        uint height = Metadata.Height;
+        uint depth = Metadata.Depth;
+
+        while (width > 1 || height > 1 || depth > 1)
+        {
+            maxMips++;
+            width = Math.Max(1, width >> 1); // Divide width by 2
+            height = Math.Max(1, height >> 1); // Divide height by 2
+            depth = Math.Max(1, depth >> 1); // Divide depth by 2
+        }
+
+        return maxMips;
+    }
 
     public uint GetMaxPossibleImages()
     {

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using Hexa.NET.DirectXTex;
 using HexaGen.Runtime;
@@ -16,17 +17,17 @@ public class TgaCodec : IImageCodec
     public string[] SupportedExtensions => [".tga"];
 
     public static PixelFormatInfo[] SupportedPixelFormats =>
-        [
-            PixelFormats.R8_Unorm_Linear,
-            PixelFormats.A8_Unorm_Linear,
-            PixelFormats.R8G8B8A8_Unorm_Linear,
-            PixelFormats.B8G8R8A8_Unorm_Linear,
-            PixelFormats.B8G8R8X8_Unorm_Linear,
-            PixelFormats.R8G8B8A8_Unorm_Srgb,
-            PixelFormats.B8G8R8A8_Unorm_Srgb,
-            PixelFormats.B8G8R8X8_Unorm_Srgb,
-            PixelFormats.B5G5R5A1_Unorm_Linear,
-        ];
+    [
+        PixelFormats.R8_Unorm_Linear,
+        PixelFormats.A8_Unorm_Linear,
+        PixelFormats.R8G8B8A8_Unorm_Linear,
+        PixelFormats.B8G8R8A8_Unorm_Linear,
+        PixelFormats.B8G8R8X8_Unorm_Linear,
+        PixelFormats.R8G8B8A8_Unorm_Srgb,
+        PixelFormats.B8G8R8A8_Unorm_Srgb,
+        PixelFormats.B8G8R8X8_Unorm_Srgb,
+        PixelFormats.B5G5R5A1_Unorm_Linear,
+    ];
 
     public unsafe byte[] SaveToMemory(Texture input, CodecOptions options)
     {
@@ -55,20 +56,26 @@ public class TgaCodec : IImageCodec
         }
     }
 
-    public Texture LoadFromMemory(byte[] input, CodecOptions options)
+    public Texture LoadFromMemory(Stream input, CodecOptions options)
     {
         DirectXTexScratchImage scratchImage = DirectXTex.CreateScratchImage();
         DirectXTexMetadata texMetadata = new();
 
         Texture texture;
+        byte[] buffer;
+        using (var ms = new MemoryStream())
+        {
+            input.CopyTo(ms);
+            buffer = ms.ToArray();
+        }
 
         unsafe
         {
-            fixed (byte* pInput = input)
+            fixed (byte* pData = buffer)
             {
                 var res = DirectXTex.LoadFromTGAMemory(
-                    pInput,
-                    (nuint)input.Length,
+                    pData,
+                    (nuint)buffer.Length,
                     TGAFlags.None,
                     ref texMetadata,
                     ref scratchImage

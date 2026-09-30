@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using Hexa.NET.DirectXTex;
 using HexaGen.Runtime;
@@ -47,20 +48,25 @@ public class HdrCodec : IImageCodec
         }
     }
 
-    public Texture LoadFromMemory(byte[] data, CodecOptions options)
+    public Texture LoadFromMemory(Stream input, CodecOptions options)
     {
         ScratchImage scratchImage = DirectXTex.CreateScratchImage();
         DirectXTexMetadata texMetadata = new();
 
-        Texture texture;
+        byte[] buffer;
+        using (var ms = new MemoryStream())
+        {
+            input.CopyTo(ms);
+            buffer = ms.ToArray();
+        }
 
         unsafe
         {
-            fixed (byte* pData = data)
+            fixed (byte* pData = buffer)
             {
-                var res = DirectXTex.LoadFromHDRMemory(
+                HResult res = DirectXTex.LoadFromHDRMemory(
                     pData,
-                    (nuint)data.Length,
+                    (nuint)buffer.Length,
                     ref texMetadata,
                     ref scratchImage
                 );
@@ -73,7 +79,7 @@ public class HdrCodec : IImageCodec
             }
         }
 
-        texture = DirectXTexUtility.LoadFromScratchImage(scratchImage);
+        Texture texture = DirectXTexUtility.LoadFromScratchImage(scratchImage);
 
         scratchImage.Release();
 

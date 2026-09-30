@@ -19,12 +19,12 @@ public class PngCodec : IImageCodec
     public string[] SupportedExtensions => [".png"];
 
     public static PixelFormatInfo[] SupportedPixelFormats =>
-        [
-            PixelFormats.R8_Unorm_Linear,
-            PixelFormats.R8G8B8A8_Unorm_Linear,
-            PixelFormats.B8G8R8A8_Unorm_Linear,
-            PixelFormats.B8G8R8X8_Unorm_Linear,
-        ];
+    [
+        PixelFormats.R8_Unorm_Linear,
+        PixelFormats.R8G8B8A8_Unorm_Linear,
+        PixelFormats.B8G8R8A8_Unorm_Linear,
+        PixelFormats.B8G8R8X8_Unorm_Linear,
+    ];
 
     public unsafe byte[] SaveToMemory(Texture input, CodecOptions options)
     {
@@ -60,20 +60,27 @@ public class PngCodec : IImageCodec
         }
     }
 
-    public Texture LoadFromMemory(byte[] data, CodecOptions options)
+    public Texture LoadFromMemory(Stream input, CodecOptions options)
     {
         DirectXTexScratchImage scratchImage = DirectXTex.CreateScratchImage();
         DirectXTexMetadata texMetadata = new();
 
         Texture texture;
 
+        byte[] buffer;
+        using (var ms = new MemoryStream())
+        {
+            input.CopyTo(ms);
+            buffer = ms.ToArray();
+        }
+
         unsafe
         {
-            fixed (byte* pData = data)
+            fixed (byte* pData = buffer)
             {
                 var res = DirectXTex.LoadFromWICMemory(
                     pData,
-                    (nuint)data.Length,
+                    (nuint)input.Length,
                     WICFlags.AllFrames,
                     ref texMetadata,
                     ref scratchImage,
@@ -99,8 +106,7 @@ public class PngCodec : IImageCodec
     {
         if (Environment.OSVersion.Platform == PlatformID.Win32NT)
         {
-            var bytes = File.ReadAllBytes(filePath);
-            return LoadFromMemory(bytes, options);
+            return LoadFromMemory(File.OpenRead(filePath), options);
         }
         else
         {

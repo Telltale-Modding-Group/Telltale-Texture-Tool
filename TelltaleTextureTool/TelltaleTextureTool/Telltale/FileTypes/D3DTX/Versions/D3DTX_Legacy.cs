@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using TelltaleTextureTool.DirectX;
 using TelltaleTextureTool.DirectX.Enums;
-using TelltaleTextureTool.Main;
 using TelltaleTextureTool.Telltale.FileTypes.D3DTX;
 using TelltaleTextureTool.TelltaleEnums;
 using TelltaleTextureTool.TelltaleTypes;
@@ -16,7 +15,7 @@ using TelltaleTextureTool.Utilities;
  *
  * This version of D3DTX is COMPLETE.
  *
- * COMPLETE meaning that all of the data is known and getting identified.
+ * COMPLETE meaning that all the data is known and getting identified.
  * Just like the versions before and after, this D3DTX version derives from version 9 and has been 'stripped' or adjusted to suit this version of D3DTX.
  * Also, Telltale uses Hungarian Notation for variable naming.
 */
@@ -256,12 +255,12 @@ namespace TelltaleTextureTool.TelltaleD3DTX
 
         public void WriteToBinary(
             BinaryWriter writer,
-            TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+            TelltaleToolGame game = TelltaleToolGame.NONE,
             T3PlatformType platform = T3PlatformType.ePlatform_None,
             bool printDebug = false
         )
         {
-            if (game is TelltaleToolGame.DEFAULT || game is TelltaleToolGame.UNKNOWN)
+            if (game is TelltaleToolGame.NONE || game is TelltaleToolGame.UNKNOWN)
             {
                 throw new Exception("The game is not supported.");
             }
@@ -767,12 +766,12 @@ namespace TelltaleTextureTool.TelltaleD3DTX
 
         public void ReadFromBinary(
             BinaryReader reader,
-            TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+            TelltaleToolGame game = TelltaleToolGame.NONE,
             T3PlatformType platform = T3PlatformType.ePlatform_None,
             bool printDebug = false
         )
         {
-            if (game == TelltaleToolGame.DEFAULT || game == TelltaleToolGame.UNKNOWN)
+            if (game == TelltaleToolGame.NONE || game == TelltaleToolGame.UNKNOWN)
             {
                 throw new Exception();
             }
@@ -1344,49 +1343,36 @@ namespace TelltaleTextureTool.TelltaleD3DTX
             {
                 byte[] encryptedBytes = [.. mPixelData.pixelData.Take(2048)];
 
-                BlowFish decHeader = new(TelltaleToolGameExtensions.GetBlowfishKey(game), 1);
-                byte[] decryptedBytes = decHeader.Crypt_ECB(encryptedBytes, 1, true);
+                // BlowFish decHeader = new(TelltaleToolGameExtensions.GetBlowfishKey(game), 1);
+                // byte[] decryptedBytes = decHeader.Crypt_ECB(encryptedBytes, 1, true);
 
-                if (!D3DTX_Master.HasDDSHeader(decryptedBytes))
-                {
-                    throw new Exception("The texture is encrypted but the decryption failed!");
-                }
+                // if (!D3DTX_Master.HasDDSHeader(decryptedBytes))
+                // {
+                //     throw new Exception("The texture is encrypted but the decryption failed!");
+                // }
 
-                encryptedBytes = decryptedBytes;
+                // encryptedBytes = decryptedBytes;
 
                 Array.Copy(encryptedBytes, 0, mPixelData.pixelData, 0, encryptedBytes.Length);
             }
 
             /// DDS
-
             if (mTplTextureDataSize > 0)
             {
                 mTplData = new byte[mTplTextureDataSize];
-
-                for (int i = 0; i < mTplTextureDataSize; i++)
-                {
-                    mTplData[i] = reader.ReadByte();
-                }
+                mTplData = reader.ReadBytes((int)mTplTextureDataSize);
             }
 
             if (mTplAlphaDataSize > 0)
             {
                 mTplAlphaData = new byte[mTplAlphaDataSize];
-
-                for (int i = 0; i < mTplAlphaDataSize; i++)
-                {
-                    mTplAlphaData[i] = reader.ReadByte();
-                }
+                mTplAlphaData = reader.ReadBytes((int)mTplAlphaDataSize);
             }
 
             if (mJPEGTextureDataSize > 0)
             {
                 mJPEGTextureData = new byte[mJPEGTextureDataSize];
-
-                for (int i = 0; i < mJPEGTextureDataSize; i++)
-                {
-                    mJPEGTextureData[i] = reader.ReadByte();
-                }
+                mJPEGTextureData = reader.ReadBytes((int)mJPEGTextureDataSize);
             }
 
             if (reader.BaseStream.Position != reader.BaseStream.Length)
@@ -1461,11 +1447,11 @@ namespace TelltaleTextureTool.TelltaleD3DTX
         }
 
         public string GetDebugInfo(
-            TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+            TelltaleToolGame game = TelltaleToolGame.NONE,
             T3PlatformType platform = T3PlatformType.ePlatform_None
         )
         {
-            if (game is TelltaleToolGame.DEFAULT)
+            if (game is TelltaleToolGame.NONE)
             {
                 return string.Empty;
             }
@@ -1548,7 +1534,7 @@ namespace TelltaleTextureTool.TelltaleD3DTX
         }
 
         public void PrintConsole(
-            TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+            TelltaleToolGame game = TelltaleToolGame.NONE,
             T3PlatformType platform = T3PlatformType.ePlatform_None
         )
         {

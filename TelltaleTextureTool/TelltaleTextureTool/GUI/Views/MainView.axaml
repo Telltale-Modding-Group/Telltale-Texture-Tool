@@ -3,8 +3,6 @@
      xmlns="https://github.com/avaloniaui"
      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-     xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
-     xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
      xmlns:paz="using:Avalonia.Controls.PanAndZoom"
      xmlns:vm="clr-namespace:TelltaleTextureTool.ViewModels"
@@ -23,12 +21,11 @@
           <vm:EnumDisplayNameConverter x:Key="EnumDisplayNameConverter" />
           <vm:DimensionsConverter x:Key="DimensionsConverter" />
           <vm:BackgroundTypeToBrushConverter x:Key="BackgroundTypeToBrushConverter" />
-
-
+          <vm:MaxValueDisplayConverter x:Key="MaxValueDisplayConverter" />
      </UserControl.Resources>
 
-     <DockPanel>
-          <Menu Height="36" DockPanel.Dock="Top">
+     <DockPanel VerticalSpacing="6">
+          <Menu DockPanel.Dock="Top">
                <MenuItem Header="File">
                     <MenuItem
                          Command="{Binding OpenFileButton_Click}"
@@ -101,58 +98,61 @@
                     </MenuItem>
                </MenuItem>
                <MenuItem Header="View">
-                    <MenuItem
-                         Header="View Name"
-                         IsChecked="{Binding ColumnSettings.IsNameVisible, Mode=TwoWay}"
-                         ToggleType="CheckBox" />
-                    <MenuItem
-                         Header="View Type"
-                         IsChecked="{Binding ColumnSettings.IsExtensionVisible, Mode=TwoWay}"
-                         ToggleType="CheckBox" />
-                    <MenuItem
-                         Header="View Size"
-                         IsChecked="{Binding ColumnSettings.IsSizeVisible, Mode=TwoWay}"
-                         ToggleType="CheckBox" />
-                    <MenuItem
-                         Header="View Date Created"
-                         IsChecked="{Binding ColumnSettings.IsCreatedDateVisible, Mode=TwoWay}"
-                         ToggleType="CheckBox" />
-                    <MenuItem
-                         Header="View Date Modified"
-                         IsChecked="{Binding ColumnSettings.IsModifiedDateVisible, Mode=TwoWay}"
-                         ToggleType="CheckBox" />
+                    <MenuItem Header="File Explorer">
+                         <MenuItem
+                              Header="View Name"
+                              IsChecked="{Binding FileExplorerContext.ColumnSettings.IsNameVisible, Mode=TwoWay}"
+                              ToggleType="CheckBox" />
+                         <MenuItem
+                              Header="View Type"
+                              IsChecked="{Binding FileExplorerContext.ColumnSettings.IsExtensionVisible, Mode=TwoWay}"
+                              ToggleType="CheckBox" />
+                         <MenuItem
+                              Header="View Size"
+                              IsChecked="{Binding FileExplorerContext.ColumnSettings.IsSizeVisible, Mode=TwoWay}"
+                              ToggleType="CheckBox" />
+                         <MenuItem
+                              Header="View Date Created"
+                              IsChecked="{Binding FileExplorerContext.ColumnSettings.IsCreatedDateVisible, Mode=TwoWay}"
+                              ToggleType="CheckBox" />
+                         <MenuItem
+                              Header="View Date Modified"
+                              IsChecked="{Binding FileExplorerContext.ColumnSettings.IsModifiedDateVisible, Mode=TwoWay}"
+                              ToggleType="CheckBox" />
+                    </MenuItem>
                     <MenuItem
                          Name="ViewMipCountMenuItem"
                          Command="{Binding ToggleMipSliderVisibilityCommand}"
                          CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
                          Header="View Mip Count"
-                         IsChecked="{Binding ColumnSettings.IsMipSliderVisible, Mode=TwoWay}"
+                         IsChecked="{Binding FileExplorerContext.ColumnSettings.IsMipSliderVisible, Mode=TwoWay}"
                          ToggleType="CheckBox" />
+                    <MenuItem
+                         Header="View Debug Info"
+                         IsChecked="{Binding IsDebugInfoVisible, Mode=TwoWay}"
+                         ToggleType="CheckBox" />
+
                </MenuItem>
                <MenuItem Header="Help" ToolTip.Tip="Help">
                     <MenuItem
-                         Command="{Binding HelpButton_Click}"
+                         Command="{Binding HelpButton_ClickCommand}"
                          Header="Help"
                          HotKey="F1"
                          Icon="{SvgImage /Assets/help_icon.svg}"
                          InputGesture="F1" />
                     <MenuItem
-                         Command="{Binding AboutButton_Click}"
+                         Command="{Binding AboutButton_ClickCommand}"
                          Header="About"
                          Icon="{SvgImage /Assets/about_icon.svg}" />
                </MenuItem>
           </Menu>
-          <Rectangle
-               Height="6"
-               HorizontalAlignment="Stretch"
-               DockPanel.Dock="Top"
-               Fill="{DynamicResource SystemAltMediumLowColor}" />
+
           <Grid>
                <!--  MAIN COLUMN DEFINITIONS  -->
                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="450" MinWidth="300" />
+                    <ColumnDefinition Width="400" MinWidth="256" />
                     <ColumnDefinition Width="4" />
-                    <ColumnDefinition Width="600" MinWidth="156" />
+                    <ColumnDefinition Width="600" MinWidth="128" />
                     <ColumnDefinition Width="4" />
                     <ColumnDefinition Width="*" MinWidth="128" />
                </Grid.ColumnDefinitions>
@@ -168,6 +168,7 @@
                <Grid
                     Grid.Column="0"
                     MinWidth="250"
+                    DataContext="{Binding FileExplorerContext}"
                     RowDefinitions="auto, auto, *">
 
                     <Grid
@@ -183,39 +184,21 @@
                               HorizontalAlignment="Stretch"
                               IsReadOnly="True"
                               ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                              Text="{Binding DirectoryPath}"
-                              ToolTip.Tip="{Binding DirectoryPath}"
+                              Text="{Binding CurrentDirectory}"
+                              ToolTip.Tip="{Binding CurrentDirectory}"
                               Watermark="Selected Directory" />
                          <Button
                               Grid.Column="1"
                               Padding="0"
                               Background="Transparent"
                               BorderThickness="0.4"
-                              Command="{Binding ReturnDirectory_Click}"
-                              IsEnabled="{Binding ReturnDirectoryButtonStatus}"
+                              Command="{Binding ReturnDirectory}"
                               ToolTip.Tip="Return to parent directory">
                               <Button.Content>
                                    <Image
                                         Width="32"
                                         Height="32"
                                         Source="{SvgImage /Assets/folder_parent_icon.svg}" />
-                              </Button.Content>
-                         </Button>
-                         <Button
-                              Grid.Row="0"
-                              Grid.Column="2"
-                              Margin="4,4,0,4"
-                              Padding="0"
-                              Background="Transparent"
-                              BorderThickness="0.4"
-                              Command="{Binding RefreshDirectoryButton_Click}"
-                              IsEnabled="{Binding RefreshDirectoryButtonStatus}"
-                              ToolTip.Tip="Refresh the current directory">
-                              <Button.Content>
-                                   <Image
-                                        Width="32"
-                                        Height="32"
-                                        Source="{SvgImage /Assets/refresh_icon.svg}" />
                               </Button.Content>
                          </Button>
                     </Grid>
@@ -226,8 +209,8 @@
                          Margin="4"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Top"
+                         Text="{Binding SearchText, Mode=TwoWay}"
                          ToolTip.Tip="Search for a file or folder in the current directory"
-                         Text="{Binding SearchTextBoxText, Mode=TwoWay}"
                          Watermark="Search" />
 
                     <DataGrid
@@ -238,45 +221,37 @@
                          CanUserResizeColumns="True"
                          IsReadOnly="true"
                          ItemsSource="{Binding FilteredDirectoryFiles}"
-                         SelectedItem="{Binding DataGridSelectedItem}"
+                         SelectedItem="{Binding SelectedItem}"
                          ToolTip.Tip="Double clicking on a cell opens the file with the preferred program. Double clicking a folder opens it inside the app. Selecting a folder enables bulk conversion (From gets unlocked).">
-                         <i:Interaction.Behaviors>
-                              <ia:EventTriggerBehavior EventName="DoubleTapped" SourceObject="TextureDirectoryFilesDataGrid">
-                                   <ia:CallMethodAction MethodName="RowDoubleTappedCommand" TargetObject="{Binding}" />
-                              </ia:EventTriggerBehavior>
-                              <ia:EventTriggerBehavior EventName="SelectionChanged" SourceObject="TextureDirectoryFilesDataGrid">
-                                   <ia:CallMethodAction MethodName="UpdateUIElementsOnItemChange" TargetObject="{Binding}" />
-                              </ia:EventTriggerBehavior>
-                         </i:Interaction.Behaviors>
+                         <Interaction.Behaviors>
+                              <EventTriggerBehavior EventName="DoubleTapped" SourceObject="TextureDirectoryFilesDataGrid">
+                                   <CallMethodAction MethodName="RowDoubleTapped" TargetObject="{Binding}" />
+                              </EventTriggerBehavior>
+                         </Interaction.Behaviors>
                          <DataGrid.Columns>
                               <DataGridTextColumn
                                    Width="300"
                                    Binding="{Binding Name}"
-                                   FontSize="12"
                                    Header="Name"
                                    IsVisible="{Binding ColumnSettings.IsNameVisible}" />
                               <DataGridTextColumn
                                    Width="auto"
                                    Binding="{Binding Type}"
-                                   FontSize="12"
                                    Header="Type"
                                    IsVisible="{Binding ColumnSettings.IsExtensionVisible}" />
                               <DataGridTextColumn
                                    Width="auto"
                                    Binding="{Binding Size}"
-                                   FontSize="12"
                                    Header="Size"
                                    IsVisible="{Binding ColumnSettings.IsSizeVisible}" />
                               <DataGridTextColumn
                                    Width="auto"
                                    Binding="{Binding CreatedDate}"
-                                   FontSize="12"
                                    Header="Date Created"
                                    IsVisible="{Binding ColumnSettings.IsCreatedDateVisible}" />
                               <DataGridTextColumn
                                    Width="auto"
                                    Binding="{Binding ModifiedDate}"
-                                   FontSize="12"
                                    Header="Date Modified"
                                    IsVisible="{Binding ColumnSettings.IsModifiedDateVisible}" />
                          </DataGrid.Columns>
@@ -302,11 +277,6 @@
                                         Header="Add File"
                                         Icon="{SvgImage /Assets/add_icon.svg}" />
                                    <MenuItem
-                                        Name="ContextMenuRefreshDirectory"
-                                        Command="{Binding ContextMenuRefreshDirectoryCommand}"
-                                        Header="Refresh Directory"
-                                        Icon="{SvgImage /Assets/refresh_icon.svg}" />
-                                   <MenuItem
                                         Name="ContextMenuDeleteFile"
                                         Command="{Binding DeleteFileCommand}"
                                         Header="Delete File"
@@ -316,7 +286,7 @@
                     </DataGrid>
                </Grid>
                <ScrollViewer Grid.Column="4">
-                    <Grid RowDefinitions="auto,auto,auto,*">
+                    <Grid VerticalAlignment="Stretch" RowDefinitions="auto,auto,auto">
 
                          <!--  IMAGE PREVIEW  -->
                          <!--  Image Properties  -->
@@ -326,158 +296,38 @@
                               BorderThickness="0"
                               Header="Image Information"
                               IsExpanded="{Binding IsImageInformationVisible}">
-                              <Grid ColumnDefinitions="auto,auto" RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto">
-                                   <!--  Name  -->
-                                   <Label
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        HorizontalAlignment="Left"
-                                        Content="Name:" />
-                                   <SelectableTextBlock
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding ImageProperties.Name}"
-                                        ToolTip.Tip="{Binding ImageProperties.Name}" />
-                                   <!--  Pixel Width  -->
-                                   <Label
-                                        Grid.Row="1"
-                                        Grid.Column="0"
-                                        HorizontalAlignment="Left"
-                                        Content="Dimensions:"
-                                        ToolTip.Tip="The dimensions of the image. The format is: Width × Height × Depth" />
-                                   <StackPanel
-                                        Grid.Row="1"
-                                        Grid.Column="1"
-                                        Orientation="Horizontal">
-                                        <SelectableTextBlock VerticalAlignment="Center">
-                                             <SelectableTextBlock.Text>
-                                                  <MultiBinding Converter="{StaticResource DimensionsConverter}">
-                                                       <Binding Path="ImageProperties.Width" />
-                                                       <Binding Path="ImageProperties.Height" />
-                                                       <Binding Path="ImageProperties.Depth" />
-                                                       <Binding Path="ImageProperties.TextureLayout" />
-                                                  </MultiBinding>
-                                             </SelectableTextBlock.Text>
-                                        </SelectableTextBlock>
-                                   </StackPanel>
-                                   <!--  Pixel Format  -->
-                                   <Label
-                                        Grid.Row="3"
-                                        Grid.Column="0"
-                                        HorizontalAlignment="Left"
-                                        Content="Pixel Format:"
-                                        ToolTip.Tip="The pixel format of the image. BC stands for Block Compression." />
-                                   <SelectableTextBlock
-                                        Grid.Row="3"
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding ImageProperties.PixelFormat}" />
-                                   <!--  Color Space  -->
-                                   <Label
-                                        Grid.Row="4"
-                                        Grid.Column="0"
-                                        HorizontalAlignment="Left"
-                                        Content="Color Space:"
-                                        ToolTip.Tip="The color space of the format. Try matching the original texture's color space. sRGB textures appear darker." />
-                                   <SelectableTextBlock
-                                        Grid.Row="4"
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding ImageProperties.SurfaceGamma}" />
-                                   <!--  Mip Count  -->
-                                   <Label
-                                        Grid.Row="5"
-                                        Grid.Column="0"
-                                        HorizontalAlignment="Left"
-                                        Content="Mip Count:"
-                                        ToolTip.Tip="Number of mip layers. The texture has no mips if the value is 1." />
-                                   <SelectableTextBlock
-                                        Grid.Row="5"
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding ImageProperties.MipMapCount}" />
-                                   <!--  Array Size  -->
-                                   <Label
-                                        Grid.Row="6"
-                                        Grid.Column="0"
-                                        HorizontalAlignment="Left"
-                                        Content="Array Size:"
-                                        ToolTip.Tip="Number of texture array elements." />
-                                   <SelectableTextBlock
-                                        Grid.Row="6"
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding ImageProperties.ArraySize}" />
-                                   <!--  Alpha Mode  -->
-                                   <Label
-                                        Grid.Row="7"
-                                        Grid.Column="0"
-                                        HorizontalAlignment="Left"
-                                        Content="Alpha Mode:"
-                                        ToolTip.Tip="Possible values: Straight Alpha or Premultiplied Alpha." />
-                                   <SelectableTextBlock
-                                        Grid.Row="7"
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding ImageProperties.AlphaMode}" />
-                                   <!--  Is Cubemap  -->
-                                   <Label
-                                        Grid.Row="8"
-                                        Grid.Column="0"
-                                        HorizontalAlignment="Left"
-                                        Content="Is Cubemap:"
-                                        ToolTip.Tip="Indicates if the texture is a cubemap. Cubemaps are used for the environment skybox." />
-                                   <SelectableTextBlock
-                                        Grid.Row="8"
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding ImageProperties.IsCubemap}" />
-                                   <!--  Dimensions  -->
-                                   <Label
-                                        Grid.Row="9"
-                                        Grid.Column="0"
-                                        HorizontalAlignment="Left"
-                                        Content="Is Volumemap:"
-                                        ToolTip.Tip="Indicates if the texture is a volumemap." />
-                                   <SelectableTextBlock
-                                        Grid.Row="9"
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding ImageProperties.IsVolumemap}" />
-                              </Grid>
+
+                              <TreeDataGrid
+                                   HorizontalAlignment="Stretch"
+                                   CanUserResizeColumns="False"
+                                   CanUserSortColumns="False"
+                                   ShowColumnHeaders="False"
+                                   Source="{Binding ImagePropertiesContext.Source}" />
                          </Expander>
-                         <Expander
+                         <Border
                               Grid.Row="1"
+                              Margin="4"
                               HorizontalAlignment="Stretch"
-                              BorderThickness="0"
-                              Header="Advanced Options"
-                              IsExpanded="False">
-                              <StackPanel Margin="0,0,10,10" Spacing="4">
-                                   <Grid ColumnDefinitions="auto,*">
+                              VerticalAlignment="Stretch"
+                              BorderBrush="Black"
+                              BorderThickness="1">
+                              <StackPanel Margin="4" VerticalAlignment="Stretch">
+
+                                   <Grid ColumnDefinitions="auto,auto" RowDefinitions="auto, auto, auto, auto, auto, auto, auto, auto, auto, auto">
                                         <Label
-                                             Height="30"
+                                             Grid.Row="0"
+                                             Grid.Column="0"
                                              HorizontalAlignment="Left"
-                                             VerticalAlignment="Top"
                                              VerticalContentAlignment="Center"
-                                             Content="Select Game:"
+                                             Content="Game Key"
                                              ToolTip.Tip="Select the correct game to load the texture faster. Use default if it is a newer game." />
+                                        <!--  IsEnabled="{Binding VersionConvertComboBoxStatus}"  -->
                                         <ComboBox
+                                             Grid.Row="0"
                                              Grid.Column="1"
-                                             Height="30"
                                              HorizontalAlignment="Stretch"
-                                             VerticalAlignment="Bottom"
-                                             IsEnabled="{Binding VersionConvertComboBoxStatus}"
                                              ItemsSource="{Binding Games}"
-                                             SelectedItem="{Binding ImageAdvancedOptions.GameID, Mode=TwoWay}"
+                                             SelectedItem="{Binding ConverterOptions.GameID, Mode=TwoWay}"
                                              ToolTip.Tip="Select the correct game to load the texture faster. Use default if it is a newer game.">
                                              <ComboBox.ItemTemplate>
                                                   <DataTemplate>
@@ -485,128 +335,222 @@
                                                   </DataTemplate>
                                              </ComboBox.ItemTemplate>
                                         </ComboBox>
-                                   </Grid>
-                                   <Border
-                                        Height="3"
-                                        HorizontalAlignment="Stretch"
-                                        CornerRadius="10" />
-                                   <CheckBox IsChecked="{Binding ImageAdvancedOptions.EnableAutomaticCompression, Mode=TwoWay}" ToolTip.Tip="Enable this option if you want to compress your textures. Works only for DXT/BC compressions.">Auto Compression</CheckBox>
-                                   <CheckBox IsChecked="{Binding ImageAdvancedOptions.EnableTelltaleNormalMap, Mode=TwoWay}" ToolTip.Tip="When enabled, the channels are reversed for RGBA normal maps and BC5 compression is used on RG normal maps.">Auto Normal Maps</CheckBox>
-                                   <Border
-                                        Height="3"
-                                        HorizontalAlignment="Stretch"
-                                        CornerRadius="10" />
-                                   <CheckBox IsChecked="{Binding ImageAdvancedOptions.EnableMips, Mode=TwoWay}" ToolTip.Tip="When enabled, you can auto generate mips or select the number manually. The latter option is used for console and mobile games.">Generate Mips</CheckBox>
-                                   <Grid
-                                        ColumnDefinitions="auto, 10, *"
-                                        IsVisible="{Binding ImageAdvancedOptions.EnableMips}"
-                                        RowDefinitions="auto, auto">
-                                        <RadioButton Grid.Column="0" IsChecked="{Binding ImageAdvancedOptions.AutoGenerateMips, Mode=TwoWay}">Automatic</RadioButton>
-                                        <RadioButton Grid.Column="2" IsChecked="{Binding ImageAdvancedOptions.ManualGenerateMips, Mode=TwoWay}">Manual</RadioButton>
-                                        <Grid
-                                             Grid.Row="1"
-                                             Grid.ColumnSpan="3"
-                                             ColumnDefinitions="auto, 150"
-                                             IsVisible="{Binding ImageAdvancedOptions.ManualGenerateMips, Mode=TwoWay}">
-                                             <Label
-                                                  Grid.Column="0"
-                                                  Height="30"
-                                                  HorizontalAlignment="Left"
-                                                  VerticalContentAlignment="Center"
-                                                  Content="Mips:" />
-                                             <NumericUpDown
-                                                  Grid.Column="1"
-                                                  HorizontalAlignment="Stretch"
-                                                  Increment="1"
-                                                  Maximum="{Binding MaxMipCountButton}"
-                                                  Minimum="1"
-                                                  Value="{Binding ImageAdvancedOptions.SetMips, Mode=TwoWay}" />
-                                        </Grid>
-                                   </Grid>
-                                   <Border
-                                        Height="3"
-                                        HorizontalAlignment="Stretch"
-                                        CornerRadius="10" />
-                                   <CheckBox IsChecked="{Binding ImageAdvancedOptions.EnableSwizzle, Mode=TwoWay}" ToolTip.Tip="When enabled, you can select to either swizzle or deswizzle the texture. It is used for console games.">Enable Swizzling</CheckBox>
-                                   <Grid
-                                        ColumnDefinitions="auto, 10,  *"
-                                        IsVisible="{Binding ImageAdvancedOptions.EnableSwizzle}"
-                                        RowDefinitions="auto, auto">
-                                        <Grid
-                                             Grid.Row="0"
-                                             ColumnDefinitions="auto, *"
-                                             IsVisible="{Binding ImageAdvancedOptions.EnableSwizzle}">
-                                             <Label
-                                                  Grid.Row="0"
-                                                  Grid.Column="0"
-                                                  Height="30"
-                                                  HorizontalAlignment="Left"
-                                                  VerticalContentAlignment="Center"
-                                                  Content="Platform:" />
-                                             <ComboBox
-                                                  Grid.Row="0"
-                                                  Grid.Column="2"
-                                                  Height="30"
-                                                  HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Top"
-                                                  ItemsSource="{Binding SwizzlePlatforms}"
-                                                  SelectedItem="{Binding ImageAdvancedOptions.PlatformType, Mode=TwoWay}"
-                                                  ToolTip.Tip="Platforms">
-                                                  <ComboBox.ItemTemplate>
-                                                       <DataTemplate>
-                                                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}" />
-                                                       </DataTemplate>
-                                                  </ComboBox.ItemTemplate>
-                                             </ComboBox>
-                                        </Grid>
-                                        <StackPanel
-                                             Grid.Row="1"
-                                             Grid.ColumnSpan="3"
-                                             Orientation="Horizontal"
-                                             Spacing="10">
-                                             <RadioButton IsChecked="{Binding ImageAdvancedOptions.IsSwizzle}">Swizzle</RadioButton>
-                                             <RadioButton IsChecked="{Binding ImageAdvancedOptions.IsDeswizzle}">Deswizzle</RadioButton>
-                                        </StackPanel>
-                                   </Grid>
-                                   <Border
-                                        Height="3"
-                                        HorizontalAlignment="Stretch"
-                                        CornerRadius="10" />
-                                   <CheckBox IsChecked="{Binding ImageAdvancedOptions.EnableEditing}" ToolTip.Tip="You can apply an effect to your texture. This is mainly used for normal maps.">Enable Effects</CheckBox>
-                                   <Grid ColumnDefinitions="auto, *" IsVisible="{Binding ImageAdvancedOptions.EnableEditing}">
                                         <Label
+                                             Grid.Row="1"
+                                             Grid.Column="0"
+                                             HorizontalAlignment="Left"
+                                             VerticalContentAlignment="Center"
+                                             Content="Auto Compression" />
+                                        <CheckBox
+                                             Grid.Row="1"
+                                             Grid.Column="1"
+                                             IsChecked="{Binding ConverterOptions.EnableAutomaticCompression, Mode=TwoWay}"
+                                             ToolTip.Tip="Enable this option if you want to compress your textures. Works only for DXT/BC compressions." />
+                                        <Label
+                                             Grid.Row="2"
+                                             Grid.Column="0"
+                                             HorizontalAlignment="Left"
+                                             VerticalContentAlignment="Center"
+                                             Content="Auto Normal Maps" />
+                                        <CheckBox
+                                             Grid.Row="2"
+                                             Grid.Column="1"
+                                             IsChecked="{Binding ConverterOptions.EnableTelltaleNormalMap, Mode=TwoWay}"
+                                             ToolTip.Tip="When enabled, the channels are reversed for RGBA normal maps and BC5 compression is used on RG normal maps." />
+
+                                        <Label
+                                             Grid.Row="3"
+                                             Grid.Column="0"
+                                             HorizontalAlignment="Left"
+                                             VerticalContentAlignment="Center"
+                                             Content="Max Mip Count"
+                                             ToolTip.Tip="When enabled, you can auto generate mips or select the number manually. The latter option is used for console and mobile games." />
+                                        <NumericUpDown
+                                             Name="MyNumericUpDown"
+                                             Grid.Row="3"
+                                             Grid.Column="1"
+                                             HorizontalAlignment="Stretch"
+                                             Increment="1"
+                                             Maximum="{Binding MaxMipCountButton}"
+                                             Minimum="1"
+                                             Value="{Binding ConverterOptions.SetMips, Mode=TwoWay}">
+                                             <NumericUpDown.Value>
+                                                  <Binding
+                                                       Converter="{StaticResource MaxValueDisplayConverter}"
+                                                       Mode="TwoWay"
+                                                       Path="ConverterOptions.SetMips">
+
+                                                       <Binding.ConverterParameter>
+                                                            <Binding ElementName="MyNumericUpDown" Path="Maximum" />
+                                                       </Binding.ConverterParameter>
+                                                  </Binding>
+                                             </NumericUpDown.Value>
+                                        </NumericUpDown>
+
+                                        <Label
+                                             Grid.Row="4"
+                                             Grid.Column="0"
+                                             HorizontalAlignment="Left"
+                                             VerticalContentAlignment="Center"
+                                             Content="Swizzling Type"
+                                             ToolTip.Tip="When enabled, you can select to either swizzle or deswizzle the texture. It is used for console games." />
+                                        <ComboBox
+                                             Grid.Row="4"
+                                             Grid.Column="1"
+                                             HorizontalAlignment="Stretch"
+                                             VerticalAlignment="Top"
+                                             ItemsSource="{Binding SwizzlePlatforms}"
+                                             SelectedItem="{Binding ConverterOptions.PlatformType, Mode=TwoWay}"
+                                             ToolTip.Tip="Platforms">
+                                             <ComboBox.ItemTemplate>
+                                                  <DataTemplate>
+                                                       <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}" />
+                                                  </DataTemplate>
+                                             </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <Label
+                                             Grid.Row="5"
+                                             Grid.Column="0"
+                                             HorizontalAlignment="Left"
+                                             VerticalContentAlignment="Center"
+                                             Content="Deswizzling Type" />
+                                        <ComboBox
+                                             Grid.Row="5"
+                                             Grid.Column="1"
+                                             HorizontalAlignment="Stretch"
+                                             ItemsSource="{Binding SwizzlePlatforms}"
+                                             SelectedItem="{Binding ConverterOptions.PlatformType, Mode=TwoWay}"
+                                             ToolTip.Tip="Platforms">
+                                             <ComboBox.ItemTemplate>
+                                                  <DataTemplate>
+                                                       <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}" />
+                                                  </DataTemplate>
+                                             </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <Label
+                                             Grid.Row="6"
                                              Grid.Column="0"
                                              Height="30"
                                              HorizontalAlignment="Left"
                                              VerticalContentAlignment="Center"
-                                             Content="Effect:" />
-                                        <!--<ComboBox Grid.Column="1"
-                                                  ItemsSource="{Binding ImageConversionModes}"
-                                                  SelectedItem="{Binding ImageAdvancedOptions.ImageEffect, Mode=TwoWay}">
-                                            <ComboBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}" />
-                                                </DataTemplate>
-                                            </ComboBox.ItemTemplate>
-                                        </ComboBox>-->
+                                             Content="Effect" />
+                                        <ComboBox
+                                             Grid.Row="6"
+                                             Grid.Column="1"
+                                             HorizontalAlignment="Stretch"
+                                             ItemsSource="{Binding ImageConversionModes}"
+                                             SelectedItem="{Binding ConverterOptions.ImageEffect, Mode=TwoWay}">
+                                             <ComboBox.ItemTemplate>
+                                                  <DataTemplate>
+                                                       <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}" />
+                                                  </DataTemplate>
+                                             </ComboBox.ItemTemplate>
+                                        </ComboBox>
+
+                                        <Label
+                                             Grid.Row="7"
+                                             Grid.Column="0"
+                                             HorizontalAlignment="Left"
+                                             VerticalContentAlignment="Center"
+                                             Content="Input Format" />
+                                        <ComboBox
+                                             Grid.Row="7"
+                                             Grid.Column="1"
+                                             HorizontalAlignment="Stretch"
+                                             IsEnabled="{Binding IsInputFormatComboboxEnabled}"
+                                             ItemsSource="{Binding InputFormatsList}"
+                                             SelectedItem="{Binding InputFormat}"
+                                             ToolTip.Tip="Available image formats.">
+                                             <ComboBox.ItemTemplate>
+                                                  <DataTemplate>
+                                                       <TextBlock IsVisible="{Binding IsVisible}" Text="{Binding Name}" />
+                                                  </DataTemplate>
+                                             </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <Label
+                                             Grid.Row="8"
+                                             Grid.Column="0"
+                                             HorizontalAlignment="Left"
+                                             VerticalContentAlignment="Center"
+                                             Content="Output Format" />
+                                        <ComboBox
+                                             Grid.Row="8"
+                                             Grid.Column="1"
+                                             HorizontalAlignment="Stretch"
+                                             IsEnabled="{Binding IsOutputFormatComboboxEnabled}"
+                                             ItemsSource="{Binding OutputFormatsList}"
+                                             SelectedItem="{Binding OutputFormat}"
+                                             ToolTip.Tip="Available image formats.">
+                                             <ComboBox.ItemTemplate>
+                                                  <DataTemplate>
+                                                       <TextBlock IsVisible="{Binding IsVisible}" Text="{Binding Name}" />
+                                                  </DataTemplate>
+                                             </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <Label
+                                             Grid.Row="9"
+                                             Grid.Column="0"
+                                             HorizontalAlignment="Left"
+                                             VerticalContentAlignment="Center"
+                                             Content="Output Directory"
+                                             ToolTip.Tip="The directory where the converted files will be saved." />
+                                        <CheckBox
+                                             Name="ChooseOutputDirectoryCheckBox"
+                                             Grid.Row="9"
+                                             Grid.Column="1"
+                                             HorizontalAlignment="Left"
+                                             VerticalAlignment="Top"
+                                             IsEnabled="{Binding IsChooseOutputDirectoryCheckBoxEnabled}" />
                                    </Grid>
-                                   <Border
-                                        Height="3"
-                                        HorizontalAlignment="Stretch"
-                                        CornerRadius="10" />
-                                   <CheckBox IsChecked="{Binding ImageAdvancedOptions.EnableNormalMap}" ToolTip.Tip="When enabled, the converted texture becomes a normal map. However, the current quality is not good enough.">Create Normal Map</CheckBox>
-                                   <Border
-                                        Height="3"
-                                        HorizontalAlignment="Stretch"
-                                        CornerRadius="10" />
+                                   <Separator />
+                                   <!--  SelectedIndex="{Binding SelectedConvertOptionsComboBoxIndex}"  -->
+
+
+
+                                   <!--  IsChecked="{Binding ChooseOutputDirectoryCheckBoxStatus}"  -->
+
+                                   <Grid ColumnDefinitions="*,*,*">
+
+                                        <Button
+                                             Name="ConvertButtonSingle"
+                                             Grid.Column="0"
+                                             HorizontalAlignment="Stretch"
+                                             HorizontalContentAlignment="Center"
+                                             Command="{Binding ConvertButton_Click}"
+                                             CommandParameter="{Binding ElementName=TextureDirectoryFilesDataGrid, Path=SelectedItems}"
+                                             Content="Convert"
+                                             IsEnabled="{Binding ConvertButtonStatus}"
+                                             ToolTip.Tip="Convert the file into the desired format." />
+                                        <Button
+                                             Name="ConvertButtonBatch"
+                                             Grid.Column="1"
+                                             HorizontalAlignment="Stretch"
+                                             HorizontalContentAlignment="Center"
+                                             Command="{Binding ConvertButton_Click}"
+                                             CommandParameter="{Binding ElementName=TextureDirectoryFilesDataGrid, Path=SelectedItems}"
+                                             Content="Convert All"
+                                             IsEnabled="{Binding ConvertButtonStatus}"
+                                             ToolTip.Tip="Convert the file into the desired format." />
+                                        <Button
+                                             Name="ConvertButtonBatchFilter"
+                                             Grid.Column="2"
+                                             HorizontalAlignment="Stretch"
+                                             HorizontalContentAlignment="Center"
+                                             Command="{Binding ConvertButton_Click}"
+                                             CommandParameter="{Binding ElementName=TextureDirectoryFilesDataGrid, Path=SelectedItems}"
+                                             Content="Convert Filtered"
+                                             IsEnabled="{Binding ConvertButtonStatus}"
+                                             ToolTip.Tip="Convert the file into the desired format." />
+                                   </Grid>
                               </StackPanel>
-                         </Expander>
+                         </Border>
+
                          <Expander
                               Grid.Row="2"
                               HorizontalAlignment="Stretch"
                               BorderThickness="0"
                               Header="Debug Information"
-                              IsExpanded="False">
+                              IsVisible="{Binding IsDebugInfoVisible}">
                               <Expander.Header />
                               <TextBox
                                    HorizontalAlignment="Stretch"
@@ -615,89 +559,7 @@
                                    Text="{Binding DebugInfo}"
                                    TextWrapping="Wrap" />
                          </Expander>
-                         <Border
-                              Grid.Row="3"
-                              Margin="4"
-                              HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch"
-                              BorderBrush="Black"
-                              BorderThickness="1">
-                              <StackPanel VerticalAlignment="Stretch" Spacing="4" Margin="4">
-                                   <Label
-                                        Width="120"
-                                        Height="30"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Top"
-                                        VerticalContentAlignment="Center"
-                                        Content="Convert Options:" />
-                                   <!--  SelectedIndex="{Binding SelectedConvertOptionsComboBoxIndex}"  -->
-                                   <Grid ColumnDefinitions="auto, auto, auto, auto">
-                                        <Label
-                                             Grid.Column="0"
-                                             HorizontalAlignment="Left"
-                                             VerticalContentAlignment="Center"
-                                             Content="From:" />
-                                        <ComboBox
-                                             Grid.Column="1"
-                                             HorizontalAlignment="Left"
-                                             VerticalAlignment="Top"
-                                             IsEnabled="{Binding IsFromSelectedComboboxEnable}"
-                                             ItemsSource="{Binding FromFormatsList}"
-                                             SelectedItem="{Binding SelectedFromFormat}"
-                                             ToolTip.Tip="Available image formats.">
-                                             <ComboBox.ItemTemplate>
-                                                  <DataTemplate>
-                                                       <TextBlock IsEnabled="{Binding ItemStatus}" Text="{Binding Name}" />
-                                                  </DataTemplate>
-                                             </ComboBox.ItemTemplate>
-                                        </ComboBox>
-                                        <Label
-                                             Grid.Column="2"
-                                             HorizontalAlignment="Left"
-                                             VerticalContentAlignment="Center"
-                                             Content="To:" />
-                                        <ComboBox
-                                             Grid.Column="3"
-                                             HorizontalAlignment="Left"
-                                             VerticalAlignment="Top"
-                                             IsEnabled="{Binding IsToSelectedComboboxEnable}"
-                                             ItemsSource="{Binding ToFormatsList}"
-                                             SelectedItem="{Binding SelectedToFormat}"
-                                             ToolTip.Tip="Available image formats.">
-                                             <ComboBox.ItemTemplate>
-                                                  <DataTemplate>
-                                                       <TextBlock IsEnabled="{Binding ItemStatus}" Text="{Binding Name}" />
-                                                  </DataTemplate>
-                                             </ComboBox.ItemTemplate>
-                                        </ComboBox>
-                                   </Grid>
-                                   <!--  IsChecked="{Binding ChooseOutputDirectoryCheckBoxStatus}"  -->
-                                   <CheckBox
-                                        Name="ChooseOutputDirectoryCheckBox"
-                                        Width="200"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Top"
-                                        Content="Choose Output Directory"
-                                        IsEnabled="{Binding ChooseOutputDirectoryCheckBoxEnabledStatus}" />
-                                   <Button
-                                        Name="ConvertButton"
-                                        Width="100"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Top"
-                                        HorizontalContentAlignment="Center"
-                                        Command="{Binding ConvertButton_Click}"
-                                        CommandParameter="{Binding ElementName=TextureDirectoryFilesDataGrid, Path=SelectedItems}"
-                                        Content="Convert"
-                                        IsEnabled="{Binding ConvertButtonStatus}"
-                                        ToolTip.Tip="Convert the file into the desired format." />
-                              </StackPanel>
-                         </Border>
 
-
-
-
-
-                         <!--  Convert Panel  -->
                     </Grid>
                </ScrollViewer>
                <Grid Grid.Column="2">

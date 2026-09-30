@@ -17,7 +17,7 @@ public class ImageData
     /// Applies the effects to the image.
     /// </summary>
     /// <param name="options"></param>
-    public void ApplyEffects(ImageAdvancedOptions options)
+    public void ApplyEffects(ConverterOptions options)
     {
         try
         {

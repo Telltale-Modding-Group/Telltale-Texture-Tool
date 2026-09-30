@@ -1,0 +1,10 @@
+{
+    "name": "CSI: 3 Dimensions of Murder",
+    "description": "",
+    "blowfishKey": "Csi3DimensionsOfMurder",
+    "isTtarch2": false,
+    "ttarchVersion": 4,
+    "luaVersion": "5.0",
+    "metaStreamVersion": "MBIN",
+    "enableOodleCompression": false
+}

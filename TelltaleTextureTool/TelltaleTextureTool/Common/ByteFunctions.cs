@@ -105,6 +105,7 @@ public static class ByteFunctions
     /// </summary>
     /// <param name="first"></param>
     /// <param name="second"></param>
+    /// <exception cref="ArgumentNullException">Thrown if either of the byte arrays is null.</exception>
     /// <returns></returns>
     public static byte[] Combine(byte[] first, byte[] second)
     {
@@ -117,22 +118,11 @@ public static class ByteFunctions
             return (byte[])second.Clone();
         if (second.Length == 0)
             return (byte[])first.Clone();
+
         // Check for potential overflow
-        checked
-        {
-            try
-            {
-                byte[] result = new byte[first.Length + second.Length];
-                Buffer.BlockCopy(first, 0, result, 0, first.Length);
-                Buffer.BlockCopy(second, 0, result, first.Length, second.Length);
-                return result;
-            }
-            catch (OverflowException)
-            {
-                throw new InvalidOperationException(
-                    $"Combined array size exceeds maximum allowed length ({int.MaxValue} bytes)"
-                );
-            }
-        }
+        byte[] result = new byte[first.Length + second.Length];
+        Buffer.BlockCopy(first, 0, result, 0, first.Length);
+        Buffer.BlockCopy(second, 0, result, first.Length, second.Length);
+        return result;
     }
 }

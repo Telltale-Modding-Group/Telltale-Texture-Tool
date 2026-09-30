@@ -14,12 +14,11 @@ public interface IImageCodec
     static PixelFormatInfo[]? SupportedPixelFormats { get; } // Supported pixel formats
 
     // Core operations
-    public Texture LoadFromMemory(byte[] input, CodecOptions options);
+    public Texture LoadFromMemory(Stream input, CodecOptions options);
 
     public Texture LoadFromFile(string filePath, CodecOptions options)
     {
-        var bytes = File.ReadAllBytes(filePath);
-        return LoadFromMemory(bytes, options);
+        return LoadFromMemory(File.OpenRead(filePath), options);
     }
 
     public byte[] SaveToMemory(Texture input, CodecOptions options);
@@ -86,7 +85,7 @@ public class CodecManager
         return GetCodecForExtension(extension).LoadFromFile(filePath, options);
     }
 
-    public Texture LoadFromMemory(string format, byte[] input, CodecOptions options)
+    public Texture LoadFromMemory(string format, Stream input, CodecOptions options)
     {
         return GetCodecForExtension(format).LoadFromMemory(input, options);
     }

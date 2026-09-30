@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
@@ -15,14 +16,51 @@ public partial class MainView : UserControl
     public MainView()
     {
         InitializeComponent();
-
         DataContext = new MainViewModel();
+
+        if (DataContext is MainViewModel mainVm)
+        {
+            // mainVm.
+            // ConfigHelper.Save(
+            //     new AppConfig
+            //     {
+            //         LastFolder = mainVm.FileExplorerContext.CurrentDirectory,
+            //         //  Theme = desktop.MainWindow.DataContext is MainViewModel vm2 ? vm2.Theme : "Light"
+            //     }
+            // );
+        }
+
+        // DataContext.Exit += (_, _) =>
+        // {
+        //     // Save configuration on shutdown
+        //     try
+        //     {
+
+        //     catch (Exception ex)
+        //     {
+        //         Console.Error.WriteLine("Error saving configuration: " + ex.Message);
+        //     }
+        // };
     }
 
     private void ResetPanAndZoom()
     {
         // Assuming zoomBorder is the name of your ZoomBorder control
         ZoomBorder1.ResetMatrix();
+    }
+
+    private void ScrollIntoView()
+    {
+        // Dispatcher.UIThread.Post(
+        //     () =>
+        //     {
+        //         TextureDirectoryFilesDataGrid.ScrollIntoView(
+        //             viewModel.FileExplorerContext.SelectedItem,
+        //             null
+        //         );
+        //     },
+        //     DispatcherPriority.Background
+        // );
     }
 
     private void ZoomBorder_KeyDown(object? sender, KeyEventArgs e)
@@ -52,24 +90,30 @@ public partial class MainView : UserControl
         if (DataContext is MainViewModel viewModel) { }
     }
 
-    private void Binding_1(object? sender, Avalonia.Controls.SelectionChangedEventArgs e) { }
-
-    private void PreviewImageCommand_1(
-        object? sender,
-        Avalonia.Controls.SelectionChangedEventArgs e
-    ) { }
-
     private void Binding(
         object? sender,
         Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e
     ) { }
 
-    private void PreviewImageCommand_1(
-        object? sender,
-        Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e
-    ) { }
-
     private void PreviewImageCommand(object? sender, Avalonia.Interactivity.RoutedEventArgs e) { }
+
+    public void FindSelectedItem()
+    {
+        if (DataContext is MainViewModel viewModel)
+        {
+            // Scroll to the selected item
+            Dispatcher.UIThread.Post(
+                () =>
+                {
+                    TextureDirectoryFilesDataGrid.ScrollIntoView(
+                        viewModel.FileExplorerContext.SelectedItem,
+                        null
+                    );
+                },
+                DispatcherPriority.Background
+            );
+        }
+    }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
@@ -86,27 +130,25 @@ public partial class MainView : UserControl
                 Position = NotificationPosition.BottomRight,
             };
 
-            viewModel.PropertyChanged += (sender, e) =>
+            viewModel.FileExplorerContext.PropertyChanged += (sender, e) =>
             {
-                if (e.PropertyName == nameof(viewModel.DataGridSelectedItem))
+                if (e.PropertyName == nameof(viewModel.FileExplorerContext.SelectedItem))
                 {
                     // Scroll to the selected item
                     Dispatcher.UIThread.Post(
                         () =>
                         {
-                            if (viewModel.DataGridSelectedItem != null)
-                            {
-                                TextureDirectoryFilesDataGrid.ScrollIntoView(
-                                    viewModel.DataGridSelectedItem,
-                                    null
-                                );
-                            }
+                            TextureDirectoryFilesDataGrid.ScrollIntoView(
+                                viewModel.FileExplorerContext.SelectedItem,
+                                null
+                            );
                         },
                         DispatcherPriority.Background
                     );
                 }
             };
         }
+
         ResetPanAndZoom();
     }
 }

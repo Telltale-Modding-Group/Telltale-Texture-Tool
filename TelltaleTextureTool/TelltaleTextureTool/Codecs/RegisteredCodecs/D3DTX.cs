@@ -1,7 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using TelltaleTextureTool.Graphics;
-using TelltaleTextureTool.Main;
-using TelltaleTextureTool.TelltaleEnums;
+using TelltaleTextureTool.Telltale.FileTypes.D3DTX;
+using TelltaleToolKit;
+using TelltaleToolKit.Serialization.Binary;
+using TelltaleToolKit.T3Types.Textures;
+using TelltaleToolKit.T3Types.Textures.T3Types;
+using TelltaleToolKit.Utility;
+using TelltaleToolKit.Utility.Blowfish;
 
 namespace TelltaleTextureTool.Codecs;
 
@@ -10,7 +17,6 @@ public class D3dtxCodec : IImageCodec
     public string Name => "D3DTX Codec";
     public string FormatName => "Telltale Tool Texture";
     public string[] SupportedExtensions => [".d3dtx"];
-
     public PixelFormatInfo[] SupportedPixelFormats => [];
 
     private static readonly DdsCodec ddsCodec = new();
@@ -20,55 +26,109 @@ public class D3dtxCodec : IImageCodec
         throw new NotImplementedException();
     }
 
-    public Texture LoadFromMemory(byte[] data, CodecOptions options)
+    public Texture LoadFromMemory(Stream stream, CodecOptions options)
     {
-        var d3dtx = new D3DTX_Master();
-        d3dtx.ReadD3DTXBytes(data, options.TelltaleToolGame, options.IsLegacyConsole);
+        var d3dtxTexture = TTK.Load<T3Texture>(stream, out MetaStreamConfiguration configuration);
 
-        if (!d3dtx.IsInitialized())
+        //  d3dtx.ReadD3DTXBytes(data, options.TelltaleToolGame, options.IsLegacyConsole);
+
+        if (d3dtxTexture.DdsTextureData.Length > 0)
         {
-            throw new Exception(
-                "This Telltale game is not supported, please notify the developer."
-            );
+            if (!d3dtxTexture.IsEncrypted)
+                return ddsCodec.LoadFromMemory(
+                    new MemoryStream(d3dtxTexture.DdsTextureData),
+                    options
+                );
+
+            T3BlowfishKey[] keys = Enum.GetValues<T3BlowfishKey>();
+
+            foreach (T3BlowfishKey key in keys)
+            {
+                var blowfish = new Blowfish(key.GetBlowfishKey(), 2);
+
+                d3dtxTexture.Decrypt(blowfish);
+
+                if (
+                    d3dtxTexture.DdsTextureData[0] == 0x44
+                    && d3dtxTexture.DdsTextureData[1] == 0x44
+                    && d3dtxTexture.DdsTextureData[2] == 0x53
+                    && d3dtxTexture.DdsTextureData[3] == 0x20
+                )
+                {
+                    return ddsCodec.LoadFromMemory(
+                        new MemoryStream(d3dtxTexture.DdsTextureData),
+                        options
+                    );
+                }
+
+                d3dtxTexture.Encrypt(blowfish);
+
+                var blowfishModified = new Blowfish(key.GetBlowfishKey(), 7);
+
+                d3dtxTexture.Decrypt(blowfishModified);
+
+                if (
+                    d3dtxTexture.DdsTextureData[0] == 0x44
+                    && d3dtxTexture.DdsTextureData[1] == 0x44
+                    && d3dtxTexture.DdsTextureData[2] == 0x53
+                    && d3dtxTexture.DdsTextureData[3] == 0x20
+                )
+                {
+                    return ddsCodec.LoadFromMemory(
+                        new MemoryStream(d3dtxTexture.DdsTextureData),
+                        options
+                    );
+                }
+
+                d3dtxTexture.Encrypt(blowfishModified);
+            }
+
+            throw new Exception("Texture couldn't be decrypted!");
+
+            // ddsTexture.Metadata.ExtraMetadata.DebugInformation = d3dtx.GetD3DTXDebugInfo();
         }
-        else if (d3dtx.HasDDSHeader())
-        {
-            Texture ddsTexture = ddsCodec.LoadFromMemory(
-                d3dtx.d3dtxObject.GetPixelData()[0],
-                options
-            );
-            ddsTexture.Metadata.ExtraMetadata.DebugInformation = d3dtx.GetD3DTXDebugInfo();
-            return ddsTexture;
-        }
-        else if (!d3dtx.HasDDSHeader() && d3dtx.IsLegacyConsole())
+        else if (d3dtxTexture.TplTextureData.Length > 0)
         {
             throw new Exception("Legacy console or wrong decrypting key.");
         }
 
         Texture texture = new();
-        var d3dtxMetadata = d3dtx.d3dtxMetadata;
 
-        T3SurfaceFormat surfaceFormat = d3dtxMetadata.Format;
-        T3SurfaceGamma surfaceGamma = d3dtxMetadata.SurfaceGamma;
-        T3PlatformType platformType = d3dtxMetadata.Platform;
+        T3SurfaceFormat surfaceFormat = d3dtxTexture.SurfaceFormat;
+        T3SurfaceGamma surfaceGamma = d3dtxTexture.SurfaceGamma;
+        PlatformType platformType = d3dtxTexture.PlatformType.Value;
 
-        texture.Metadata = new()
+
+        if (d3dtxTexture.ArraySize == 0)
         {
-            Width = d3dtxMetadata.Width,
-            Height = d3dtxMetadata.Height,
-            PixelFormatInfo = GetPixelFormatInfo(surfaceFormat, surfaceGamma, platformType), // Change this to the correct pixel format
-            MipLevels = d3dtxMetadata.MipLevels,
-            ArraySize = d3dtxMetadata.IsCubemap()
-                ? d3dtxMetadata.ArraySize * 6
-                : d3dtxMetadata.ArraySize,
-            Depth = d3dtxMetadata.Depth,
-            Dimension = d3dtxMetadata.IsVolumemap() ? TexDimension.Tex3D : TexDimension.Tex2D,
-            IsVolumemap = d3dtxMetadata.IsVolumemap(),
-            IsCubemap = d3dtxMetadata.IsCubemap(),
+            d3dtxTexture.ArraySize = 1;
+        }
+
+        if (d3dtxTexture.Depth == 0)
+        {
+            d3dtxTexture.Depth = 1;
+        }
+
+        texture.Metadata = new TexMetadata
+        {
+            Width = d3dtxTexture.Width,
+            Height = d3dtxTexture.Height,
+            PixelFormatInfo =
+                GetPixelFormatInfo(surfaceFormat, surfaceGamma,
+                    platformType), // Change this to the correct pixel format
+            MipLevels = d3dtxTexture.NumMipLevels,
+            ArraySize = d3dtxTexture.IsCubemap()
+                ? d3dtxTexture.ArraySize * 6
+                : d3dtxTexture.ArraySize,
+            Depth = d3dtxTexture.Depth,
+            Dimension = d3dtxTexture.IsVolumemap() ? TexDimension.Tex3D : TexDimension.Tex2D,
+            IsVolumemap = d3dtxTexture.IsVolumemap(),
+            IsCubemap = d3dtxTexture.IsCubemap(),
             IsPremultipliedAlpha = false, // Sort of?
         };
 
-        texture.Metadata.ExtraMetadata.DebugInformation = d3dtx.GetD3DTXDebugInfo();
+        // TODO:
+        // texture.Metadata.ExtraMetadata.DebugInformation = d3dtx.GetD3DTXDebugInfo();
 
         // NOTES: Telltale mip levels are reversed in Poker Night 2 and above, presumably extracted from KTX and KTX2 files.
         //
@@ -79,8 +139,8 @@ public class D3dtxCodec : IImageCodec
         // Some surface formats are not supported by DDS. In this case, the texture will be written as a raw texture.
 
         if (
-            d3dtx.d3dtxMetadata.Platform == T3PlatformType.ePlatform_NX
-            && d3dtx.d3dtxMetadata.IsVolumemap()
+            d3dtxTexture.PlatformType.Value == PlatformType.NX
+            && d3dtxTexture.IsVolumemap()
         )
         {
             texture.Metadata.Height *= texture.Metadata.Depth;
@@ -94,13 +154,13 @@ public class D3dtxCodec : IImageCodec
                 RowPitch = 0,
                 SlicePitch = 0,
                 PixelFormatInfo = texture.Metadata.PixelFormatInfo,
-                Pixels = d3dtx.GetPixelData()[0],
+                Pixels = d3dtxTexture.RegionHeaders[0].RegionData
             };
 
             Texture.DeswizzleImage(texture.Images[0], Platform.Switch);
 
-            texture.Metadata.Width = (uint)Math.Sqrt(d3dtxMetadata.Depth) * d3dtxMetadata.Width;
-            texture.Metadata.Height = (uint)Math.Sqrt(d3dtxMetadata.Depth) * d3dtxMetadata.Height;
+            texture.Metadata.Width = (uint)Math.Sqrt(d3dtxTexture.Depth) * d3dtxTexture.Width;
+            texture.Metadata.Height = (uint)Math.Sqrt(d3dtxTexture.Depth) * d3dtxTexture.Height;
 
             texture.Images[0].Width = texture.Metadata.Width;
             texture.Images[0].Height = texture.Metadata.Height;
@@ -115,7 +175,7 @@ public class D3dtxCodec : IImageCodec
         // My library's texture format is very extensible and can support any texture layout, pixel format and most swizzling methods.
 
         // The first step is to sort all regions by face indexes and mip indexes.
-        var orderRegions = d3dtx.GetRegionDataSortedByMips();
+        List<T3Texture.RegionStreamHeader> orderRegions = d3dtxTexture.GetRegionDataSortedByMips();
 
         // Initialize base dimensions and region index.
         int regionIndex = 0;
@@ -158,9 +218,9 @@ public class D3dtxCodec : IImageCodec
                         height
                     );
 
-                    orderRegions[regionIndex].Header.mPitch = (int)pitches.rowPitch;
-                    orderRegions[regionIndex].Header.mSlicePitch = (int)(
-                        orderRegions[regionIndex].Header.mPitch * height
+                    orderRegions[regionIndex].Pitch = (int)pitches.rowPitch;
+                    orderRegions[regionIndex].SlicePitch = (int)(
+                        orderRegions[regionIndex].Pitch * height
                     );
 
                     // Right, now I take the region pixel data and put it inside my texture format.
@@ -173,13 +233,13 @@ public class D3dtxCodec : IImageCodec
                     {
                         Width = width,
                         Height = height,
-                        RowPitch = (uint)orderRegions[regionIndex].Header.mPitch,
-                        SlicePitch = (uint)orderRegions[regionIndex].Header.mSlicePitch,
+                        RowPitch = (uint)orderRegions[regionIndex].Pitch,
+                        SlicePitch = (uint)orderRegions[regionIndex].SlicePitch,
                         PixelFormatInfo = texture.Metadata.PixelFormatInfo,
                         Pixels =
-                            orderRegions[regionIndex].Header.mMipCount <= 1
-                                ? D3DTX_Master.GetSliceData(orderRegions[regionIndex], k)
-                                : D3DTX_Master.ExtractSingleMipFromRegion(
+                            orderRegions[regionIndex].MipCount <= 1
+                                ? d3dtxTexture.GetSliceData(orderRegions[regionIndex], k)
+                                : d3dtxTexture.ExtractSingleMipFromRegion(
                                     orderRegions[regionIndex],
                                     texture.Metadata.PixelFormatInfo.PixelFormat,
                                     width,
@@ -188,10 +248,11 @@ public class D3dtxCodec : IImageCodec
                                 ),
                     };
                 }
+
                 // Read Mip
                 // Remove mip
                 // Queue next mip
-                D3DTX_Master.RemoveMip(
+                d3dtxTexture.RemoveMip(
                     orderRegions[regionIndex],
                     texture.Metadata.PixelFormatInfo.PixelFormat,
                     width,
@@ -199,7 +260,7 @@ public class D3dtxCodec : IImageCodec
                     depth
                 );
 
-                if (orderRegions[regionIndex].Header.mMipCount > 1 && !lockRegionIndex)
+                if (orderRegions[regionIndex].MipCount > 1 && !lockRegionIndex)
                 {
                     backupRegionIndex = regionIndex;
                     lockRegionIndex = true;
@@ -207,6 +268,7 @@ public class D3dtxCodec : IImageCodec
 
                 regionIndex++;
             }
+
             width = Math.Max(1, width >> 1);
             height = Math.Max(1, height >> 1);
             depth = Math.Max(1, depth >> 1);
@@ -225,7 +287,7 @@ public class D3dtxCodec : IImageCodec
     public static PixelFormatInfo GetPixelFormatInfo(
         T3SurfaceFormat format,
         T3SurfaceGamma gamma = T3SurfaceGamma.Linear,
-        T3PlatformType platformType = T3PlatformType.ePlatform_PC
+        PlatformType platformType = PlatformType.PC
     )
     {
         PixelFormat pixelFormat = format switch
@@ -303,14 +365,14 @@ public class D3dtxCodec : IImageCodec
             //  _ => DXGIFormat.R8G8B8A8_UNORM, // Choose R8G8B8A8 if the format is not specified. (Raw data)
         };
 
-        if (platformType is T3PlatformType.ePlatform_iPhone or T3PlatformType.ePlatform_Android)
+        if (platformType is PlatformType.iPhone or PlatformType.Android)
         {
             pixelFormat = GetPixelFormatWithSwappedRBChannels(pixelFormat);
         }
 
-        var colorSpace = gamma == T3SurfaceGamma.sRGB ? ColorSpace.sRGB : ColorSpace.Linear;
+        ColorSpace colorSpace = gamma == T3SurfaceGamma.sRGB ? ColorSpace.sRGB : ColorSpace.Linear;
 
-        var dataType = format switch
+        DataType dataType = format switch
         {
             T3SurfaceFormat.RGBA8S => DataType.Snorm,
             T3SurfaceFormat.RG16S => DataType.Snorm,

@@ -1,0 +1,10 @@
+{
+    "name": "The Walking Dead: Michonne",
+    "description": "",
+    "blowfishKey": "Twdm",
+    "isTtarch2": true,
+    "ttarchVersion": 4,
+    "luaVersion": "5.2.3",
+    "metaStreamVersion": "MSV5",
+    "enableOodleCompression": true
+}

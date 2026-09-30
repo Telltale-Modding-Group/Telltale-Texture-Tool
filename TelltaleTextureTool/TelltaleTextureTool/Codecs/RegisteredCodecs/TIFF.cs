@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using Hexa.NET.DirectXTex;
 using HexaGen.Runtime;
@@ -15,17 +16,17 @@ public class TiffCodec : IImageCodec
     public string[] SupportedExtensions => [".tiff", ".tif"];
 
     public static PixelFormatInfo[] SupportedPixelFormats =>
-        [
-            PixelFormats.R8_Unorm_Linear,
-            PixelFormats.A8_Unorm_Linear,
-            PixelFormats.R8G8B8A8_Unorm_Linear,
-            PixelFormats.B8G8R8A8_Unorm_Linear,
-            PixelFormats.B8G8R8X8_Unorm_Linear,
-            PixelFormats.R8G8B8A8_Unorm_Srgb,
-            PixelFormats.B8G8R8A8_Unorm_Srgb,
-            PixelFormats.B8G8R8X8_Unorm_Srgb,
-            PixelFormats.B5G5R5A1_Unorm_Linear,
-        ];
+    [
+        PixelFormats.R8_Unorm_Linear,
+        PixelFormats.A8_Unorm_Linear,
+        PixelFormats.R8G8B8A8_Unorm_Linear,
+        PixelFormats.B8G8R8A8_Unorm_Linear,
+        PixelFormats.B8G8R8X8_Unorm_Linear,
+        PixelFormats.R8G8B8A8_Unorm_Srgb,
+        PixelFormats.B8G8R8A8_Unorm_Srgb,
+        PixelFormats.B8G8R8X8_Unorm_Srgb,
+        PixelFormats.B5G5R5A1_Unorm_Linear,
+    ];
 
     public unsafe byte[] SaveToMemory(Texture input, CodecOptions options)
     {
@@ -38,6 +39,7 @@ public class TiffCodec : IImageCodec
 
         ScratchImage newImage = DirectXTexUtility.CreateScratchImageFromTexture(input);
         Blob blob = DirectXTex.CreateBlob();
+
 
         try
         {
@@ -60,16 +62,23 @@ public class TiffCodec : IImageCodec
         }
     }
 
-    public Texture LoadFromMemory(byte[] input, CodecOptions options)
+    public Texture LoadFromMemory(Stream input, CodecOptions options)
     {
         ScratchImage scratchImage = DirectXTex.CreateScratchImage();
         DirectXTexMetadata texMetadata = new();
 
         Texture texture;
 
+        byte[] buffer;
+        using (var ms = new MemoryStream())
+        {
+            input.CopyTo(ms);
+            buffer = ms.ToArray();
+        }
+
         unsafe
         {
-            fixed (byte* pInput = input)
+            fixed (byte* pInput = buffer)
             {
                 var res = DirectXTex.LoadFromWICMemory(
                     pInput,

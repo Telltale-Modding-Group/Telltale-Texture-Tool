@@ -1,0 +1,6008 @@
+[
+    {
+        "type": "RecordingUtils::EnumRecordingStatus",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<Color>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "Polar",
+        "crc32": 4194573120,
+        "members": [
+            {
+                "name": "mR",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mTheta",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mPhi",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "WalkBoxes::Edge",
+        "crc32": 1227071641,
+        "members": [
+            {
+                "name": "mV1",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mV2",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mEdgeDest",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mEdgeDestEdge",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mEdgeDir",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mMaxRadius",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "SkeletonPoseValue::BoneEntry",
+        "crc32": 3669832072,
+        "members": [
+            {
+                "name": "mName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "uint32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<Handle<D3DMesh>>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "WalkBoxes::Tri",
+        "crc32": 2578510715,
+        "members": [
+            {
+                "name": "mFootstepMaterial",
+                "type": "SoundFootsteps::EnumMaterial",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mNormal",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mQuadBuddy",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mMaxRadius",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mVerts",
+                "type": "SArray<int,3>",
+                "flags": 0
+            },
+            {
+                "name": "mEdgeInfo",
+                "type": "SArray<WalkBoxes::Edge,3>",
+                "flags": 0
+            },
+            {
+                "name": "mVertOffsets",
+                "type": "SArray<int,3>",
+                "flags": 0
+            },
+            {
+                "name": "mVertScales",
+                "type": "SArray<float,3>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ParticlePropertySamples",
+        "crc32": 2525075422,
+        "members": [
+            {
+                "name": "mSampleCount",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "LanguageResProxy",
+        "crc32": 927719816,
+        "members": [
+            {
+                "name": "mID",
+                "type": "uint32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "T3Texture::StreamHeader",
+        "crc32": 1077824440,
+        "members": [
+            {
+                "name": "mRegionCount",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mAuxDataCount",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mTotalDataSize",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "D3DMesh::PaletteEntry",
+        "crc32": 94963258,
+        "members": [
+            {
+                "name": "mBoneName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mBoundingBox",
+                "type": "BoundingBox",
+                "flags": 0
+            },
+            {
+                "name": "mBoundingSphere",
+                "type": "Sphere",
+                "flags": 0
+            },
+            {
+                "name": "mNumVerts",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgChoicesChildPost",
+        "crc32": 2099438889,
+        "members": [
+            {
+                "name": "Baseclass_DlgChild",
+                "type": "DlgChild",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "PreloadPackage::RuntimeDataDialog",
+        "crc32": 1150108613,
+        "members": [
+            {
+                "name": "mDialogResourceVectors",
+                "type": "DCArray<PreloadPackage::RuntimeDataDialog::DlgObjIdAndResourceVector>",
+                "flags": 0
+            },
+            {
+                "name": "mStartNodeOffsets",
+                "type": "DCArray<PreloadPackage::RuntimeDataDialog::DlgObjIdAndStartNodeOffset>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<PhonemeKey>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeParallel",
+        "crc32": 2650542555,
+        "members": [
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            },
+            {
+                "name": "mPElements",
+                "type": "DlgNodeParallel::DlgChildSetElement",
+                "flags": 32
+            },
+            {
+                "name": "mElemUseCriteria",
+                "type": "DlgNodeCriteria",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "D3DMesh::TriangleSet",
+        "crc32": 1724565026,
+        "members": [
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 262144
+            },
+            {
+                "name": "mBonePaletteIndex",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mLocalTransformPaletteIndex",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mLocalTransformIndex",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mMinVertIndex",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVertIndex",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mStartIndex",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mNumPrimitives",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mBoundingBox",
+                "type": "BoundingBox",
+                "flags": 0
+            },
+            {
+                "name": "mBoundingSphere",
+                "type": "Sphere",
+                "flags": 0
+            },
+            {
+                "name": "mTxIndex",
+                "type": "SArray<int,14>",
+                "flags": 0
+            },
+            {
+                "name": "mTriStrips",
+                "type": "DCArray<unsignedshort>",
+                "flags": 0
+            },
+            {
+                "name": "mNumTotalIndices",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mfBumpHeight",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mfDetailBumpHeight",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mSpecularPower",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mSpecularColor",
+                "type": "Color",
+                "flags": 0
+            },
+            {
+                "name": "mAmbientColor",
+                "type": "Color",
+                "flags": 0
+            },
+            {
+                "name": "mToonOutlineColor",
+                "type": "Color",
+                "flags": 0
+            },
+            {
+                "name": "mToonOutlineInvertColor",
+                "type": "Color",
+                "flags": 0
+            },
+            {
+                "name": "mToonOutlineSize",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mToonMaxZConstOutlineSize",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mToonMinZConstOutlineSize",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mGlowIntensity",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mReceiveShadowIntensity",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mAlphaMode",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mfReflectivity",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mToonShades",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mUVGenMode",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mUVScreenSpaceScaling",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mSpecularOnAlpha",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mSubsurfaceScateringRadius",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mDiffuseColor",
+                "type": "Color",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgConditionInput",
+        "crc32": 3635003717,
+        "members": [
+            {
+                "name": "Baseclass_DlgCondition",
+                "type": "DlgCondition",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "ActingPaletteGroup",
+        "crc32": 2824988578,
+        "members": [
+            {
+                "name": "Baseclass_UID::Owner",
+                "type": "UID::Owner",
+                "flags": 16
+            },
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 32
+            },
+            {
+                "name": "mIdle",
+                "type": "AnimOrChore",
+                "flags": 0
+            },
+            {
+                "name": "mTalkingIdle",
+                "type": "AnimOrChore",
+                "flags": 0
+            },
+            {
+                "name": "mMumbleMouth",
+                "type": "AnimOrChore",
+                "flags": 0
+            },
+            {
+                "name": "mWeight",
+                "type": "float",
+                "flags": 32
+            },
+            {
+                "name": "mTransitionIn",
+                "type": "AnimOrChore",
+                "flags": 0
+            },
+            {
+                "name": "mTransitionOut",
+                "type": "AnimOrChore",
+                "flags": 0
+            },
+            {
+                "name": "mTransitions",
+                "type": "List<ActingPaletteGroup::ActingPaletteTransition>",
+                "flags": 0
+            },
+            {
+                "name": "mIdleTransitionTimeOverride",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mIdleTransitionKind",
+                "type": "ActingPaletteGroup::EnumIdleTransition",
+                "flags": 0
+            },
+            {
+                "name": "mRandomAutoMin",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mRandomAutoMax",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "SkeletonPoseValue::Sample",
+        "crc32": 1944545365,
+        "members": [
+            {
+                "name": "mTime",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mRecipTimeToNextSample",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mValues",
+                "type": "DCArray<Transform>",
+                "flags": 0
+            },
+            {
+                "name": "mTangents",
+                "type": "DCArray<int>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNode",
+        "crc32": 860007977,
+        "members": [
+            {
+                "name": "Baseclass_DlgObjIDOwner",
+                "type": "DlgObjIDOwner",
+                "flags": 48
+            },
+            {
+                "name": "Baseclass_DlgVisibilityConditionsOwner",
+                "type": "DlgVisibilityConditionsOwner",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_DlgObjectPropsOwner",
+                "type": "DlgObjectPropsOwner",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_TaskOwner",
+                "type": "TaskOwner",
+                "flags": 16
+            },
+            {
+                "name": "mPrev",
+                "type": "DlgNodeLink",
+                "flags": 32
+            },
+            {
+                "name": "mNext",
+                "type": "DlgNodeLink",
+                "flags": 32
+            },
+            {
+                "name": "mName",
+                "type": "Symbol",
+                "flags": 32
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 32
+            },
+            {
+                "name": "mChainContextTypeID",
+                "type": "int32",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<Handle<PropertySet>>",
+        "crc32": 1261182456,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<Handle<PropertySet>>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "Handle<PropertySet>",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "Handle<PropertySet>",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<Handle<PropertySet>>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "T3OverlayTextParams",
+        "crc32": 541562932,
+        "members": [
+            {
+                "name": "mhFont",
+                "type": "Handle<Font>",
+                "flags": 0
+            },
+            {
+                "name": "mhDlg",
+                "type": "Handle<Dlg>",
+                "flags": 0
+            },
+            {
+                "name": "mDlgNodeName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mText",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mInitialPosition",
+                "type": "Vector2",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "EventStorage::PageEntry",
+        "crc32": 1183995000,
+        "members": [
+            {
+                "name": "mhPage",
+                "type": "Handle<EventStoragePage>",
+                "flags": 0
+            },
+            {
+                "name": "mMaxEventID",
+                "type": "uint32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<Transform>",
+        "crc32": 964247595,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<Transform>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "Transform",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "Transform",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<Transform>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<AnimOrChore>",
+        "crc32": 3192439959,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<AnimOrChore>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "AnimOrChore",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "AnimOrChore",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<AnimOrChore>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "SoundEventNameBase",
+        "crc32": 3171480706,
+        "members": [
+            {
+                "name": "mEventGuid",
+                "type": "Symbol",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgFolder",
+        "crc32": 3031564708,
+        "members": [
+            {
+                "name": "Baseclass_DlgObjIDOwner",
+                "type": "DlgObjIDOwner",
+                "flags": 48
+            },
+            {
+                "name": "Baseclass_DlgObjectPropsOwner",
+                "type": "DlgObjectPropsOwner",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_DlgChildSet",
+                "type": "DlgChildSet",
+                "flags": 48
+            },
+            {
+                "name": "Baseclass_TaskOwner",
+                "type": "TaskOwner",
+                "flags": 16
+            },
+            {
+                "name": "mName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mProdReportProps",
+                "type": "PropertySet",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ScriptEnum:DialogMode",
+        "crc32": 3581553835,
+        "members": [
+            {
+                "name": "mCurValue",
+                "type": "String",
+                "flags": 1152
+            }
+        ]
+    },
+    {
+        "type": "Dlg",
+        "crc32": 2843835599,
+        "members": [
+            {
+                "name": "Baseclass_DlgObjIDOwner",
+                "type": "DlgObjIDOwner",
+                "flags": 48
+            },
+            {
+                "name": "Baseclass_TaskOwner",
+                "type": "TaskOwner",
+                "flags": 16
+            },
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 32
+            },
+            {
+                "name": "mVersion",
+                "type": "int32",
+                "flags": 32
+            },
+            {
+                "name": "mDefFolderID",
+                "type": "DlgObjID",
+                "flags": 32
+            },
+            {
+                "name": "mLangDB",
+                "type": "LanguageDB",
+                "flags": 32
+            },
+            {
+                "name": "mProjectID",
+                "type": "uint32",
+                "flags": 32
+            },
+            {
+                "name": "mResourceLocationID",
+                "type": "Symbol",
+                "flags": 32
+            },
+            {
+                "name": "mChronology",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 32
+            },
+            {
+                "name": "mDependencies",
+                "type": "DependencyLoader<1>",
+                "flags": 32
+            },
+            {
+                "name": "mProdReportProps",
+                "type": "PropertySet",
+                "flags": 0
+            },
+            {
+                "name": "mJiraRecordManager",
+                "type": "JiraRecordManager",
+                "flags": 32
+            },
+            {
+                "name": "mbHasToolOnlyData",
+                "type": "bool",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<Symbol>",
+        "crc32": 2943193791,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<Symbol>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<Symbol>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgObjID",
+        "crc32": 3933754241,
+        "members": [
+            {
+                "name": "mID",
+                "type": "Symbol",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeMarker",
+        "crc32": 1604548739,
+        "members": [
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "UID::Owner",
+        "crc32": 2412187803,
+        "members": [
+            {
+                "name": "miUniqueID",
+                "type": "int32",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<PhonemeKey>",
+        "crc32": 3800913023,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<PhonemeKey>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "PhonemeKey",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "PhonemeKey",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<PhonemeKey>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeChore",
+        "crc32": 3813436339,
+        "members": [
+            {
+                "name": "mChore",
+                "type": "Handle<Chore>",
+                "flags": 0
+            },
+            {
+                "name": "mPriority",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mLooping",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<Handle<WalkBoxes>>",
+        "crc32": 1043978704,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<Handle<WalkBoxes>>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "Handle<WalkBoxes>",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "Handle<WalkBoxes>",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<Handle<WalkBoxes>>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeWait",
+        "crc32": 1816618023,
+        "members": [
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_DlgConditionSet",
+                "type": "DlgConditionSet",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "Scene",
+        "crc32": 4234762738,
+        "members": [
+            {
+                "name": "mTimeScale",
+                "type": "float",
+                "flags": 1
+            },
+            {
+                "name": "mbActive",
+                "type": "bool",
+                "flags": 1
+            },
+            {
+                "name": "mbHidden",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mAgentList",
+                "type": "LinkedList<Scene::AgentInfo,0>",
+                "flags": 1
+            },
+            {
+                "name": "mReferencedScenes",
+                "type": "DCArray<HandleLock<Scene>>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeScript",
+        "crc32": 1800811590,
+        "members": [
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            },
+            {
+                "name": "mScriptText",
+                "type": "String",
+                "flags": 32
+            },
+            {
+                "name": "mbBlocking",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mbExecuteOnInstanceRetire",
+                "type": "bool",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "EnumTextOrientationType",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "Animation",
+        "crc32": 76098593,
+        "members": [
+            {
+                "name": "mVersion",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mLength",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mAdditiveMask",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mValues",
+                "type": "DCArray<Ptr<AnimationValueInterfaceBase>>",
+                "flags": 1
+            },
+            {
+                "name": "mToolProps",
+                "type": "ToolProps",
+                "flags": 8224
+            }
+        ]
+    },
+    {
+        "type": "NavCam::EnumMode",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "Footsteps2::FootstepBank",
+        "crc32": 3646602481,
+        "members": [
+            {
+                "name": "mEventName",
+                "type": "SoundEventName<0>",
+                "flags": 0
+            },
+            {
+                "name": "mMaterialMap",
+                "type": "Map<SoundFootsteps::EnumMaterial,SoundEventName<0>,less<SoundFootsteps::EnumMaterial>>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ActingPaletteClass",
+        "crc32": 177154245,
+        "members": [
+            {
+                "name": "Baseclass_UID::Generator",
+                "type": "UID::Generator",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_UID::Owner",
+                "type": "UID::Owner",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_ActingOverridablePropOwner",
+                "type": "ActingOverridablePropOwner",
+                "flags": 16
+            },
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 32
+            },
+            {
+                "name": "mPalettePtrs",
+                "type": "DCArray<Ptr<ActingPalette>>",
+                "flags": 33
+            },
+            {
+                "name": "mPaletteGroupPtrs",
+                "type": "DCArray<Ptr<ActingPaletteGroup>>",
+                "flags": 33
+            },
+            {
+                "name": "mAlternateNames",
+                "type": "DCArray<String>",
+                "flags": 0
+            },
+            {
+                "name": "mDefaultPaletteGroupID",
+                "type": "int32",
+                "flags": 32
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 32
+            },
+            {
+                "name": "mInstantChange",
+                "type": "bool",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeCriteria::EnumDefaultResultT",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "DlgChildSetChoicesChildPost",
+        "crc32": 2380508955,
+        "members": [
+            {
+                "name": "Baseclass_DlgChildSet",
+                "type": "DlgChildSet",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "T3OverlayData",
+        "crc32": 1861783987,
+        "members": [
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 32
+            },
+            {
+                "name": "mSpriteObjects",
+                "type": "DCArray<T3OverlayObjectData_Sprite>",
+                "flags": 0
+            },
+            {
+                "name": "mTextObjects",
+                "type": "DCArray<T3OverlayObjectData_Text>",
+                "flags": 0
+            },
+            {
+                "name": "mParams",
+                "type": "T3OverlayParams",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<Handle<SoundAmbience::AmbienceDefinition>>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "PhonemeKey",
+        "crc32": 643193775,
+        "members": [
+            {
+                "name": "mPhoneme",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mFadeInTime",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mHoldTime",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mFadeOutTime",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mTargetContribution",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgChoicesChildPre",
+        "crc32": 2099438889,
+        "members": [
+            {
+                "name": "Baseclass_DlgChild",
+                "type": "DlgChild",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "SoundEventName<0>",
+        "crc32": 1108449382,
+        "members": [
+            {
+                "name": "Baseclass_SoundEventNameBase",
+                "type": "SoundEventNameBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "DlgCondition",
+        "crc32": 2839969602,
+        "members": [
+            {
+                "name": "Baseclass_DlgObjIDOwner",
+                "type": "DlgObjIDOwner",
+                "flags": 48
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<Handle<SoundAmbience::AmbienceDefinition>>",
+        "crc32": 4039695348,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<Handle<SoundAmbience::AmbienceDefinition>>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "Handle<SoundAmbience::AmbienceDefinition>",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "Handle<SoundAmbience::AmbienceDefinition>",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<Handle<SoundAmbience::AmbienceDefinition>>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeLogic",
+        "crc32": 1599691385,
+        "members": [
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            },
+            {
+                "name": "mRule",
+                "type": "Rule",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "Color",
+        "crc32": 1449415578,
+        "members": [
+            {
+                "name": "r",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "g",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "b",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "a",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ParticleProperties",
+        "crc32": 517239884,
+        "members": [
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mTextureFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mTextureCount",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mAnimations",
+                "type": "DCArray<ParticleProperties::Animation>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeExchange::Entry",
+        "crc32": 565152393,
+        "members": [
+            {
+                "name": "mID",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mType",
+                "type": "int32",
+                "flags": 64
+            }
+        ]
+    },
+    {
+        "type": "ActingPaletteGroup::EnumIdleTransition",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "IdleSlotDefaults",
+        "crc32": 2010505503,
+        "members": [
+            {
+                "name": "mTransitionInDefault",
+                "type": "IdleTransitionSettings",
+                "flags": 0
+            },
+            {
+                "name": "mTransitionDefault",
+                "type": "IdleTransitionSettings",
+                "flags": 0
+            },
+            {
+                "name": "mTransitionOutDefault",
+                "type": "IdleTransitionSettings",
+                "flags": 0
+            },
+            {
+                "name": "mBasePriority",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mSlotFriendlyName",
+                "type": "Symbol",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "LanguageLookupMap",
+        "crc32": 2021484270,
+        "members": [
+            {
+                "name": "mIDSets",
+                "type": "DCArray<LanguageLookupMap::DlgIDSet>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ClipResourceFilter",
+        "crc32": 157875214,
+        "members": [
+            {
+                "name": "mResources",
+                "type": "Set<Symbol,less<Symbol>>",
+                "flags": 0
+            },
+            {
+                "name": "mbExclusiveMode",
+                "type": "bool",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeCriteria",
+        "crc32": 2134756465,
+        "members": [
+            {
+                "name": "mTestType",
+                "type": "DlgNodeCriteria::EnumTestT",
+                "flags": 0
+            },
+            {
+                "name": "mFlagsThreshold",
+                "type": "DlgNodeCriteria::EnumThresholdT",
+                "flags": 0
+            },
+            {
+                "name": "mCriteriaThreshold",
+                "type": "DlgNodeCriteria::EnumThresholdT",
+                "flags": 0
+            },
+            {
+                "name": "mDefaultResult",
+                "type": "DlgNodeCriteria::EnumDefaultResultT",
+                "flags": 0
+            },
+            {
+                "name": "mClassFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mClassIDs",
+                "type": "Set<int,less<int>>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "PropertySet",
+        "crc32": 1874192314,
+        "members": [
+            {
+                "name": "mPropVersion",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mPropertyFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mKeyMap",
+                "type": "IntrusiveSet<Symbol,PropertySet::KeyInfo,TagPropertyKeyInfoSet,less<Symbol>>",
+                "flags": 1
+            }
+        ]
+    },
+    {
+        "type": "EnumEmitterSpawnShape",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeExit",
+        "crc32": 1604548739,
+        "members": [
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "DlgChoice",
+        "crc32": 3635227711,
+        "members": [
+            {
+                "name": "Baseclass_DlgChild",
+                "type": "DlgChild",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_DlgConditionSet",
+                "type": "DlgConditionSet",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "D3DMesh",
+        "crc32": 763425164,
+        "members": [
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mVersion",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 262144
+            },
+            {
+                "name": "mBoundingBox",
+                "type": "BoundingBox",
+                "flags": 0
+            },
+            {
+                "name": "mBoundingSphere",
+                "type": "Sphere",
+                "flags": 0
+            },
+            {
+                "name": "mTriangleSets",
+                "type": "DCArray<D3DMesh::TriangleSet>",
+                "flags": 0
+            },
+            {
+                "name": "mVertexAnimations",
+                "type": "DCArray<D3DMesh::VertexAnimation>",
+                "flags": 0
+            },
+            {
+                "name": "mBonePalettes",
+                "type": "DCArray<DCArray<D3DMesh::PaletteEntry>>",
+                "flags": 0
+            },
+            {
+                "name": "mSkinningData",
+                "type": "DCArray<D3DMesh::SkinningEntry>",
+                "flags": 0
+            },
+            {
+                "name": "mBoneData",
+                "type": "DCArray<D3DMesh::BoneEntry>",
+                "flags": 0
+            },
+            {
+                "name": "mLocalTransformPalettes",
+                "type": "DCArray<DCArray<D3DMesh::LocalTransformEntry>>",
+                "flags": 0
+            },
+            {
+                "name": "mTriangleStripState",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mAnimatedVertexCount",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mTextures",
+                "type": "SArray<DCArray<D3DMesh::Texture>,14>",
+                "flags": 0
+            },
+            {
+                "name": "mDiffuseScale",
+                "type": "Vector2",
+                "flags": 0
+            },
+            {
+                "name": "mLightMapScale",
+                "type": "Vector2",
+                "flags": 0
+            },
+            {
+                "name": "mShadowMapScale",
+                "type": "Vector2",
+                "flags": 0
+            },
+            {
+                "name": "mDetailScale",
+                "type": "Vector2",
+                "flags": 0
+            },
+            {
+                "name": "mScaledUVScale",
+                "type": "Vector2",
+                "flags": 0
+            },
+            {
+                "name": "mToolAnimatedVertexEntries",
+                "type": "DCArray<D3DMesh::AnimatedVertexEntry>",
+                "flags": 0
+            },
+            {
+                "name": "mToolAnimatedVertexGroupEntries",
+                "type": "Map<Symbol,D3DMesh::AnimatedVertexGroupEntry,less<Symbol>>",
+                "flags": 0
+            },
+            {
+                "name": "mToolProps",
+                "type": "ToolProps",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<SoundEventName<2>>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "Skeleton",
+        "crc32": 4204911280,
+        "members": [
+            {
+                "name": "mEntries",
+                "type": "DCArray<Skeleton::Entry>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "LogicGroup",
+        "crc32": 2294572655,
+        "members": [
+            {
+                "name": "mOperator",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mItems",
+                "type": "Map<String,LogicGroup::LogicItem,less<String>>",
+                "flags": 0
+            },
+            {
+                "name": "mLogicGroups",
+                "type": "DCArray<LogicGroup>",
+                "flags": 0
+            },
+            {
+                "name": "mGroupOperator",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mType",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<CompressedPathBlockingValue::CompressedPathInfoKey>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "LanguageDB",
+        "crc32": 1869857139,
+        "members": [
+            {
+                "name": "Baseclass_UID::Owner",
+                "type": "UID::Owner",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_UID::Generator",
+                "type": "UID::Generator",
+                "flags": 16
+            },
+            {
+                "name": "mLanguageResources",
+                "type": "Map<unsignedint,LanguageRes,less<unsignedint>>",
+                "flags": 0
+            },
+            {
+                "name": "mRegistry",
+                "type": "LocalizationRegistry",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mProjectID",
+                "type": "uint32",
+                "flags": 0
+            },
+            {
+                "name": "mExpandedIDRanges",
+                "type": "DCArray<ProjectDatabaseIDPair>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "Transform",
+        "crc32": 3493138780,
+        "members": [
+            {
+                "name": "mRot",
+                "type": "Quaternion",
+                "flags": 0
+            },
+            {
+                "name": "mTrans",
+                "type": "Vector3",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<Handle<WalkBoxes>>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "PreloadPackage::RuntimeDataScene",
+        "crc32": 3446159768,
+        "members": [
+            {
+                "name": "mResources",
+                "type": "DCArray<PreloadPackage::ResourceKey>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<Vector3>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<Handle<Chore>>",
+        "crc32": 1574729859,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<Handle<Chore>>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "Handle<Chore>",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "Handle<Chore>",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<Handle<Chore>>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "Font::GlyphInfo",
+        "crc32": 861841173,
+        "members": [
+            {
+                "name": "mTexturePage",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mChannel",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mGlyph",
+                "type": "TRect<float>",
+                "flags": 0
+            },
+            {
+                "name": "mWidth",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mHeight",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mXOffset",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mYOffset",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mXAdvance",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "InputMapper",
+        "crc32": 3177599622,
+        "members": [
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mMappedEvents",
+                "type": "DCArray<InputMapper::EventMapping>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeChoices",
+        "crc32": 3912061526,
+        "members": [
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            },
+            {
+                "name": "mChoices",
+                "type": "DlgChildSetChoice",
+                "flags": 32
+            },
+            {
+                "name": "mPreChoice",
+                "type": "DlgChildSetChoicesChildPre",
+                "flags": 32
+            },
+            {
+                "name": "mPostChoice",
+                "type": "DlgChildSetChoicesChildPost",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "PreloadPackage::ResourceSeenTimes",
+        "crc32": 3379576892,
+        "members": [
+            {
+                "name": "mfEarliest",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mfLatest",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mAdditionalScenes",
+                "type": "Set<Symbol,less<Symbol>>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "Skeleton::Entry",
+        "crc32": 2955552495,
+        "members": [
+            {
+                "name": "mJointName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mParentName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mParentIndex",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mMirrorBoneName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mMirrorBoneIndex",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mBoneLength",
+                "type": "float",
+                "flags": 1
+            },
+            {
+                "name": "mLocalPos",
+                "type": "Vector3",
+                "flags": 0
+            },
+            {
+                "name": "mLocalQuat",
+                "type": "Quaternion",
+                "flags": 0
+            },
+            {
+                "name": "mRestXform",
+                "type": "Transform",
+                "flags": 0
+            },
+            {
+                "name": "mGlobalTranslationScale",
+                "type": "Vector3",
+                "flags": 0
+            },
+            {
+                "name": "mLocalTranslationScale",
+                "type": "Vector3",
+                "flags": 0
+            },
+            {
+                "name": "mAnimTranslationScale",
+                "type": "Vector3",
+                "flags": 0
+            },
+            {
+                "name": "mResourceGroupMembership",
+                "type": "Map<String,float,less<String>>",
+                "flags": 0
+            },
+            {
+                "name": "mConstraints",
+                "type": "BoneContraints",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "Chore",
+        "crc32": 2430642959,
+        "members": [
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mLength",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mNumResources",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mNumAgents",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mEditorProps",
+                "type": "PropertySet",
+                "flags": 8192
+            },
+            {
+                "name": "mChoreSceneFile",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mRenderDelay",
+                "type": "int32",
+                "flags": 8192
+            },
+            {
+                "name": "mSynchronizedToLocalization",
+                "type": "LocalizeInfo",
+                "flags": 0
+            },
+            {
+                "name": "mDependencies",
+                "type": "DependencyLoader<1>",
+                "flags": 8192
+            },
+            {
+                "name": "mToolProps",
+                "type": "ToolProps",
+                "flags": 8224
+            },
+            {
+                "name": "mWalkPaths",
+                "type": "Map<Symbol,WalkPath,less<Symbol>>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<float>",
+        "crc32": 56723018,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<float>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<float>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "BoundingBox",
+        "crc32": 2395633409,
+        "members": [
+            {
+                "name": "mMin",
+                "type": "Vector3",
+                "flags": 0
+            },
+            {
+                "name": "mMax",
+                "type": "Vector3",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgConditionalCase",
+        "crc32": 2099438889,
+        "members": [
+            {
+                "name": "Baseclass_DlgChild",
+                "type": "DlgChild",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "LanguageResLocal",
+        "crc32": 2486018864,
+        "members": [
+            {
+                "name": "mPrefix",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mText",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mLocalInfo",
+                "type": "LocalizeInfo",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "DlgSystemSettings",
+        "crc32": 2201256133,
+        "members": [
+            {
+                "name": "mPropsMapUser",
+                "type": "DlgObjectPropsMap",
+                "flags": 0
+            },
+            {
+                "name": "mPropsMapProduction",
+                "type": "DlgObjectPropsMap",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgVisibilityConditionsOwner",
+        "crc32": 698322594,
+        "members": [
+            {
+                "name": "mVisCond",
+                "type": "DlgVisibilityConditions",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "FileNameBase",
+        "crc32": 4007774606,
+        "members": [
+            {
+                "name": "mFileName",
+                "type": "Symbol",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ResourceGroupInfo",
+        "crc32": 607114858,
+        "members": [
+            {
+                "name": "mColor",
+                "type": "Color",
+                "flags": 0
+            },
+            {
+                "name": "mPriority",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeJump",
+        "crc32": 3389418213,
+        "members": [
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            },
+            {
+                "name": "mJumpToLink",
+                "type": "DlgNodeLink",
+                "flags": 32
+            },
+            {
+                "name": "mJumpToName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mJumpTargetClass",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mJumpBehavior",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mChoiceTransparency",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mVisibilityBehavior",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mhJumpToDlg",
+                "type": "Handle<Dlg>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<Handle<Dlg>>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "IdleTransitionSettings",
+        "crc32": 1860826104,
+        "members": [
+            {
+                "name": "mTransitionTime",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mTransitionStyleDummy",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<Handle<T3Texture>>",
+        "crc32": 3388417782,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<Handle<T3Texture>>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "Handle<T3Texture>",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "Handle<T3Texture>",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<Handle<T3Texture>>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgChildSetChoice",
+        "crc32": 2380508955,
+        "members": [
+            {
+                "name": "Baseclass_DlgChildSet",
+                "type": "DlgChildSet",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<String>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "T3Texture::RegionStreamHeader",
+        "crc32": 1925153037,
+        "members": [
+            {
+                "name": "mFaceIndex",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mMipIndex",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mMipCount",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mDataSize",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mPitch",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "EnumeTangentModes",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "EventStoragePage",
+        "crc32": 1699019216,
+        "members": [
+            {
+                "name": "mVersion",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mSessionID",
+                "type": "uint64",
+                "flags": 0
+            },
+            {
+                "name": "mFlushedNameOnDisk",
+                "type": "String",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ResourceGroups",
+        "crc32": 2799865443,
+        "members": [
+            {
+                "name": "mGroups",
+                "type": "Map<String,float,less<String>>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ParticleSprite",
+        "crc32": 2328823174,
+        "members": [
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 32
+            },
+            {
+                "name": "mhTexture",
+                "type": "SArray<Handle<T3Texture>,1>",
+                "flags": 0
+            },
+            {
+                "name": "mTextureX",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mTextureY",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mSpriteSize",
+                "type": "Vector2",
+                "flags": 0
+            },
+            {
+                "name": "mBlendMode",
+                "type": "BlendMode",
+                "flags": 0
+            },
+            {
+                "name": "mAnimations",
+                "type": "DCArray<ParticleSprite::Animation>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ScriptEnum:LightComposerNodeLocation",
+        "crc32": 3581553835,
+        "members": [
+            {
+                "name": "mCurValue",
+                "type": "String",
+                "flags": 1152
+            }
+        ]
+    },
+    {
+        "type": "DlgLineCollection",
+        "crc32": 2104945925,
+        "members": [
+            {
+                "name": "Baseclass_UID::Generator",
+                "type": "UID::Generator",
+                "flags": 16
+            },
+            {
+                "name": "mLines",
+                "type": "Map<int,DlgLine,less<int>>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgObjectPropsOwner",
+        "crc32": 2184919591,
+        "members": [
+            {
+                "name": "mDlgObjectProps",
+                "type": "DlgObjectProps",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "LanguageRes",
+        "crc32": 2863459459,
+        "members": [
+            {
+                "name": "mResName",
+                "type": "Symbol",
+                "flags": 32
+            },
+            {
+                "name": "mID",
+                "type": "uint32",
+                "flags": 32
+            },
+            {
+                "name": "mIDAlias",
+                "type": "uint32",
+                "flags": 0
+            },
+            {
+                "name": "mhAnimation",
+                "type": "Handle<Animation>",
+                "flags": 0
+            },
+            {
+                "name": "mhVoiceData",
+                "type": "Handle<SoundData>",
+                "flags": 0
+            },
+            {
+                "name": "mLocalData",
+                "type": "DCArray<LanguageResLocal>",
+                "flags": 32
+            },
+            {
+                "name": "mLengthOverride",
+                "type": "float",
+                "flags": 32
+            },
+            {
+                "name": "mResolvedLocalData",
+                "type": "LanguageResLocal",
+                "flags": 32
+            },
+            {
+                "name": "mRecordingStatus",
+                "type": "RecordingUtils::EnumRecordingStatus",
+                "flags": 32
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 262144
+            }
+        ]
+    },
+    {
+        "type": "ScriptEnum:GamepadButton",
+        "crc32": 3581553835,
+        "members": [
+            {
+                "name": "mCurValue",
+                "type": "String",
+                "flags": 1152
+            }
+        ]
+    },
+    {
+        "type": "PreloadPackage::RuntimeDataDialog::DlgObjIdAndStartNodeOffset",
+        "crc32": 1509739226,
+        "members": [
+            {
+                "name": "mID",
+                "type": "DlgObjID",
+                "flags": 0
+            },
+            {
+                "name": "mOffset",
+                "type": "PreloadPackage::StartNodeOffset",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ParticleSprite::Animation",
+        "crc32": 193517962,
+        "members": [
+            {
+                "name": "mName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mStartFrame",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mFrameCount",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ChoreResource::Block",
+        "crc32": 2258583657,
+        "members": [
+            {
+                "name": "mStartTime",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mEndTime",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mbLoopingBlock",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mScale",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mbSelected",
+                "type": "bool",
+                "flags": 1
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<SoundEventName<0>>",
+        "crc32": 113612061,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<SoundEventName<0>>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "SoundEventName<0>",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "SoundEventName<0>",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<SoundEventName<0>>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeParallel::DlgChildSetElement",
+        "crc32": 2380508955,
+        "members": [
+            {
+                "name": "Baseclass_DlgChildSet",
+                "type": "DlgChildSet",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "EnumTonemapType",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "LocalizationRegistry",
+        "crc32": 3676887578,
+        "members": [
+            {
+                "name": "mFlagIndexMap",
+                "type": "Map<Symbol,int,less<Symbol>>",
+                "flags": 0
+            },
+            {
+                "name": "mFlagIndexMapReverse",
+                "type": "Map<int,Symbol,less<int>>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "CompressedPathBlockingValue",
+        "crc32": 2644084822,
+        "members": [
+            {
+                "name": "Baseclass_KeyframedValue<Transform>",
+                "type": "KeyframedValue<Transform>",
+                "flags": 16
+            },
+            {
+                "name": "mCompressedPathInfoKeys",
+                "type": "KeyframedValue<CompressedPathBlockingValue::CompressedPathInfoKey>",
+                "flags": 0
+            },
+            {
+                "name": "mAgentName",
+                "type": "Symbol",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "SoundEventName<1>",
+        "crc32": 1108449382,
+        "members": [
+            {
+                "name": "Baseclass_SoundEventNameBase",
+                "type": "SoundEventNameBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "EventLoggerEvent",
+        "crc32": 620906894,
+        "members": [
+            {
+                "name": "mEventID",
+                "type": "uint32",
+                "flags": 0
+            },
+            {
+                "name": "mMaxSeverity",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<SoundEventName<1>>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "T3OverlaySpriteParams",
+        "crc32": 1198675961,
+        "members": [
+            {
+                "name": "mhSprite",
+                "type": "Handle<ParticleSprite>",
+                "flags": 0
+            },
+            {
+                "name": "mInitialPosition",
+                "type": "Vector2",
+                "flags": 0
+            },
+            {
+                "name": "mSize",
+                "type": "Vector2",
+                "flags": 0
+            },
+            {
+                "name": "mAnimation",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mAnimationSpeed",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 262144
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<bool>",
+        "crc32": 942328854,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<bool>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<bool>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<SoundEventName<1>>",
+        "crc32": 222044461,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<SoundEventName<1>>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "SoundEventName<1>",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "SoundEventName<1>",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<SoundEventName<1>>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "StyleGuide",
+        "crc32": 3620421950,
+        "members": [
+            {
+                "name": "Baseclass_UID::Generator",
+                "type": "UID::Generator",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_ActingOverridablePropOwner",
+                "type": "ActingOverridablePropOwner",
+                "flags": 16
+            },
+            {
+                "name": "mDefPaletteClassID",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mbGeneratesLookAts",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mPaletteClassPtrs",
+                "type": "DCArray<Ptr<ActingPaletteClass>>",
+                "flags": 1
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mPaletteClasses",
+                "type": "DCArray<ActingPaletteClass>",
+                "flags": 32
+            },
+            {
+                "name": "mDefPaletteClassIndex",
+                "type": "int32",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "ActorAgentBinding",
+        "crc32": 3457604738,
+        "members": [
+            {
+                "name": "mActorName",
+                "type": "String",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeStart",
+        "crc32": 235952379,
+        "members": [
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            },
+            {
+                "name": "mProdReportProps",
+                "type": "PropertySet",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgConditionRule",
+        "crc32": 2252263714,
+        "members": [
+            {
+                "name": "Baseclass_DlgCondition",
+                "type": "DlgCondition",
+                "flags": 16
+            },
+            {
+                "name": "mRule",
+                "type": "Rule",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgObjectPropsMap::GroupDefinition",
+        "crc32": 1737501947,
+        "members": [
+            {
+                "name": "Baseclass_UID::Owner",
+                "type": "UID::Owner",
+                "flags": 16
+            },
+            {
+                "name": "mGroupCat",
+                "type": "int32",
+                "flags": 32
+            },
+            {
+                "name": "mVer",
+                "type": "int32",
+                "flags": 32
+            },
+            {
+                "name": "mhProps",
+                "type": "Handle<PropertySet>",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "D3DMesh::Texture",
+        "crc32": 3070892918,
+        "members": [
+            {
+                "name": "mName",
+                "type": "Handle<T3Texture>",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 262144
+            },
+            {
+                "name": "mNameSymbol",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mBoundingBox",
+                "type": "BoundingBox",
+                "flags": 0
+            },
+            {
+                "name": "mBoundingSphere",
+                "type": "Sphere",
+                "flags": 0
+            },
+            {
+                "name": "mMaxObjAreaPerUVArea",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mAverageObjAreaPerUVArea",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "BoneContraints",
+        "crc32": 586183020,
+        "members": [
+            {
+                "name": "mBoneType",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mHingeAxis",
+                "type": "Vector3",
+                "flags": 0
+            },
+            {
+                "name": "mAxisRange",
+                "type": "SArray<TRange<float>,3>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "TRange<float>",
+        "crc32": 4019342037,
+        "members": [
+            {
+                "name": "min",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "max",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<Transform>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<CompressedPathBlockingValue::CompressedPathInfoKey>",
+        "crc32": 2333880429,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<CompressedPathBlockingValue::CompressedPathInfoKey>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "CompressedPathBlockingValue::CompressedPathInfoKey",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "CompressedPathBlockingValue::CompressedPathInfoKey",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<CompressedPathBlockingValue::CompressedPathInfoKey>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<String>",
+        "crc32": 3817016567,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<String>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<String>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<Handle<Font>>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "Procedural_LookAt",
+        "crc32": 2608970207,
+        "members": [
+            {
+                "name": "mHostNode",
+                "type": "String",
+                "flags": 1
+            },
+            {
+                "name": "mTargetAgent",
+                "type": "String",
+                "flags": 1
+            },
+            {
+                "name": "mTargetNode",
+                "type": "String",
+                "flags": 1
+            },
+            {
+                "name": "mTargetOffset",
+                "type": "Vector3",
+                "flags": 1
+            },
+            {
+                "name": "mbUsePrivateNode",
+                "type": "bool",
+                "flags": 1
+            },
+            {
+                "name": "mhXAxisChore",
+                "type": "AnimOrChore",
+                "flags": 1
+            },
+            {
+                "name": "mhYAxisChore",
+                "type": "AnimOrChore",
+                "flags": 1
+            },
+            {
+                "name": "mbRotateHostNode",
+                "type": "bool",
+                "flags": 1
+            },
+            {
+                "name": "mLastLRAngle",
+                "type": "float",
+                "flags": 1
+            },
+            {
+                "name": "mLastUDAngle",
+                "type": "float",
+                "flags": 1
+            },
+            {
+                "name": "mLastLRWeight",
+                "type": "float",
+                "flags": 1
+            },
+            {
+                "name": "mLastUDWeight",
+                "type": "float",
+                "flags": 1
+            },
+            {
+                "name": "mMaxPerSecondAngleIncrement",
+                "type": "float",
+                "flags": 1
+            },
+            {
+                "name": "mLookAtComputeStage",
+                "type": "Procedural_LookAt::EnumLookAtComputeStage",
+                "flags": 1
+            }
+        ]
+    },
+    {
+        "type": "Procedural_LookAt::EnumLookAtComputeStage",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "CameraFacingTypes",
+        "crc32": 2879995494,
+        "members": [
+            {
+                "name": "mCameraFacingType",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ZTestFunction",
+        "crc32": 2993424345,
+        "members": [
+            {
+                "name": "mZTestType",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<SoundEventName<2>>",
+        "crc32": 107806470,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<SoundEventName<2>>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "SoundEventName<2>",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "SoundEventName<2>",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<SoundEventName<2>>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "SoundFootsteps::EnumMaterial",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "DlgChainHead",
+        "crc32": 796853129,
+        "members": [
+            {
+                "name": "Baseclass_DlgObjIDOwner",
+                "type": "DlgObjIDOwner",
+                "flags": 16
+            },
+            {
+                "name": "mLink",
+                "type": "DlgNodeLink",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimationValueInterfaceBase",
+        "crc32": 1712641324,
+        "members": [
+            {
+                "name": "mName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "SoundBankWaveMap",
+        "crc32": 778243314,
+        "members": [
+            {
+                "name": "mWaveMap",
+                "type": "Map<Symbol,SoundBankWaveMapEntry,less<Symbol>>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "SoundAmbience::AmbienceDefinition",
+        "crc32": 19810266,
+        "members": [
+            {
+                "name": "mEvents",
+                "type": "DCArray<SoundAmbience::EventContext>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ChoreAgent",
+        "crc32": 3887610370,
+        "members": [
+            {
+                "name": "mpChore",
+                "type": "Ptr<PtrBase>",
+                "flags": 0
+            },
+            {
+                "name": "mAgentName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mResources",
+                "type": "DCArray<int>",
+                "flags": 0
+            },
+            {
+                "name": "mAttachment",
+                "type": "ChoreAgent::Attachment",
+                "flags": 0
+            },
+            {
+                "name": "mAABinding",
+                "type": "ActorAgentBinding",
+                "flags": 0
+            },
+            {
+                "name": "mAgentEnabledRule",
+                "type": "Rule",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeSequence",
+        "crc32": 1184854638,
+        "members": [
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            },
+            {
+                "name": "mElements",
+                "type": "DlgNodeSequence::DlgChildSetElement",
+                "flags": 32
+            },
+            {
+                "name": "mPlaybackMode",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mLifetimeMode",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mElemUseCriteria",
+                "type": "DlgNodeCriteria",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "DlgFolderChild",
+        "crc32": 2099438889,
+        "members": [
+            {
+                "name": "Baseclass_DlgChild",
+                "type": "DlgChild",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "LocationInfo",
+        "crc32": 2928220232,
+        "members": [
+            {
+                "name": "mAttachmentAgent",
+                "type": "String",
+                "flags": 4096
+            },
+            {
+                "name": "mAttachmentNode",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mInitialLocalTransform",
+                "type": "Transform",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ScriptEnum:ControllerButtons",
+        "crc32": 3581553835,
+        "members": [
+            {
+                "name": "mCurValue",
+                "type": "String",
+                "flags": 1152
+            }
+        ]
+    },
+    {
+        "type": "LogicGroup::LogicItem",
+        "crc32": 2494835115,
+        "members": [
+            {
+                "name": "Baseclass_PropertySet",
+                "type": "PropertySet",
+                "flags": 16
+            },
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mKeyNegateList",
+                "type": "Map<Symbol,bool,less<Symbol>>",
+                "flags": 0
+            },
+            {
+                "name": "mKeyComparisonList",
+                "type": "Map<Symbol,int,less<Symbol>>",
+                "flags": 0
+            },
+            {
+                "name": "mKeyActionList",
+                "type": "Map<Symbol,int,less<Symbol>>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<Symbol>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "T3IndexBuffer",
+        "crc32": 2968688527,
+        "members": [
+            {
+                "name": "mFormat",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mNumIndicies",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mUsage",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "EnumPlatformType",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "LightProbeData",
+        "crc32": 3150004735,
+        "members": [
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mVersion",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mTetrahedraCount",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mProbeCount",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "T3OverlayObjectData_Sprite",
+        "crc32": 2573313470,
+        "members": [
+            {
+                "name": "mName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mParams",
+                "type": "T3OverlaySpriteParams",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "SoundEventName<2>",
+        "crc32": 1108449382,
+        "members": [
+            {
+                "name": "Baseclass_SoundEventNameBase",
+                "type": "SoundEventNameBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<bool>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<LocationInfo>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "DlgLine",
+        "crc32": 3255799738,
+        "members": [
+            {
+                "name": "Baseclass_UID::Owner",
+                "type": "UID::Owner",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_DlgObjIDOwner",
+                "type": "DlgObjIDOwner",
+                "flags": 48
+            },
+            {
+                "name": "mLangResProxy",
+                "type": "LanguageResProxy",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "T3OverlayParams",
+        "crc32": 2841597330,
+        "members": [
+            {
+                "name": "mhBackgroundTexture",
+                "type": "Handle<T3Texture>",
+                "flags": 0
+            },
+            {
+                "name": "mhChore",
+                "type": "Handle<Chore>",
+                "flags": 0
+            },
+            {
+                "name": "mMinDisplayTime",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mFadeTime",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "Vector2",
+        "crc32": 713873068,
+        "members": [
+            {
+                "name": "x",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "y",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeText",
+        "crc32": 2103095546,
+        "members": [
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            },
+            {
+                "name": "mLangResProxy",
+                "type": "LanguageResProxy",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "FileName<SoundEventBankDummy>",
+        "crc32": 86037894,
+        "members": [
+            {
+                "name": "Baseclass_FileNameBase",
+                "type": "FileNameBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeCriteria::EnumTestT",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "PreloadPackage::ResourceKey",
+        "crc32": 3393282122,
+        "members": [
+            {
+                "name": "mResourceName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mMetaClassDescriptionCrc",
+                "type": "uint64",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "T3VertexComponent",
+        "crc32": 243402132,
+        "members": [
+            {
+                "name": "mOffset",
+                "type": "uint32",
+                "flags": 0
+            },
+            {
+                "name": "mCount",
+                "type": "uint32",
+                "flags": 0
+            },
+            {
+                "name": "mType",
+                "type": "int32",
+                "flags": 64
+            }
+        ]
+    },
+    {
+        "type": "T3OverlayObjectData_Text",
+        "crc32": 804330099,
+        "members": [
+            {
+                "name": "mName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mParams",
+                "type": "T3OverlayTextParams",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "Scene::AgentInfo",
+        "crc32": 2701741550,
+        "members": [
+            {
+                "name": "mpAgent",
+                "type": "Ptr<PtrBase>",
+                "flags": 0
+            },
+            {
+                "name": "mAgentName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mAgentSceneProps",
+                "type": "PropertySet",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "WalkBoxes",
+        "crc32": 2085565833,
+        "members": [
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mTris",
+                "type": "DCArray<WalkBoxes::Tri>",
+                "flags": 0
+            },
+            {
+                "name": "mVerts",
+                "type": "DCArray<WalkBoxes::Vert>",
+                "flags": 0
+            },
+            {
+                "name": "mNormals",
+                "type": "DCArray<Vector3>",
+                "flags": 0
+            },
+            {
+                "name": "mQuads",
+                "type": "DCArray<WalkBoxes::Quad>",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "Flags",
+        "crc32": 77151353,
+        "members": [
+            {
+                "name": "mFlags",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<SoundEventName<0>>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "SoundReverbPreset",
+        "crc32": 2806610700,
+        "members": [
+            {
+                "name": "mPreset",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgChildSetChoicesChildPre",
+        "crc32": 2380508955,
+        "members": [
+            {
+                "name": "Baseclass_DlgChildSet",
+                "type": "DlgChildSet",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "Font",
+        "crc32": 734056929,
+        "members": [
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mbUnicode",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mHeight",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mBase",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mWiiScale",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mFontScale",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mGlyphInfo",
+                "type": "Map<unsignedint,Font::GlyphInfo,less<unsignedint>>",
+                "flags": 0
+            },
+            {
+                "name": "mTexturePages",
+                "type": "DCArray<T3Texture>",
+                "flags": 0
+            },
+            {
+                "name": "mIsDistanceField",
+                "type": "bool",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<float>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "EnumVTextAlignmentType",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "DlgVisibilityConditions",
+        "crc32": 740788242,
+        "members": [
+            {
+                "name": "mbDiesOff",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 32
+            },
+            {
+                "name": "mDownstreamVisCond",
+                "type": "DlgDownstreamVisibilityConditions",
+                "flags": 0
+            },
+            {
+                "name": "mScriptVisCond",
+                "type": "String",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<Handle<T3Texture>>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeLink",
+        "crc32": 1671118158,
+        "members": [
+            {
+                "name": "Baseclass_DlgObjIDOwner",
+                "type": "DlgObjIDOwner",
+                "flags": 16
+            },
+            {
+                "name": "mRequiredCCType",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "PreloadPackage::RuntimeDataDialog::DialogResourceInfo",
+        "crc32": 2840709360,
+        "members": [
+            {
+                "name": "mResourceKey",
+                "type": "PreloadPackage::ResourceKey",
+                "flags": 0
+            },
+            {
+                "name": "mResourceSeenTimes",
+                "type": "PreloadPackage::ResourceSeenTimes",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<Vector3>",
+        "crc32": 1892857283,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<Vector3>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "Vector3",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "Vector3",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<Vector3>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "Procedural_LookAt::Constraint",
+        "crc32": 2070937053,
+        "members": [
+            {
+                "name": "mMaxLeftRight",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mMinLeftRight",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mMaxUp",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mMinUp",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mLeftRightFixedOffsset",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mUpDownFixedOffsset",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "EnumParticleGeometryType",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "SoundAmbience::EventContext",
+        "crc32": 245952390,
+        "members": [
+            {
+                "name": "mEventname",
+                "type": "SoundEventName<0>",
+                "flags": 0
+            },
+            {
+                "name": "mPlayChance",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mSilentTimeRange",
+                "type": "TRange<float>",
+                "flags": 0
+            },
+            {
+                "name": "mPlayTimeRange",
+                "type": "TRange<float>",
+                "flags": 0
+            },
+            {
+                "name": "mVolumeRangedB",
+                "type": "TRange<float>",
+                "flags": 0
+            },
+            {
+                "name": "mVolumeFadeTimeRange",
+                "type": "TRange<float>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "InputMapper::EventMapping",
+        "crc32": 4198452299,
+        "members": [
+            {
+                "name": "mInputCode",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mEvent",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mScriptFunction",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mControllerIndexOverride",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeConditional",
+        "crc32": 1108791140,
+        "members": [
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            },
+            {
+                "name": "mCases",
+                "type": "DlgChildSetConditionalCase",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeNotes",
+        "crc32": 912175195,
+        "members": [
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            },
+            {
+                "name": "mNoteText",
+                "type": "String",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "T3SamplerStateBlock",
+        "crc32": 3542725288,
+        "members": [
+            {
+                "name": "mData",
+                "type": "uint32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgObjectProps",
+        "crc32": 1429504518,
+        "members": [
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "EnumParticleSortMode",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "ParticleProperties::Animation",
+        "crc32": 2452382998,
+        "members": [
+            {
+                "name": "mName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mParams",
+                "type": "ParticleProperties::AnimationParams",
+                "flags": 0
+            },
+            {
+                "name": "mDataFlags",
+                "type": "Flags",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgConditionTime",
+        "crc32": 2487701757,
+        "members": [
+            {
+                "name": "Baseclass_DlgCondition",
+                "type": "DlgCondition",
+                "flags": 16
+            },
+            {
+                "name": "mDurationClass",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mSeconds",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeParallel::PElement",
+        "crc32": 2099438889,
+        "members": [
+            {
+                "name": "Baseclass_DlgChild",
+                "type": "DlgChild",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "Sphere",
+        "crc32": 2966419603,
+        "members": [
+            {
+                "name": "mCenter",
+                "type": "Vector3",
+                "flags": 0
+            },
+            {
+                "name": "mRadius",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgChildSetConditionalCase",
+        "crc32": 2380508955,
+        "members": [
+            {
+                "name": "Baseclass_DlgChildSet",
+                "type": "DlgChildSet",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "DlgDownstreamVisibilityConditions",
+        "crc32": 2637415543,
+        "members": [
+            {
+                "name": "mNodeTypeFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mMaxNumNodeEvals",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "SkeletonPoseValue",
+        "crc32": 774319649,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            },
+            {
+                "name": "mBones",
+                "type": "DCArray<SkeletonPoseValue::BoneEntry>",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<SkeletonPoseValue::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AgentMap::AgentMapEntry",
+        "crc32": 3669568237,
+        "members": [
+            {
+                "name": "mzName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mzActor",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mazModels",
+                "type": "Set<String,less<String>>",
+                "flags": 0
+            },
+            {
+                "name": "mazGuides",
+                "type": "Set<String,less<String>>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgObjIDOwner",
+        "crc32": 632100095,
+        "members": [
+            {
+                "name": "mDlgObjID",
+                "type": "DlgObjID",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<Color>",
+        "crc32": 2637553435,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<Color>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "Color",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "Color",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<Color>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<Handle<Font>>",
+        "crc32": 839364384,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<Handle<Font>>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "Handle<Font>",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "Handle<Font>",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<Handle<Font>>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "EnumRenderMaskTest",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "ChoreResource",
+        "crc32": 241352964,
+        "members": [
+            {
+                "name": "mpChore",
+                "type": "Ptr<PtrBase>",
+                "flags": 0
+            },
+            {
+                "name": "mVersion",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mResName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mResLength",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mPriority",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mResourceGroup",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mhObject",
+                "type": "HandleBase",
+                "flags": 0
+            },
+            {
+                "name": "mControlAnimation",
+                "type": "Animation",
+                "flags": 0
+            },
+            {
+                "name": "mBlocks",
+                "type": "DCArray<ChoreResource::Block>",
+                "flags": 0
+            },
+            {
+                "name": "mbNoPose",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mbEmbedded",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mbEnabled",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mbIsAgentResource",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mbViewGraphs",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mbViewEmptyGraphs",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mbViewProperties",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mbViewResourceGroups",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mResourceProperties",
+                "type": "PropertySet",
+                "flags": 0
+            },
+            {
+                "name": "mResourceGroupInclude",
+                "type": "Map<String,float,less<String>>",
+                "flags": 0
+            },
+            {
+                "name": "mAAStatus",
+                "type": "int32",
+                "flags": 64
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<unsigned__int64>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "ScriptEnum:PropPresetDepthofFieldSAMPLE",
+        "crc32": 3581553835,
+        "members": [
+            {
+                "name": "mCurValue",
+                "type": "String",
+                "flags": 1152
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<Handle<Chore>>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<int>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "EnumRenderMaskWrite",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "UID::Generator",
+        "crc32": 2823674566,
+        "members": [
+            {
+                "name": "miNextUniqueID",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<LocationInfo>",
+        "crc32": 3291666804,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<LocationInfo>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "LocationInfo",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "LocationInfo",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<LocationInfo>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeExchange",
+        "crc32": 2537862244,
+        "members": [
+            {
+                "name": "mPriority",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mhChore",
+                "type": "Handle<Chore>",
+                "flags": 0
+            },
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            },
+            {
+                "name": "mEntries",
+                "type": "DCArray<DlgNodeExchange::Entry>",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "EnumParticleAffectorType",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeSequence::Element",
+        "crc32": 1026969612,
+        "members": [
+            {
+                "name": "Baseclass_DlgChild",
+                "type": "DlgChild",
+                "flags": 16
+            },
+            {
+                "name": "mRepeat",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mPlayPosition",
+                "type": "int32",
+                "flags": 64
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<Handle<Dlg>>",
+        "crc32": 2945267739,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<Handle<Dlg>>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "Handle<Dlg>",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "Handle<Dlg>",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<Handle<Dlg>>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<int>",
+        "crc32": 2650042709,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<int>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<int>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "PerAgentClipResourceFilter",
+        "crc32": 2237854830,
+        "members": [
+            {
+                "name": "mIncludedAgents",
+                "type": "Map<String,ClipResourceFilter,StringCompareCaseInsensitive>",
+                "flags": 0
+            },
+            {
+                "name": "mExcludedAgents",
+                "type": "Set<String,StringCompareCaseInsensitive>",
+                "flags": 0
+            },
+            {
+                "name": "mbExclusiveMode",
+                "type": "bool",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<AnimOrChore>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "EnumDepthOfFieldType",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "EventStorage",
+        "crc32": 3874229451,
+        "members": [
+            {
+                "name": "mVersion",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mSessionID",
+                "type": "uint64",
+                "flags": 0
+            },
+            {
+                "name": "mPages",
+                "type": "DCArray<EventStorage::PageEntry>",
+                "flags": 0
+            },
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mLastEventID",
+                "type": "uint32",
+                "flags": 0
+            },
+            {
+                "name": "mEventStoragePageSize",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "BlendMode",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "T3VertexBuffer",
+        "crc32": 1427712525,
+        "members": [
+            {
+                "name": "mNumVerts",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mVertSize",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mUsage",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mVertexComponents",
+                "type": "SArray<T3VertexComponent,13>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ParticleProperties::AnimationParams",
+        "crc32": 1198494567,
+        "members": [
+            {
+                "name": "mPositionMin",
+                "type": "Vector3",
+                "flags": 0
+            },
+            {
+                "name": "mPositionMax",
+                "type": "Vector3",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "PreloadPackage::StartNodeOffset",
+        "crc32": 1913070145,
+        "members": [
+            {
+                "name": "mStartNodeChain",
+                "type": "DlgObjID",
+                "flags": 0
+            },
+            {
+                "name": "fStartTimeSeconds",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mfMinDurationToPreload",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<unsigned__int64>",
+        "crc32": 2206931786,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<unsigned__int64>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "uint64",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "uint64",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<unsigned__int64>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeCriteria::EnumThresholdT",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "ActingPaletteGroup::ActingPaletteTransition",
+        "crc32": 3455364084,
+        "members": [
+            {
+                "name": "mTransition",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mTransitionIn",
+                "type": "AnimOrChore",
+                "flags": 0
+            },
+            {
+                "name": "mCenterOffset",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mPreDelay",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mPostDelay",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mFadeTime",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "AgentMap",
+        "crc32": 62021772,
+        "members": [
+            {
+                "name": "maAgents",
+                "type": "Map<String,AgentMap::AgentMapEntry,less<String>>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "LocalizeInfo",
+        "crc32": 1429504518,
+        "members": [
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeSequence::DlgChildSetElement",
+        "crc32": 2380508955,
+        "members": [
+            {
+                "name": "Baseclass_DlgChildSet",
+                "type": "DlgChildSet",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "SoundEventBankMap",
+        "crc32": 2758090947,
+        "members": [
+            {
+                "name": "mBankMap",
+                "type": "Map<String,DCArray<String>,less<String>>",
+                "flags": 0
+            },
+            {
+                "name": "mbLoadAllBanksGlobally",
+                "type": "bool",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "EnumEmitterColorType",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "Rule",
+        "crc32": 2208750736,
+        "members": [
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mRuntimePropName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mConditions",
+                "type": "LogicGroup",
+                "flags": 0
+            },
+            {
+                "name": "mActions",
+                "type": "LogicGroup",
+                "flags": 0
+            },
+            {
+                "name": "mElse",
+                "type": "LogicGroup",
+                "flags": 0
+            },
+            {
+                "name": "mAgentCategory",
+                "type": "String",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "D3DMesh::LocalTransformEntry",
+        "crc32": 184674563,
+        "members": [
+            {
+                "name": "mTransform",
+                "type": "Transform",
+                "flags": 0
+            },
+            {
+                "name": "mCameraFacingType",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "EnumHTextAlignmentType",
+        "crc32": 4161473433,
+        "members": [
+            {
+                "name": "mVal",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "Baseclass_EnumBase",
+                "type": "EnumBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "AnimatedValueInterface<Handle<PropertySet>>",
+        "crc32": 1152273865,
+        "members": [
+            {
+                "name": "Baseclass_AnimationValueInterfaceBase",
+                "type": "AnimationValueInterfaceBase",
+                "flags": 16
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<Handle<D3DMesh>>",
+        "crc32": 3237522144,
+        "members": [
+            {
+                "name": "Baseclass_AnimatedValueInterface<T>",
+                "type": "AnimatedValueInterface<Handle<D3DMesh>>",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_KeyframedValueInterface",
+                "type": "KeyframedValueInterface",
+                "flags": 16
+            },
+            {
+                "name": "mMinVal",
+                "type": "Handle<D3DMesh>",
+                "flags": 0
+            },
+            {
+                "name": "mMaxVal",
+                "type": "Handle<D3DMesh>",
+                "flags": 0
+            },
+            {
+                "name": "mSamples",
+                "type": "DCArray<KeyframedValue<Handle<D3DMesh>>::Sample>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "TRect<float>",
+        "crc32": 1999893740,
+        "members": [
+            {
+                "name": "left",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "right",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "top",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "bottom",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "PreloadPackage::RuntimeDataDialog::DlgObjIdAndResourceVector",
+        "crc32": 4285236088,
+        "members": [
+            {
+                "name": "mID",
+                "type": "DlgObjID",
+                "flags": 0
+            },
+            {
+                "name": "mVector",
+                "type": "DCArray<PreloadPackage::RuntimeDataDialog::DialogResourceInfo>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ActingOverridablePropOwner",
+        "crc32": 1625877016,
+        "members": [
+            {
+                "name": "mSerializationFlags",
+                "type": "Flags",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ChoreAgent::Attachment",
+        "crc32": 799020592,
+        "members": [
+            {
+                "name": "mbDoAttach",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mAttachTo",
+                "type": "String",
+                "flags": 4096
+            },
+            {
+                "name": "mAttachToNode",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mAttachPos",
+                "type": "Vector3",
+                "flags": 0
+            },
+            {
+                "name": "mAttachQuat",
+                "type": "Quaternion",
+                "flags": 0
+            },
+            {
+                "name": "mbAttachPreserveWorldPos",
+                "type": "bool",
+                "flags": 0
+            },
+            {
+                "name": "mbLeaveAttachedWhenComplete",
+                "type": "bool",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "CompressedPathBlockingValue::CompressedPathInfoKey",
+        "crc32": 773486761,
+        "members": [
+            {
+                "name": "mFocusAgentName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mFocusAgentBoneName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "mFocusAgentOffset",
+                "type": "Vector3",
+                "flags": 0
+            },
+            {
+                "name": "mfDampingFactor",
+                "type": "float",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgChild",
+        "crc32": 1681066685,
+        "members": [
+            {
+                "name": "Baseclass_DlgChainHead",
+                "type": "DlgChainHead",
+                "flags": 48
+            },
+            {
+                "name": "mName",
+                "type": "Symbol",
+                "flags": 0
+            },
+            {
+                "name": "Baseclass_DlgVisibilityConditionsOwner",
+                "type": "DlgVisibilityConditionsOwner",
+                "flags": 16
+            },
+            {
+                "name": "Baseclass_DlgObjectPropsOwner",
+                "type": "DlgObjectPropsOwner",
+                "flags": 16
+            },
+            {
+                "name": "mParent",
+                "type": "DlgNodeLink",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "TaskOwner",
+        "crc32": 1964658522,
+        "members": [
+            {
+                "name": "mTaskID",
+                "type": "uint32",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "WalkBoxes::Vert",
+        "crc32": 2180310070,
+        "members": [
+            {
+                "name": "mFlags",
+                "type": "Flags",
+                "flags": 0
+            },
+            {
+                "name": "mPos",
+                "type": "Vector3",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "DlgNodeIdle",
+        "crc32": 4050700091,
+        "members": [
+            {
+                "name": "Baseclass_DlgNode",
+                "type": "DlgNode",
+                "flags": 16
+            },
+            {
+                "name": "mhIdle",
+                "type": "Handle<Chore>",
+                "flags": 0
+            },
+            {
+                "name": "mOverrideOptionTime",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mOverrideOptionStyle",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mTransitionTimeOverride",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mTransitionStyleOverride",
+                "type": "int32",
+                "flags": 32
+            },
+            {
+                "name": "mIdleSlot",
+                "type": "int32",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "AnimOrChore",
+        "crc32": 3445786196,
+        "members": [
+            {
+                "name": "mhAnim",
+                "type": "Handle<Animation>",
+                "flags": 0
+            },
+            {
+                "name": "mhChore",
+                "type": "Handle<Chore>",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "ScriptEnum:ReticleActions",
+        "crc32": 3581553835,
+        "members": [
+            {
+                "name": "mCurValue",
+                "type": "String",
+                "flags": 1152
+            }
+        ]
+    },
+    {
+        "type": "LightType",
+        "crc32": 1860991189,
+        "members": [
+            {
+                "name": "mLightType",
+                "type": "int32",
+                "flags": 64
+            }
+        ]
+    },
+    {
+        "type": "Rect",
+        "crc32": 2596276756,
+        "members": [
+            {
+                "name": "left",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "right",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "top",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "bottom",
+                "type": "int32",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<Handle<Chore>>::Sample",
+        "crc32": 1906438923,
+        "members": []
+    },
+    {
+        "type": "SoundBankWaveMapEntry",
+        "crc32": 1568689605,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<Handle<PropertySet>>::Sample",
+        "crc32": 1083545107,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<AnimOrChore>::Sample",
+        "crc32": 2911155438,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<Color>::Sample",
+        "crc32": 162664713,
+        "members": []
+    },
+    {
+        "type": "LanguageLookupMap::DlgIDSet",
+        "crc32": 1422179024,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<Handle<WalkBoxes>>::Sample",
+        "crc32": 2189458300,
+        "members": []
+    },
+    {
+        "type": "Symbol",
+        "crc32": 2222126035,
+        "members": [
+            {
+                "name": "mCrc64",
+                "type": "unsigned__int64",
+                "flags": 0
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<SoundEventName<2>>::Sample",
+        "crc32": 2154151251,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<Handle<SoundAmbience::AmbienceDefinition>>::Sample",
+        "crc32": 1494976989,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<int>::Sample",
+        "crc32": 1246207306,
+        "members": []
+    },
+    {
+        "type": "ChorecorderParameters",
+        "crc32": 1380213052,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<Handle<D3DMesh>>::Sample",
+        "crc32": 1964710119,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<Handle<Dlg>>::Sample",
+        "crc32": 3845365155,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<Handle<Font>>::Sample",
+        "crc32": 2968426688,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<Vector3>::Sample",
+        "crc32": 309762929,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<Symbol>::Sample",
+        "crc32": 735955943,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<CompressedPathBlockingValue::CompressedPathInfoKey>::Sample",
+        "crc32": 123491795,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<Transform>::Sample",
+        "crc32": 3129982977,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<SoundEventName<1>>::Sample",
+        "crc32": 48901230,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<Handle<T3Texture>>::Sample",
+        "crc32": 762576919,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<LocationInfo>::Sample",
+        "crc32": 2775375510,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<String>::Sample",
+        "crc32": 3662232385,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<float>::Sample",
+        "crc32": 2034371971,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<SoundEventName<0>>::Sample",
+        "crc32": 3490792114,
+        "members": []
+    },
+    {
+        "type": "KeyframedValue<unsigned__int64>::Sample",
+        "crc32": 4250266928,
+        "members": []
+    },
+    {
+        "type": "T3Texture",
+        "crc32": 1753119058,
+        "members": [
+            {
+                "name": "mVersion",
+                "type": "int32",
+                "flags": 32
+            },
+            {
+                "name": "mSamplerState",
+                "type": "T3SamplerStateBlock",
+                "flags": 0
+            },
+            {
+                "name": "mPlatform",
+                "type": "EnumPlatformType",
+                "flags": 0
+            },
+            {
+                "name": "mName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mImportName",
+                "type": "String",
+                "flags": 0
+            },
+            {
+                "name": "mImportScale",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mImportSpecularPower",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mToolProps",
+                "type": "ToolProps",
+                "flags": 32
+            },
+            {
+                "name": "mNumMipLevels",
+                "type": "uint32",
+                "flags": 0
+            },
+            {
+                "name": "mWidth",
+                "type": "uint32",
+                "flags": 0
+            },
+            {
+                "name": "mHeight",
+                "type": "uint32",
+                "flags": 0
+            },
+            {
+                "name": "mSurfaceFormat",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mTextureLayout",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mSurfaceGamma",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mResourceUsage",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mType",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mNormalMapFormat",
+                "type": "int32",
+                "flags": 0
+            },
+            {
+                "name": "mSpecularGlossExponent",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mHDRLightmapScale",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mToonGradientCutoff",
+                "type": "float",
+                "flags": 0
+            },
+            {
+                "name": "mAlphaMode",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mColorMode",
+                "type": "int32",
+                "flags": 64
+            },
+            {
+                "name": "mUVOffset",
+                "type": "Vector2",
+                "flags": 0
+            },
+            {
+                "name": "mUVScale",
+                "type": "Vector2",
+                "flags": 0
+            },
+            {
+                "name": "mNumMipLevelsAllocated",
+                "type": "uint32",
+                "flags": 1
+            },
+            {
+                "name": "mNumSurfacesRequested",
+                "type": "uint32",
+                "flags": 1
+            },
+            {
+                "name": "mNumSurfacesRequired",
+                "type": "uint32",
+                "flags": 1
+            },
+            {
+                "name": "mNumSurfacesLoaded",
+                "type": "uint32",
+                "flags": 1
+            },
+            {
+                "name": "mToonRegions",
+                "type": "DCArray<T3ToonGradientRegion>",
+                "flags": 32
+            }
+        ]
+    },
+    {
+        "type": "KeyframedValue<bool>::Sample",
+        "crc32": 1271868337,
+        "members": []
+    },
+    {
+        "type": "TRange<unsignedint>",
+        "crc32": 1072543900,
+        "members": []
+    },
+    {
+        "type": "LanguageRegister",
+        "crc32": 149339461,
+        "members": [
+            {
+                "name": "Baseclass_UID::Generator",
+                "type": "UID::Generator",
+                "flags": 16
+            }
+        ]
+    }
+]

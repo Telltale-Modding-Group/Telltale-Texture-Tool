@@ -1,0 +1,10 @@
+{
+    "name": "Minecraft: Story Mode",
+    "description": "",
+    "blowfishKey": "Mcsm",
+    "isTtarch2": true,
+    "ttarchVersion": 3,
+    "luaVersion": "5.1.2",
+    "metaStreamVersion": "MSV5",
+    "enableOodleCompression": false
+}

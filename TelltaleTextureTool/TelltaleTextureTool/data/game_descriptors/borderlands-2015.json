@@ -1,0 +1,10 @@
+{
+    "name": "Borderlands",
+    "description": "",
+    "blowfishKey": "Borderlands",
+    "isTtarch2": true,
+    "ttarchVersion": 4,
+    "luaVersion": "5.1",
+    "metaStreamVersion": "MSV5",
+    "enableOodleCompression": false
+}

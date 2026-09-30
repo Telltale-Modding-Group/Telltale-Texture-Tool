@@ -238,7 +238,7 @@ public class D3DTX_V8 : ID3DTX
 
     public void WriteToBinary(
         BinaryWriter writer,
-        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        TelltaleToolGame game = TelltaleToolGame.NONE,
         T3PlatformType platform = T3PlatformType.ePlatform_None,
         bool printDebug = false
     )
@@ -312,7 +312,7 @@ public class D3DTX_V8 : ID3DTX
 
     public void ReadFromBinary(
         BinaryReader reader,
-        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        TelltaleToolGame game = TelltaleToolGame.NONE,
         T3PlatformType platform = T3PlatformType.ePlatform_None,
         bool printDebug = false
     )
@@ -507,26 +507,9 @@ public class D3DTX_V8 : ID3DTX
 
     public D3DTXMetadata GetD3DTXMetadata()
     {
-        D3DTXMetadata metadata = new()
-        {
-            TextureName = mName,
-            Width = mWidth,
-            Height = mHeight,
-            Depth = mDepth,
-            ArraySize = mArraySize,
-            Format = mSurfaceFormat,
-            MipLevels = mNumMipLevels,
-            SurfaceGamma = mSurfaceGamma,
-            Dimension = mTextureLayout,
-            AlphaMode = mAlphaMode,
-            Platform = mPlatform,
-            TextureType = mType,
-            RegionHeaders = mRegionHeaders,
-            D3DFormat = LegacyFormat.UNKNOWN,
-        };
-
-        return metadata;
+        throw new NotImplementedException();
     }
+
 
     public List<byte[]> GetPixelData()
     {
@@ -534,7 +517,7 @@ public class D3DTX_V8 : ID3DTX
     }
 
     public string GetDebugInfo(
-        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        TelltaleToolGame game = TelltaleToolGame.NONE,
         T3PlatformType platform = T3PlatformType.ePlatform_None
     )
     {

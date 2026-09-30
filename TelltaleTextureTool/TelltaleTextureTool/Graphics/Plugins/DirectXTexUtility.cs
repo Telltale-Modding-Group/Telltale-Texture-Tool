@@ -51,7 +51,7 @@ public static class DirectXTexUtility
     {
         DirectXTexMetadata metadata = scratchImage.GetMetadata();
 
-        return new()
+        return new TexMetadata
         {
             Width = (uint)metadata.Width,
             Height = (uint)metadata.Height,
@@ -120,9 +120,9 @@ public static class DirectXTexUtility
 
     public static unsafe DirectXImage GetDirectXImage(Image image)
     {
-        var dxgiFormat = GetDXGIFormat(image.PixelFormatInfo);
+        DXGIFormat dxgiFormat = GetDXGIFormat(image.PixelFormatInfo);
 
-        var (rowPitch, slicePitch) = PixelFormatUtility.ComputePitch(
+        (uint rowPitch, uint slicePitch) = PixelFormatUtility.ComputePitch(
             image.PixelFormatInfo.PixelFormat,
             image.Width,
             image.Height
@@ -148,16 +148,16 @@ public static class DirectXTexUtility
             throw new InvalidOperationException("Image is not compressed");
         }
 
-        var dxImage = GetDirectXImage(image);
-        var dxgiFormat = GetDXGIFormat(pixelFormatInfo);
+        DirectXImage dxImage = GetDirectXImage(image);
+        DXGIFormat dxgiFormat = GetDXGIFormat(pixelFormatInfo);
         ScratchImage scratchImage = DirectXTex.CreateScratchImage();
         try
         {
             DirectXTex.Decompress(&dxImage, (int)dxgiFormat, &scratchImage).ThrowIf();
 
-            var pixels = GetPixelsFromDirectXScratchImage(scratchImage);
+            byte[] pixels = GetPixelsFromDirectXScratchImage(scratchImage);
 
-            var newPixelFormatInfo = GetPixelFormatInfo(
+            PixelFormatInfo newPixelFormatInfo = GetPixelFormatInfo(
                 (DXGIFormat)scratchImage.GetMetadata().Format
             );
 
@@ -195,14 +195,20 @@ public static class DirectXTexUtility
 
     public static unsafe Image ConvertImage(PixelFormatInfo pixelFormatInfo, Image image)
     {
-        if (image.PixelFormatInfo.Equals(pixelFormatInfo))
+        if (image.PixelFormatInfo.PixelFormat == pixelFormatInfo.PixelFormat)
         {
             return image;
         }
 
-        var dxImage = GetDirectXImage(image);
-        var dxgiFormat = GetDXGIFormat(pixelFormatInfo);
-        var scratchImage = DirectXTex.CreateScratchImage();
+        DirectXImage dxImage = GetDirectXImage(image);
+
+        var dxgiFormat = (int)GetDXGIFormat(pixelFormatInfo);
+
+        if (pixelFormatInfo.ColorSpace == ColorSpace.sRGB)
+        {
+            dxgiFormat = DirectXTex.MakeSRGB(dxgiFormat);
+        }
+        ScratchImage scratchImage = DirectXTex.CreateScratchImage();
 
         // DirectXTexMetadata dxMetadata = new()
         // {
@@ -215,18 +221,23 @@ public static class DirectXTexUtility
         //     Dimension = DirectXTexDimension.Texture2D,
         // };
 
-     //   scratchImage.Initialize(ref dxMetadata, CPFlags.None).ThrowIf();
+        //   scratchImage.Initialize(ref dxMetadata, CPFlags.None).ThrowIf();
 
-        TexFilterFlags filterFlags = TexFilterFlags.ForceNonWic;
-       // filterFlags |= TexFilterFlags.ForceWic;
-         filterFlags |= TexFilterFlags.ForceNonWic;
+        var filterFlags = TexFilterFlags.Default;
+        if (pixelFormatInfo.ColorSpace == ColorSpace.sRGB)
+        {
+           // filterFlags |= TexFilterFlags.SrgbIn;
+        }
+        
+        // filterFlags |= TexFilterFlags.ForceWic;
+        //    filterFlags |= TexFilterFlags.ForceNonWic;
 
-       
-        HResult r = DirectXTex.Convert(&dxImage, (int)dxgiFormat, filterFlags, 0.5f, &scratchImage);
-        var f = r.Code;
-        var pixels = GetPixelsFromDirectXScratchImage(scratchImage);
 
-        var newPixelFormatInfo = GetPixelFormatInfo((DXGIFormat)scratchImage.GetMetadata().Format);
+        HResult r = DirectXTex.Convert(&dxImage, dxgiFormat, filterFlags, 0.5f, &scratchImage);
+        int f = r.Code;
+        byte[] pixels = GetPixelsFromDirectXScratchImage(scratchImage);
+
+        PixelFormatInfo newPixelFormatInfo = GetPixelFormatInfo((DXGIFormat)scratchImage.GetMetadata().Format);
 
         scratchImage.Release();
 
@@ -259,7 +270,6 @@ public static class DirectXTexUtility
 
     //     DirectXTex.GenerateMipMaps(texture, maxMips);
     // }
-
 
 
     public static unsafe byte[] GetBytes(
@@ -415,79 +425,79 @@ public static class DirectXTexUtility
         var pixelFormat = dxgiFormat switch
         {
             DXGIFormat.R32G32B32A32_TYPELESS
-            or DXGIFormat.R32G32B32A32_FLOAT
-            or DXGIFormat.R32G32B32A32_UINT
-            or DXGIFormat.R32G32B32A32_SINT => PixelFormat.R32G32B32A32,
+                or DXGIFormat.R32G32B32A32_FLOAT
+                or DXGIFormat.R32G32B32A32_UINT
+                or DXGIFormat.R32G32B32A32_SINT => PixelFormat.R32G32B32A32,
 
             DXGIFormat.R32G32B32_TYPELESS
-            or DXGIFormat.R32G32B32_FLOAT
-            or DXGIFormat.R32G32B32_UINT
-            or DXGIFormat.R32G32B32_SINT => PixelFormat.R32G32B32,
+                or DXGIFormat.R32G32B32_FLOAT
+                or DXGIFormat.R32G32B32_UINT
+                or DXGIFormat.R32G32B32_SINT => PixelFormat.R32G32B32,
 
             DXGIFormat.R16G16B16A16_TYPELESS
-            or DXGIFormat.R16G16B16A16_FLOAT
-            or DXGIFormat.R16G16B16A16_UNORM
-            or DXGIFormat.R16G16B16A16_UINT
-            or DXGIFormat.R16G16B16A16_SNORM
-            or DXGIFormat.R16G16B16A16_SINT => PixelFormat.R16G16B16A16,
+                or DXGIFormat.R16G16B16A16_FLOAT
+                or DXGIFormat.R16G16B16A16_UNORM
+                or DXGIFormat.R16G16B16A16_UINT
+                or DXGIFormat.R16G16B16A16_SNORM
+                or DXGIFormat.R16G16B16A16_SINT => PixelFormat.R16G16B16A16,
 
             DXGIFormat.R32G32_TYPELESS
-            or DXGIFormat.R32G32_FLOAT
-            or DXGIFormat.R32G32_UINT
-            or DXGIFormat.R32G32_SINT => PixelFormat.R32G32,
+                or DXGIFormat.R32G32_FLOAT
+                or DXGIFormat.R32G32_UINT
+                or DXGIFormat.R32G32_SINT => PixelFormat.R32G32,
 
             DXGIFormat.R10G10B10A2_TYPELESS
-            or DXGIFormat.R10G10B10A2_UNORM
-            or DXGIFormat.R10G10B10A2_UINT => PixelFormat.R10G10B10A2,
+                or DXGIFormat.R10G10B10A2_UNORM
+                or DXGIFormat.R10G10B10A2_UINT => PixelFormat.R10G10B10A2,
 
             DXGIFormat.R11G11B10_FLOAT => PixelFormat.R11G11B10,
             DXGIFormat.R9G9B9E5_SHAREDEXP => PixelFormat.R9G9B9E5,
 
             DXGIFormat.R8G8B8A8_TYPELESS
-            or DXGIFormat.R8G8B8A8_UNORM
-            or DXGIFormat.R8G8B8A8_UNORM_SRGB
-            or DXGIFormat.R8G8B8A8_UINT
-            or DXGIFormat.R8G8B8A8_SNORM
-            or DXGIFormat.R8G8B8A8_SINT => PixelFormat.R8G8B8A8,
+                or DXGIFormat.R8G8B8A8_UNORM
+                or DXGIFormat.R8G8B8A8_UNORM_SRGB
+                or DXGIFormat.R8G8B8A8_UINT
+                or DXGIFormat.R8G8B8A8_SNORM
+                or DXGIFormat.R8G8B8A8_SINT => PixelFormat.R8G8B8A8,
 
             DXGIFormat.B8G8R8A8_TYPELESS
-            or DXGIFormat.B8G8R8A8_UNORM
-            or DXGIFormat.B8G8R8A8_UNORM_SRGB => PixelFormat.B8G8R8A8,
+                or DXGIFormat.B8G8R8A8_UNORM
+                or DXGIFormat.B8G8R8A8_UNORM_SRGB => PixelFormat.B8G8R8A8,
 
             DXGIFormat.B8G8R8X8_TYPELESS
-            or DXGIFormat.B8G8R8X8_UNORM
-            or DXGIFormat.B8G8R8X8_UNORM_SRGB => PixelFormat.B8G8R8X8,
+                or DXGIFormat.B8G8R8X8_UNORM
+                or DXGIFormat.B8G8R8X8_UNORM_SRGB => PixelFormat.B8G8R8X8,
 
             DXGIFormat.R16G16_TYPELESS
-            or DXGIFormat.R16G16_FLOAT
-            or DXGIFormat.R16G16_UNORM
-            or DXGIFormat.R16G16_UINT
-            or DXGIFormat.R16G16_SNORM
-            or DXGIFormat.R16G16_SINT => PixelFormat.R16G16,
+                or DXGIFormat.R16G16_FLOAT
+                or DXGIFormat.R16G16_UNORM
+                or DXGIFormat.R16G16_UINT
+                or DXGIFormat.R16G16_SNORM
+                or DXGIFormat.R16G16_SINT => PixelFormat.R16G16,
 
             DXGIFormat.R32_TYPELESS
-            or DXGIFormat.R32_FLOAT
-            or DXGIFormat.R32_UINT
-            or DXGIFormat.R32_SINT => PixelFormat.R32,
+                or DXGIFormat.R32_FLOAT
+                or DXGIFormat.R32_UINT
+                or DXGIFormat.R32_SINT => PixelFormat.R32,
 
             DXGIFormat.R8G8_TYPELESS
-            or DXGIFormat.R8G8_UNORM
-            or DXGIFormat.R8G8_UINT
-            or DXGIFormat.R8G8_SNORM
-            or DXGIFormat.R8G8_SINT => PixelFormat.R8G8,
+                or DXGIFormat.R8G8_UNORM
+                or DXGIFormat.R8G8_UINT
+                or DXGIFormat.R8G8_SNORM
+                or DXGIFormat.R8G8_SINT => PixelFormat.R8G8,
 
             DXGIFormat.R16_TYPELESS
-            or DXGIFormat.R16_FLOAT
-            or DXGIFormat.R16_UNORM
-            or DXGIFormat.R16_UINT
-            or DXGIFormat.R16_SNORM
-            or DXGIFormat.R16_SINT => PixelFormat.R16,
+                or DXGIFormat.R16_FLOAT
+                or DXGIFormat.R16_UNORM
+                or DXGIFormat.R16_UINT
+                or DXGIFormat.R16_SNORM
+                or DXGIFormat.R16_SINT => PixelFormat.R16,
 
             DXGIFormat.R8_TYPELESS
-            or DXGIFormat.R8_UNORM
-            or DXGIFormat.R8_UINT
-            or DXGIFormat.R8_SNORM
-            or DXGIFormat.R8_SINT => PixelFormat.R8,
+                or DXGIFormat.R8_UNORM
+                or DXGIFormat.R8_UINT
+                or DXGIFormat.R8_SNORM
+                or DXGIFormat.R8_SINT => PixelFormat.R8,
 
             DXGIFormat.A8_UNORM => PixelFormat.A8,
 

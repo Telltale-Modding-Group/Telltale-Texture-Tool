@@ -5,6 +5,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.DependencyInjection;
 using TelltaleTextureTool.ViewModels;
 using TelltaleTextureTool.Views;
 
@@ -23,29 +24,24 @@ public partial class App : Application
         // Without this line you will get duplicate validations from both Avalonia and CT
         try
         {
-            BindingPlugins.DataValidators.RemoveAt(0);
-
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
+                var services = new ServiceCollection();
+
                 desktop.MainWindow = new MainWindow { DataContext = new MainViewModel() };
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
             {
                 singleViewPlatform.MainView = new MainView { DataContext = new MainViewModel() };
             }
+
+            //             services.AddSingleton<AppSettings>(_ => AppSettings.Load());
+            // services.AddSingleton<MainModel>();
             base.OnFrameworkInitializationCompleted();
         }
         catch (Exception e)
         {
-            try
-            {
-                Logger.Log(e);
-            }
-            catch (IOException ex)
-            {
-                Console.Error.WriteLine("Error writing technical details to file: " + ex.Message);
-                throw new Exception(e.Message, e);
-            }
+            Logger.Log(e);
         }
     }
 }

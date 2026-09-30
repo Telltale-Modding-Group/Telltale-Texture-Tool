@@ -1,0 +1,10 @@
+{
+    "name": "Bone: Out from Boneville (2005)",
+    "description": "",
+    "blowfishKey": "BoneOutFromBoneville",
+    "isTtarch2": false,
+    "ttarchVersion": 4,
+    "luaVersion": "5.0",
+    "metaStreamVersion": "MBIN",
+    "enableOodleCompression": false
+}

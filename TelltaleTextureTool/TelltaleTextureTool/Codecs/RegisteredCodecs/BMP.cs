@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using Hexa.NET.DirectXTex;
 using TelltaleTextureTool.Graphics;
@@ -54,16 +55,23 @@ public class BmpCodec : IImageCodec
         }
     }
 
-    public Texture LoadFromMemory(byte[] input, CodecOptions options)
+    public Texture LoadFromMemory(Stream input, CodecOptions options)
     {
         ScratchImage scratchImage = DirectXTex.CreateScratchImage();
         DirectXTexMetadata texMetadata = new();
 
         Texture texture;
 
+        byte[] buffer;
+        using (var ms = new MemoryStream())
+        {
+            input.CopyTo(ms);
+            buffer = ms.ToArray();
+        }
+        
         unsafe
         {
-            fixed (byte* pInput = input)
+            fixed (byte* pInput = buffer)
             {
                 var res = DirectXTex.LoadFromWICMemory(
                     pInput,

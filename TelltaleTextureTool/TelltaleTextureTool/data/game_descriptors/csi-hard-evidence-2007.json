@@ -1,0 +1,10 @@
+{
+    "name": "CSI: Hard Evidence",
+    "description": "",
+    "blowfishKey": "CsiHardEvidence",
+    "isTtarch2": false,
+    "ttarchVersion": 3,
+    "luaVersion": "5.0",
+    "metaStreamVersion": "MBIN",
+    "enableOodleCompression": false
+}

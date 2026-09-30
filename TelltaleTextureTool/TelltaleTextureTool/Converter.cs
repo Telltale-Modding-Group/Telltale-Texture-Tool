@@ -4,16 +4,19 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Hexa.NET.DirectXTex;
+using TelltaleTextureTool.Codecs;
 using TelltaleTextureTool.DirectX;
-using TelltaleTextureTool.Graphics;
+// using TelltaleTextureTool.DirectX;
 using TelltaleTextureTool.Main;
 using TelltaleTextureTool.Telltale.FileTypes.D3DTX;
-using TelltaleTextureTool.TelltaleEnums;
-using TelltaleTextureTool.Utilities;
-using Texture = TelltaleTextureTool.DirectX.Texture;
+using TelltaleToolKit;
+using TelltaleToolKit.Serialization.Binary;
+using TelltaleToolKit.T3Types.Textures;
+using Texture = TelltaleTextureTool.Graphics.Texture;
+// using Texture = TelltaleTextureTool.DirectX.Texture;
+using TextureType = TelltaleTextureTool.Graphics.TextureType;
 
 namespace TelltaleTextureTool;
 
@@ -53,7 +56,7 @@ public static class Converter
     public static bool ConvertBulk(
         string texPath,
         string resultPath,
-        ImageAdvancedOptions imageOptions,
+        ConverterOptions imageOptions,
         TextureType oldTextureType,
         TextureType newTextureType
     )
@@ -129,7 +132,7 @@ public static class Converter
     public static void ConvertTexture(
         string sourcePath,
         string resultPath,
-        ImageAdvancedOptions options,
+        ConverterOptions options,
         TextureType oldTextureType,
         TextureType newTextureType
     )
@@ -150,7 +153,7 @@ public static class Converter
                 case TextureType.TIFF:
                 case TextureType.TGA:
                 case TextureType.HDR:
-                    ConvertTextureFromD3DtxToOthers(
+                    ConvertD3DtxTextureToCommonTexture(
                         sourcePath,
                         resultPath,
                         newTextureType,
@@ -166,7 +169,7 @@ public static class Converter
             switch (newTextureType)
             {
                 case TextureType.D3DTX:
-                    ConvertTextureFromOthersToD3Dtx(
+                    ConvertCommonTextureToD3DtxTexture(
                         sourcePath,
                         resultPath,
                         oldTextureType,
@@ -177,20 +180,14 @@ public static class Converter
                     throw new Exception("Invalid file type.");
             }
         }
-        else if (
-            oldTextureType
-            is TextureType.PNG
-                or TextureType.JPEG
-                or TextureType.BMP
-                or TextureType.TIFF
-                or TextureType.TGA
-                or TextureType.HDR
-        )
+        else if (oldTextureType is TextureType.PNG or TextureType.JPEG or TextureType.BMP or TextureType.TIFF
+                 or TextureType.TGA or TextureType.HDR
+                )
         {
             switch (newTextureType)
             {
                 case TextureType.D3DTX:
-                    ConvertTextureFromOthersToD3Dtx(
+                    ConvertCommonTextureToD3DtxTexture(
                         sourcePath,
                         resultPath,
                         oldTextureType,
@@ -212,12 +209,8 @@ public static class Converter
     /// </summary>
     /// <param name="sourceFilePath"></param>
     /// <param name="destinationDirectory"></param>
-    public static void ConvertTextureFromD3DtxToOthers(
-        string sourceFilePath,
-        string destinationDirectory,
-        TextureType newTextureType,
-        ImageAdvancedOptions options
-    )
+    public static void ConvertD3DtxTextureToCommonTexture(string sourceFilePath, string destinationDirectory,
+        TextureType newTextureType, ConverterOptions options)
     {
         // Null safety validation of inputs.
         if (string.IsNullOrEmpty(sourceFilePath) || string.IsNullOrEmpty(destinationDirectory))
@@ -252,103 +245,61 @@ public static class Converter
     /// </summary>
     /// <param name="sourceFilePath"></param>
     /// <param name="destinationDirectory"></param>
-    public static void ConvertTextureFromOthersToD3Dtx(
-        string sourceFilePath,
-        string destinationDirectory,
-        TextureType oldTextureType,
-        ImageAdvancedOptions options
-    )
+    /// <param name="oldTextureType"></param>
+    /// <param name="options"></param>
+    public static void ConvertCommonTextureToD3DtxTexture(string sourceFilePath, string destinationDirectory,
+        TextureType oldTextureType, ConverterOptions options)
     {
-        // Null safety validation of inputs.
-        if (string.IsNullOrEmpty(sourceFilePath) || string.IsNullOrEmpty(destinationDirectory))
-        {
-            throw new ArgumentException("Arguments cannot be null in DdsToD3Dtx function.");
-        }
-
         // Deconstruct the source file path
-        string? textureFileDirectory = Path.GetDirectoryName(sourceFilePath);
+        string textureFileDirectory = Path.GetDirectoryName(sourceFilePath);
         string textureFileNameOnly = Path.GetFileNameWithoutExtension(sourceFilePath);
 
-        // Create the names of the following files
-        string textureFileNameWithD3Dtx = textureFileNameOnly + Main_Shared.d3dtxExtension;
-        string textureFileNameWithJSON = textureFileNameOnly + Main_Shared.jsonExtension;
-
         // Create the path of these files. If things go well, these files (depending on the version) should exist in the same directory at the original .dds file.
-        string textureFilePathJson =
-            textureFileDirectory + Path.DirectorySeparatorChar + textureFileNameWithJSON;
+        string textureFilePathJson = Path.Combine(textureFileDirectory, textureFileNameOnly + ".json");
 
-        // Create the final path of the d3dtx
-        string textureResultPathD3Dtx =
-            destinationDirectory + Path.DirectorySeparatorChar + textureFileNameWithD3Dtx;
+        // Create a new d3dtx object
+        (T3Texture tex, MetaStreamConfiguration configuration) d3dtx =
+            T3TextureJsonConverter.FromJson(File.ReadAllText(textureFilePathJson));
 
-        // If a json file exists
-        if (File.Exists(textureFilePathJson))
+        // If the d3dtx is a legacy D3DTX, force the use of the DX9 legacy flag
+        //  DDSFlags flags = d3dtx.tex.IsLegacyD3DTX() ? DDSFlags.ForceDx9Legacy : DDSFlags.None;
+
+        CodecManager codecManager = new();
+
+        Texture commonTexture = codecManager.LoadFromFile(sourceFilePath, new CodecOptions());
+
+        byte[] ddsTexture = codecManager.SaveToMemory(".dds", commonTexture,
+            new CodecOptions() { ForceDx9Legacy = d3dtx.tex.IsLegacyD3DTX() });
+
+        //  Texture texture = new(sourceFilePath, oldTextureType, flags);
+
+        options.IsTelltaleNormalMap = d3dtx.tex.TypeEnum switch
         {
-            // Create a new d3dtx object
-            D3DTX_Master d3dtxMaster = new();
-
-            // Parse the .json file as a d3dtx
-            try
-            {
-                d3dtxMaster.ReadD3DTXJSON(textureFilePathJson);
-            }
-            catch (Exception)
-            {
-                throw new Exception("Conversion failed.\nFailed to read the .d3dtx file.");
-            }
-
-            // If the d3dtx is a legacy D3DTX, force the use of the DX9 legacy flag
-            DDSFlags flags = d3dtxMaster.IsLegacyD3DTX() ? DDSFlags.ForceDx9Legacy : DDSFlags.None;
-
-            Texture texture = new(sourceFilePath, oldTextureType, flags);
-
             // Set the options for the converter
-            if (
-                d3dtxMaster.d3dtxMetadata.TextureType
-                is T3TextureType.eTxBumpmap
-                    or T3TextureType.eTxNormalMap
-            )
-            {
-                options.IsTelltaleNormalMap = true;
-            }
-            else if (d3dtxMaster.d3dtxMetadata.TextureType is T3TextureType.eTxNormalXYMap)
-            {
-                options.IsTelltaleNormalMap = true;
-            }
+            TelltaleToolKit.T3Types.Textures.TextureType.Bumpmap
+                or TelltaleToolKit.T3Types.Textures.TextureType.NormalMap
+                or TelltaleToolKit.T3Types.Textures.TextureType.NormalXyMap => true,
+            _ => options.IsTelltaleNormalMap
+        };
 
-            if (d3dtxMaster.d3dtxMetadata.SurfaceGamma is T3SurfaceGamma.sRGB)
-            {
-                options.IsSRGB = true;
-            }
-
-            texture.TransformTexture(options, true, true);
-
-            // Get the image
-            texture.GetDDSInformation(
-                out D3DTXMetadata metadata,
-                out ImageSection[] sections,
-                flags
-            );
-
-            if (options.EnableSwizzle)
-            {
-                // metadata.Platform = options.PlatformType;
-            }
-
-            // Modify the d3dtx file using our dds data
-            d3dtxMaster.ModifyD3DTX(metadata, sections);
-
-            texture.Release();
-
-            // Write our final d3dtx file to disk
-            d3dtxMaster.WriteFinalD3DTX(textureResultPathD3Dtx);
-        }
-        // if we didn't find a json file, we're screwed!
-        else
+        if (d3dtx.tex.SurfaceGamma is TelltaleToolKit.T3Types.Textures.T3Types.T3SurfaceGamma.sRGB)
         {
-            throw new FileNotFoundException(
-                "Conversion failed.\nNo .json file was found for the file."
-            );
+            options.IsSRGB = true;
         }
+
+        // texture.TransformTexture(options, true, true);
+        // texture.GetDDSInformation(out D3DTXMetadata metadata, out ImageSection[] sections, flags);
+        // texture.Release();
+        //
+        // // if (options.EnableSwizzle)
+        // // {
+        // //     // metadata.Platform = options.PlatformType;
+        // // }
+        //
+        // // Modify the d3dtx file using our dds data
+        // // TODO:
+        // d3dtx.tex.ConvertD3Dtx(commonTexture.Metadata, sections);
+
+        TTK.Save(d3dtx.tex, Path.Combine(destinationDirectory, textureFileNameOnly + ".d3dtx"), d3dtx.configuration);
     }
 }

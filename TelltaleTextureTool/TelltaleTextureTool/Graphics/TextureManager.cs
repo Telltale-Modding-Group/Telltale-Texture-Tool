@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Hexa.NET.DirectXTex;
@@ -111,11 +112,7 @@ public unsafe static partial class TextureManager
     public static List<byte[]> GetPixelDataListFromSections(ImageSection[] sections)
     {
         List<byte[]> textureData = [];
-
-        foreach (ImageSection imageSection in sections)
-        {
-            textureData.Add(imageSection.Pixels);
-        }
+        textureData.AddRange(sections.Select(imageSection => imageSection.Pixels));
 
         return textureData;
     }
@@ -129,12 +126,7 @@ public unsafe static partial class TextureManager
     {
         byte[] textureData = [];
 
-        foreach (ImageSection imageSection in sections)
-        {
-            textureData = ByteFunctions.Combine(textureData, imageSection.Pixels);
-        }
-
-        return textureData;
+        return sections.Aggregate(textureData, (current, imageSection) => ByteFunctions.Combine(current, imageSection.Pixels));
     }
 
     /// <summary>
@@ -313,7 +305,7 @@ public unsafe static partial class TextureManager
 public unsafe partial class Texture
 {
     public Hexa.NET.DirectXTex.TexMetadata Metadata { get; set; }
-    public ImageAdvancedOptions CurrentOptions { get; set; } = new ImageAdvancedOptions();
+    public ConverterOptions CurrentOptions { get; set; } = new ConverterOptions();
     public TextureType TextureType { get; set; } = TextureType.Unknown;
 
     private ScratchImage Image { get; set; }
@@ -504,99 +496,99 @@ public unsafe partial class Texture
     /// <param name="keepOriginal"></param>
     /// <param name="convertingOnly"></param>
     public void TransformTexture(
-        ImageAdvancedOptions options,
+        ConverterOptions options,
         bool keepOriginal = false,
         bool convertingOnly = false
     )
     {
         ResetImageToOriginal();
 
-        if (options.EnableSwizzle && options.IsDeswizzle)
-        {
-            //  Deswizzle(options.PlatformType);
-        }
+        // if (options.PlatformType && options.PlatformType)
+        // {
+        //     //  Deswizzle(options.PlatformType);
+        // }
 
         Decompress();
 
-        if (options.EnableNormalMap)
-        {
-            GenerateNormalMap();
-        }
+        // if (options.EnableNormalMap)
+        // {
+        //     GenerateNormalMap();
+        // }
 
-        if (options.EnableEditing)
-        {
-            //if (options.ImageEffect != ImageEffect.DEFAULT)
-            //{
-            //    TransformImage(options.ImageEffect);
-            //}
-        }
+        // if (options.EnableEditing)
+        // {
+        //     //if (options.ImageEffect != ImageEffect.DEFAULT)
+        //     //{
+        //     //    TransformImage(options.ImageEffect);
+        //     //}
+        // }
 
         if (options.EnableTelltaleNormalMap && options.IsTelltaleNormalMap)
         {
             TransformImage(ImageEffect.SWIZZLE_ABGR);
         }
 
-        if (CurrentOptions.EnableNormalMap != options.EnableNormalMap)
-        {
-            if (!CurrentOptions.EnableNormalMap)
-            {
-                GenerateNormalMap();
-            }
-        }
+        // if (CurrentOptions.EnableNormalMap != options.EnableNormalMap)
+        // {
+        //     if (!CurrentOptions.EnableNormalMap)
+        //     {
+        //         GenerateNormalMap();
+        //     }
+        // }
 
-        if (options.EnableMips)
-        {
-            if (options.AutoGenerateMips)
-            {
-                GenerateMipMaps(0);
-            }
-            else if (options.ManualGenerateMips && options.SetMips > 1)
-            {
-                GenerateMipMaps(Math.Min(options.SetMips, GetMaxMipLevels()));
-            }
-        }
+        // if (options.EnableMips)
+        // {
+        //     if (options.AutoGenerateMips)
+        //     {
+        //         GenerateMipMaps(0);
+        //     }
+        //     // else if (options.ManualGenerateMips && options.SetMips > 1)
+        //     // {
+        //     //     GenerateMipMaps(Math.Min(options.SetMips, GetMaxMipLevels()));
+        //     // }
+        // }
 
-        if (convertingOnly)
-        {
-            if (options.EnableAutomaticCompression)
-            {
-                if (options.EnableNormalMap && options.IsTelltaleXYNormalMap)
-                {
-                    Compress(DXGIFormat.BC5_UNORM);
-                }
-                else if (OriginalImage.IsAlphaAllOpaque())
-                {
-                    if (options.IsSRGB)
-                    {
-                        Compress(DXGIFormat.BC1_UNORM_SRGB);
-                    }
-                    else
-                    {
-                        Compress(DXGIFormat.BC1_UNORM);
-                    }
-                }
-                else
-                {
-                    if (options.IsSRGB)
-                    {
-                        Compress(DXGIFormat.BC3_UNORM_SRGB);
-                    }
-                    else
-                    {
-                        Compress(DXGIFormat.BC3_UNORM);
-                    }
-                }
-            }
-        }
-        else if (keepOriginal)
-        {
-            Compress((DXGIFormat)OriginalImage.GetMetadata().Format);
-        }
+        // if (convertingOnly)
+        // {
+        //     if (options.EnableAutomaticCompression)
+        //     {
+        //         if (options.EnableNormalMap && options.IsTelltaleXYNormalMap)
+        //         {
+        //             Compress(DXGIFormat.BC5_UNORM);
+        //         }
+        //         else if (OriginalImage.IsAlphaAllOpaque())
+        //         {
+        //             if (options.IsSRGB)
+        //             {
+        //                 Compress(DXGIFormat.BC1_UNORM_SRGB);
+        //             }
+        //             else
+        //             {
+        //                 Compress(DXGIFormat.BC1_UNORM);
+        //             }
+        //         }
+        //         else
+        //         {
+        //             if (options.IsSRGB)
+        //             {
+        //                 Compress(DXGIFormat.BC3_UNORM_SRGB);
+        //             }
+        //             else
+        //             {
+        //                 Compress(DXGIFormat.BC3_UNORM);
+        //             }
+        //         }
+        //     }
+        // }
+        // else if (keepOriginal)
+        // {
+        //     Compress((DXGIFormat)OriginalImage.GetMetadata().Format);
+        // }
 
-        if (options.EnableSwizzle && options.IsSwizzle)
-        {
-            // Swizzle(options.PlatformType);
-        }
+        // if (options.EnableSwizzle && options.IsSwizzle)
+        // {
+        //     // Swizzle(options.PlatformType);
+        // }
 
         CurrentOptions = new(options);
     }

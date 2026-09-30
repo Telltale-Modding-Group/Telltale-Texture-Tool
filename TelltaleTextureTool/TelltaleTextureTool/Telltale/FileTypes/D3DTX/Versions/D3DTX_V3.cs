@@ -182,7 +182,7 @@ public class D3DTX_V3 : ID3DTX
 
     public void WriteToBinary(
         BinaryWriter writer,
-        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        TelltaleToolGame game = TelltaleToolGame.NONE,
         T3PlatformType platform = T3PlatformType.ePlatform_None,
         bool printDebug = false
     )
@@ -243,7 +243,7 @@ public class D3DTX_V3 : ID3DTX
 
     public void ReadFromBinary(
         BinaryReader reader,
-        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        TelltaleToolGame game = TelltaleToolGame.NONE,
         T3PlatformType platform = T3PlatformType.ePlatform_None,
         bool printDebug = false
     )
@@ -270,6 +270,7 @@ public class D3DTX_V3 : ID3DTX
         mType = (T3TextureType)reader.ReadInt32(); //mType [4 bytes]
         mNormalMapFormat = reader.ReadInt32(); //mNormalMapFormat [4 bytes]
         mHDRLightmapScale = reader.ReadSingle(); //mHDRLightmapScale [4 bytes]
+        var mToonGradientCutoff = reader.ReadSingle(); //mToonGradientCutoff [4 bytes]
         mAlphaMode = (T3TextureAlphaMode)reader.ReadInt32(); //mAlphaMode [4 bytes]
         mColorMode = (T3TextureColor)reader.ReadInt32(); //mColorMode [4 bytes]
 
@@ -314,10 +315,14 @@ public class D3DTX_V3 : ID3DTX
         {
             mRegionHeaders[i] = new RegionStreamHeader
             {
+                // mMipIndex = reader.ReadInt32(), //[4 bytes]
+                // mDataSize = reader.ReadUInt32(), //[4 bytes]
+                // mPitch = reader.ReadInt32(), //[4 bytes]
+                // mMipCount = 1,
                 mMipIndex = reader.ReadInt32(), //[4 bytes]
+                mMipCount = reader.ReadInt32(), //[4 bytes]
                 mDataSize = reader.ReadUInt32(), //[4 bytes]
                 mPitch = reader.ReadInt32(), //[4 bytes]
-                mMipCount = 1,
             };
             mRegionHeaders[i].mSlicePitch = (int)mRegionHeaders[i].mDataSize;
         }
@@ -328,18 +333,19 @@ public class D3DTX_V3 : ID3DTX
         // Skip the AUX data (WTF is this i have no idea)
         if (mStreamHeader.mAuxDataCount > 0)
         {
-            uint size = reader.ReadUInt32();
-            reader.ReadUInt32();
-            reader.ReadUInt32();
-            reader.ReadUInt32();
-            reader.ReadUInt32();
-            reader.ReadUInt32();
-            List<byte> array = new List<byte>();
-            for (int i = 0; i < size - 4 - 20; i++)
-            {
-                array.Add(reader.ReadByte());
-            }
-            Console.WriteLine("AUX DATA: " + BitConverter.ToString(array.ToArray()));
+            int size = reader.ReadInt32();
+            byte[] auxData = reader.ReadBytes((int)size);
+            // reader.ReadUInt32();
+            // reader.ReadUInt32();
+            // reader.ReadUInt32();
+            // reader.ReadUInt32();
+            // reader.ReadUInt32();
+            // List<byte> array = new List<byte>();
+            // for (int i = 0; i < size - 4 - 20; i++)
+            // {
+            //     array.Add(reader.ReadByte());
+            // }
+            // Console.WriteLine("AUX DATA: " + BitConverter.ToString(array.ToArray()));
         }
 
         for (int i = 0; i < mStreamHeader.mRegionCount; i++)
@@ -438,7 +444,7 @@ public class D3DTX_V3 : ID3DTX
     }
 
     public string GetDebugInfo(
-        TelltaleToolGame game = TelltaleToolGame.DEFAULT,
+        TelltaleToolGame game = TelltaleToolGame.NONE,
         T3PlatformType platform = T3PlatformType.ePlatform_None
     )
     {
@@ -484,8 +490,8 @@ public class D3DTX_V3 : ID3DTX
         {
             d3dtxInfo.AppendFormat("[mRegionHeader {0}]", i).AppendLine();
             d3dtxInfo.AppendFormat("mMipIndex: {0}, ", mRegionHeaders[i].mMipIndex);
-            d3dtxInfo.AppendFormat("mMipCount: {0}, ", mRegionHeaders[i].mMipCount);
-            d3dtxInfo.AppendFormat("mDataSize: {0}", mRegionHeaders[i].mDataSize);
+            d3dtxInfo.AppendFormat("mDataSize: {0}, ", mRegionHeaders[i].mDataSize);
+            d3dtxInfo.AppendFormat("mPitch: {0}", mRegionHeaders[i].mPitch);
             d3dtxInfo.AppendLine();
         }
 
