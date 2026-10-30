@@ -43,6 +43,7 @@ This is an application designed to preview and convert **Telltale textures** (fi
 - Minecraft: Story Mode
 - Minecraft: Story Mode – Season Two
 - The Wolf Among Us
+- The Wolf Among Us Remastered
 - Sam and Max Save the World Remastered
 - Sam and Max Beyond Time and Space Remastered
 - Sam and Max The Devil’s playhouse Remastered
@@ -67,6 +68,7 @@ This is an application designed to preview and convert **Telltale textures** (fi
 - Nelson Tethers: Puzzle Agent
 - Puzzle Agent 2
 - Poker Night at the Inventory
+- Poker Night at the Inventory Remastered
 - Poker Knight 2
 - CSI: 3 Dimensions of Murder
 - CSI: Hard Evidence
